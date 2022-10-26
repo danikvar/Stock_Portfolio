@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Portfolio implements StockPortfolio{
-  String Stock;
   ArrayList<Stock1> StockList;
 
   public Portfolio(){
