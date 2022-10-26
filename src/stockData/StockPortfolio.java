@@ -1,3 +1,5 @@
+package stockData;
+
 import java.util.ArrayList;
 
 public interface StockPortfolio {
