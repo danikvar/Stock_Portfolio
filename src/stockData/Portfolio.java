@@ -10,11 +10,20 @@ public class Portfolio implements StockPortfolio{
     this.StockList = StockList;
   }
 
+  /**
+   * I changed this method signature to be void since it should just change the object.
+   * There is no reason to return something every time we add a stock.
+   * @param Stock
+   * @param shares
+   */
   @Override
-  public ArrayList<Stock1> addStock(String Stock, int shares, String date) {
-    Stock1 in_1 = new Stock1(Stock,shares,date);
+  public void addStock(String Stock, int shares) {
+    Stock1 in_1 = new Stock1(Stock,shares);
     StockList.add(in_1);
-    return StockList;
+  }
+
+  public int size() {
+    return StockList.size();
   }
 
   @Override

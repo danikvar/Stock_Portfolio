@@ -2,18 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockData/Stock1.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockData/StockDataConnector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockValue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AlphaVantageDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/AlphaVantageDemo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HW_4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/HW_4.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Portfolio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/StockPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/Portfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockData/Portfolio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/Stock1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockData/Stock1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/StockDataConnector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/StockPortfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockData/StockPortfolio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Portfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/Stock1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Stock1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/StockDataConnector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +23,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="JUnit4 Test Class" />
         <option value="Class" />
       </list>
     </option>
@@ -39,33 +40,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\danik\OneDrive\Desktop\Northeastern_Grad\CS_5010_Prog_Design\Code\HW_4\src\stockData" />
       <recent name="C:\Users\danik\OneDrive\Desktop\Northeastern_Grad\CS_5010_Prog_Design\Code\HW_4\src" />
     </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="stockData" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.stockData.AlphaVantageDemo">
+  <component name="RunManager" selected="JUnit.PortfolioTest.stockStringTest">
     <configuration name="AlphaVantageDemo" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="AlphaVantageDemo" />
-      <module name="HW_4" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PortfolioApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="PortfolioApplication" />
       <module name="HW_4" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -84,10 +93,77 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="PortfolioTest.getValueAt" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockData.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockData" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
+      <option name="METHOD_NAME" value="getValueAt" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PortfolioTest.size" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockData.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockData" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
+      <option name="METHOD_NAME" value="size" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PortfolioTest.stockStringTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockData.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockData" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
+      <option name="METHOD_NAME" value="stockStringTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PortfolioTest.tickerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockData.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockData" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
+      <option name="METHOD_NAME" value="tickerTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PortfolioTest.stockStringTest" />
+        <item itemvalue="JUnit.PortfolioTest.tickerTest" />
+        <item itemvalue="JUnit.PortfolioTest.size" />
+        <item itemvalue="JUnit.PortfolioTest.getValueAt" />
         <item itemvalue="Application.stockData.AlphaVantageDemo" />
-        <item itemvalue="Application.PortfolioApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -100,7 +176,7 @@
       <option name="presentableId" value="Default" />
       <updated>1666810285814</updated>
       <workItem from="1666810791683" duration="2320000" />
-      <workItem from="1666815328576" duration="4056000" />
+      <workItem from="1666815328576" duration="23364000" />
     </task>
     <servers />
   </component>
