@@ -27,6 +27,7 @@ public class TextGUI implements TextInterface{
     out.println("Menu: ");
     out.println("E : Add stock");
     out.println("Q : Determine total value on a date");
+    out.println("Enter your choice:");
   }
   
   public void showOptionError() {
