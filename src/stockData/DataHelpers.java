@@ -144,12 +144,8 @@ public class DataHelpers {
     catch (IOException e) {
       throw new IllegalArgumentException("No price data found for "+ticker);
     }
-
-
-
-
-
-
     return stockData;
   }
+
+
 }
