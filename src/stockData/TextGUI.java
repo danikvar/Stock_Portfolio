@@ -1,4 +1,4 @@
-import static java.lang.System.out;
+import java.io.PrintStream;
 
 public class TextGUI implements TextInterface{
   private PrintStream out;
