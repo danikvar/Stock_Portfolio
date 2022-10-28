@@ -1,6 +1,11 @@
 import static java.lang.System.out;
 
 public class TextGUI implements TextInterface{
+  private PrintStream out;
+
+  public TextGUI(PrintStream out) {
+    this.out = out;
+  }
   @Override
   public void showOptions() {
     //Enter name of the user
