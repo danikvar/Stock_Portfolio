@@ -4,8 +4,12 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.HashMap;
+
+import java.util.Map;
 import java.util.Set;
+
+import static stockData.DataHelpers.padLeft;
+import static stockData.DataHelpers.padRight;
 
 public class Stock1 {
 
@@ -20,7 +24,7 @@ public class Stock1 {
   // They key will be a LocalDate object in 'YYYY-MM-DD' format
   // and the values in the int[] will be
   // (0:open,1:high,2:low,3:close,4:volume) - length = 5
-  private HashMap<LocalDate, double[]> stockData;
+  private Map<LocalDate, double[]> stockData;
 
   public Stock1(String ticker, int shares) {
     this.shares = shares;
@@ -91,7 +95,6 @@ public class Stock1 {
 
   public double getData(String date, int index){
 
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
     Set<LocalDate> keys = stockData.keySet();
 
     LocalDate myKey = null;
@@ -123,7 +126,7 @@ public class Stock1 {
     Set<LocalDate> keys = stockData.keySet();
 
     LocalDate myKey = null;
-    double[] output = null;
+    double[] output = {0.0, 0.0, 0.0, 0.0, 0.0};
 
     if( date == "current") {
       myKey = Collections.max(keys);
@@ -198,19 +201,7 @@ public class Stock1 {
     return output;
   }
 
-  public String padRight(String s, int n) {
-    for(int i = 0; i < n; i++) {
-      s = s + " ";
-    }
-    return s;
-  }
 
-  public String padLeft(String s, int n) {
-    for(int i = 0; i < n; i++) {
-      s = " " + s;
-    }
-    return s;
-  }
 }
 
 

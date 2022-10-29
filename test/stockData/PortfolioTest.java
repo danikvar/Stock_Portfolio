@@ -2,11 +2,15 @@ package stockData;
 
 import org.junit.Test;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PortfolioTest {
 
@@ -35,6 +39,12 @@ public class PortfolioTest {
     for(double i:myVals) {
       System.out.println(i);
     }
+
+    System.out.println("_______________________________________________________");
+    System.out.println(myPort.printPortfolioAt("current"));
+
+    System.out.println("_______________________________________________________");
+    System.out.println(myPort.portToJSON());
   }
 
   @Test
@@ -75,6 +85,36 @@ public class PortfolioTest {
     System.out.println(outBuild.toString());
     System.out.println(myStock.printDataAt("current"));
     System.out.println(myStock2.printDataAt("current"));
+  }
+
+  @Test
+  public void ScannerTest() {
+    String content = "{\n  \"GOOG\":5,\n  \"NVDA\":1 \n}";
+    System.out.println(content);
+    Scanner sc = new Scanner(content);
+    while (sc.hasNext()) {
+      String myLine = sc.next();
+
+      boolean startEnd = myLine.contains(new StringBuilder("{"))
+              || myLine.contains(new StringBuilder("}"));
+      if(! startEnd) {
+
+        System.out.println("SCANNER 1");
+        Pattern p = Pattern.compile("\"([^\"]*)\"");
+        Matcher m = p.matcher(myLine);
+        m.find();
+        System.out.println(m.group(1));
+
+        System.out.println("SCANNER 2342");
+
+        int num = Integer.parseInt(myLine.replaceAll("[^0-9]", ""));
+        System.out.println(num);
+        System.out.println("\n");
+        System.out.printf(myLine);
+        System.out.println("\n");
+      }
+
+    }
   }
 
 }

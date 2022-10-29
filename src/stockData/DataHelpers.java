@@ -147,5 +147,19 @@ public class DataHelpers {
     return stockData;
   }
 
+  public static String padRight(String s, int n) {
+    for(int i = 0; i < n; i++) {
+      s = s + " ";
+    }
+    return s;
+  }
+
+  public static String padLeft(String s, int n) {
+    for(int i = 0; i < n; i++) {
+      s = " " + s;
+    }
+    return s;
+  }
+
 
 }
