@@ -1,3 +1,4 @@
+package StockData;
 public interface TextInterface {
 
   void showOptions();
@@ -9,6 +10,10 @@ public interface TextInterface {
   void addStock();
 
   void addStockdetails();
+
+  void addStockdetails2();
+
+  void dateInput();
 
   void totalValue();
 
