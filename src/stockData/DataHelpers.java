@@ -2,9 +2,7 @@ package stockData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -12,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -79,7 +78,9 @@ public class DataHelpers {
 
   }
 
-  public static HashMap<LocalDate, double[]> getStockData(String ticker) {
+  // WE ARE USING THE OPEN PRICE AS OUR PRICE FOR THE TARGET
+
+  public static Map<LocalDate, Double> getStockData(String ticker) {
 
     //the API key needed to use this web service.
     //Please get your own free API key here: https://www.alphavantage.co/
@@ -109,10 +110,9 @@ public class DataHelpers {
               + "no longer works");
     }
 
-    HashMap<LocalDate, double[]> stockData = new HashMap<> ();
+    Map<LocalDate, Double> stockData = new HashMap<> ();
 
     try {
-      Set<String> stockNames = new HashSet<String>();
       BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
       String line = null;
@@ -128,12 +128,7 @@ public class DataHelpers {
         //System.out.println(line);
         String keyStr = tickerInfo[0];
         LocalDate myKey = LocalDate.parse(keyStr);
-        double[] dateData = new double[5];
-        dateData[0] = Double.parseDouble(tickerInfo[1]);
-        dateData[1] = Double.parseDouble(tickerInfo[2]);
-        dateData[2] = Double.parseDouble(tickerInfo[3]);
-        dateData[3] = Double.parseDouble(tickerInfo[4]);
-        dateData[4] = Double.parseDouble(tickerInfo[5]);
+        Double dateData = Double.parseDouble(tickerInfo[1]);
 
         stockData.put(myKey, dateData);
         line = in.readLine();

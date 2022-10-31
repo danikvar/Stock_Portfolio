@@ -68,7 +68,8 @@ public class PortfolioApplication {
           m.find();
           String ticker = m.group(1);
           int shares = Integer.parseInt(myLine.replaceAll("[^0-9]", ""));
-          output.addStock(ticker, shares);
+          // TODO: Fix this so it takes a string data not just "API"
+          output.addStock(ticker, shares, "API");
         }
 
       }

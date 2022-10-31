@@ -1,4 +1,4 @@
-package StockData;
+package stockData;
 public interface TextInterface {
 
   void showOptions();

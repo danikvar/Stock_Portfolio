@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -17,9 +18,10 @@ public class PortfolioTest {
   @org.junit.Test
   public void addStock() {
     Portfolio myPort = new Portfolio();
-    myPort.addStock("GOOG",3);
-    myPort.addStock("GOOG",2);
-    myPort.addStock("NVDA",1);
+    myPort.addStock("GOOG",3, "API");
+    myPort.addStock("GOOG",2, "API");
+    myPort.addStock("NVDA",1, "API");
+    /*
     double[] myVals = myPort.getTotalValues("current");
     System.out.println(myPort.size());
 
@@ -27,29 +29,23 @@ public class PortfolioTest {
     System.out.println("**********************FINAL**********************");
     System.out.println("open");
     System.out.println(myVals[0]);
-    System.out.println("high");
-    System.out.println(myVals[1]);
-    System.out.println("low");
-    System.out.println(myVals[2]);
-    System.out.println("close");
-    System.out.println(myVals[3]);
-    System.out.println("Volume");
-    System.out.println(myVals[4]);
     System.out.println("Done");
     for(double i:myVals) {
       System.out.println(i);
     }
 
+     */
+
     System.out.println("_______________________________________________________");
     System.out.println(myPort.printPortfolioAt("current"));
 
-    System.out.println("_______________________________________________________");
-    System.out.println(myPort.portToJSON());
+    //System.out.println("_______________________________________________________");
+    //System.out.println(myPort.portToJSON());
   }
 
   @Test
   public void stockDataGetter() {
-    HashMap<LocalDate, double[]> allStocks = DataHelpers.getStockData("GOOG");
+    Map<LocalDate, Double> allStocks = DataHelpers.getStockData("GOOG");
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
     Set<LocalDate> keys = allStocks.keySet();
     for ( LocalDate key : keys ) {
@@ -70,18 +66,19 @@ public class PortfolioTest {
 
   @Test
   public void stockStringTest() {
-    stockData.Stock1 myStock = new stockData.Stock1("GOOG", 12);
+    stockData.Stock1 myStock = new stockData.Stock1("GOOG", 12, "API");
 
-    stockData.Stock1 myStock2 = new stockData.Stock1("NVDA", 23);
-    StringBuilder outBuild = new StringBuilder().append(
-            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-
+    stockData.Stock1 myStock2 = new stockData.Stock1("NVDA", 23, "API");
+    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
 
 
-    outBuild.append("| TICKER |    DATE    |    SHARES     |     OPEN PRICE     |");
-    outBuild.append("    HIGH PRICE    |    LOW PRICE    |    CLOSE PRICE    |    VOLUME    |");
+
+    outBuild.append("| TICKER |    DATE    |    SHARES     |");
+    outBuild.append("     OPEN PRICE     |    SHARE VALUE    |\n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
     System.out.println(outBuild.toString());
     System.out.println(myStock.printDataAt("current"));
     System.out.println(myStock2.printDataAt("current"));

@@ -29,9 +29,9 @@ public class Portfolio implements StockPortfolio{
    * @param shares
    */
   @Override
-  public void addStock(String Stock, int shares) {
+  public void addStock(String Stock, int shares, String data) {
     if(!StockList.containsKey(Stock)) {
-      Stock1 in_1 = new Stock1(Stock,shares);
+      Stock1 in_1 = new Stock1(Stock,shares, data);
       StockList.put(Stock, in_1);
     } else {
       Stock1 myStock = StockList.get(Stock);
@@ -49,7 +49,7 @@ public class Portfolio implements StockPortfolio{
   }
   @Override
   public double[] getTotalValues(String date) {
-    double[] myVal = new double[] {0,0,0,0,0};
+    double[] myVal = new double[] {0.0, 0.0};
     if( StockList.size() > 0) {
 
       for(String myKey: StockList.keySet()) {
@@ -59,6 +59,8 @@ public class Portfolio implements StockPortfolio{
 
         Stock1 myStock = StockList.get(myKey);
 
+        double price = myStock.getData(date);
+        double totVal = price * ((double) myStock.getShares());
         /*
         System.out.println("NumShares:");
         System.out.println(myStock.getShares());
@@ -75,9 +77,10 @@ public class Portfolio implements StockPortfolio{
         System.out.println("Done");
         */
 
-        double[] stockData = valueForStock(myStock.getData(date), myStock.getShares());
+        // TODO: Update Here
+        myVal[0] += price;
+        myVal[1] += totVal;
 
-        Arrays.setAll(myVal, i -> myVal[i] + stockData[i]);
       }
     }
     return myVal;
@@ -114,27 +117,26 @@ public class Portfolio implements StockPortfolio{
    * @return a table formatted string displaying the portfolio
    */
   public String printPortfolioAt(String date) {
-    StringBuilder outBuild = new StringBuilder().append(
-            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
-    outBuild.append("| TICKER |    DATE    |    SHARES     |     OPEN PRICE     |");
-    outBuild.append("    HIGH PRICE    |    LOW PRICE    |    CLOSE PRICE    |    VOLUME    | \n");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    outBuild.append("| TICKER |    DATE    |    SHARES     |");
+    outBuild.append("     OPEN PRICE     |    SHARE VALUE    |\n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
     for (String stockName : StockList.keySet()) {
       Stock1 myStock = StockList.get(stockName);
       outBuild.append(myStock.printDataAt(date) + "\n");
     }
 
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
     DecimalFormat df = new DecimalFormat("#");
     df.setMaximumFractionDigits(10);
 
     String[] paddedVals = getPortPadding(
-            String.valueOf(this.getNumStocks()),
+            this.getNumStocks(),
             df, this.getTotalValues(date)
     );
 
@@ -142,7 +144,7 @@ public class Portfolio implements StockPortfolio{
     outBuild.append("| TOTAL  | ");
 
     if( date.equals("current") ) {
-      outBuild.append("  current ");
+      outBuild.append("  Current ");
     } else {
       outBuild.append(date);
     }
@@ -153,21 +155,16 @@ public class Portfolio implements StockPortfolio{
     outBuild.append(paddedVals[1]);
     outBuild.append(" | ");
     outBuild.append(paddedVals[2]);
-    outBuild.append(" | ");
-    outBuild.append(paddedVals[3]);
-    outBuild.append(" | ");
-    outBuild.append(paddedVals[4]);
-    outBuild.append(" | ");
-    outBuild.append(paddedVals[5]);
-    outBuild.append(" | \n");
+    outBuild.append(" |\n");
 
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
 
     return outBuild.toString();
   }
 
+  /*
   // adds to arrays in an element wise fashion
   private double[] applyOn2Arrays(BinaryOperator<Double> operator, double[] a, double b[]) {
     return IntStream.range(0, a.length)
@@ -179,22 +176,21 @@ public class Portfolio implements StockPortfolio{
     return Arrays.stream(array).map(i -> i * val).toArray();
   }
 
+   */
 
-  private String[] getPortPadding(String shares, DecimalFormat myDF, double[] myData) {
-    int[] padAmount = new int[6];
+
+  private String[] getPortPadding(int shares, DecimalFormat myDF, double[] myData) {
+    int[] padAmount = new int[3];
 
     padAmount[0] = Math.max(0, 13 - String.valueOf(shares).length());
     padAmount[1] = Math.max(0, 18 - myDF.format(myData[0]).length());
-    padAmount[2] = Math.max(0, 16 - myDF.format(myData[1]).length());
-    padAmount[3] = Math.max(0, 15 - myDF.format(myData[2]).length());
-    padAmount[4] = Math.max(0, 17 - myDF.format(myData[3]).length());
-    padAmount[5] = Math.max(0, 12 - myDF.format(myData[4]).length());
+    padAmount[2] = Math.max(0, 17 - myDF.format(myData[1]).length());
 
 
-    int[] leftPad = new int[6];
-    int[] rightPad = new int[6];
+    int[] leftPad = new int[3];
+    int[] rightPad = new int[3];
 
-    for( int i = 0; i < 6; i ++) {
+    for( int i = 0; i < 3; i ++) {
       if (padAmount[i] != 0) {
         leftPad[i] = padAmount[i] / 2;
         rightPad[i] = padAmount[i] - leftPad[i];
@@ -205,12 +201,12 @@ public class Portfolio implements StockPortfolio{
 
     }
 
-    String[] output = new String[6];
+    String[] output = new String[3];
 
-    output[0] = padRight(padLeft(shares, leftPad[0]), rightPad[0]);
-    for (int i = 1; i < 6; i++) {
-      output[i] = padRight(padLeft(myDF.format(myData[i-1]), leftPad[i]), rightPad[i]);
-    }
+    output[0] = padRight(padLeft(String.valueOf(shares), leftPad[0]), rightPad[0]);
+    output[1] = padRight(padLeft(myDF.format(myData[0]), leftPad[1]), rightPad[1]);
+    output[2] = padRight(padLeft(myDF.format(myData[1]), leftPad[2]), rightPad[2]);
+
 
     return output;
   }

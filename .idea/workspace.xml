@@ -4,10 +4,14 @@
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockData/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/DataHelpers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockData/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Portfolio.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockData/Stock1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Stock1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/TextController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/TextGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/TextInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/TextInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +58,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="stockData" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\danik\OneDrive\Desktop\Northeastern_Grad\CS_5010_Prog_Design\Code\HW_4\src\stockData" />
       <recent name="C:\Users\danik\OneDrive\Desktop\Northeastern_Grad\CS_5010_Prog_Design\Code\HW_4\src" />
@@ -65,7 +72,7 @@
       <recent name="stockData" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PortfolioTest.ScannerTest">
+  <component name="RunManager" selected="JUnit.PortfolioTest.addStock">
     <configuration name="AlphaVantageDemo" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -107,7 +114,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PortfolioTest.size" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PortfolioTest.stockDataGetter" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
@@ -117,7 +124,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="stockData" />
       <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
-      <option name="METHOD_NAME" value="size" />
+      <option name="METHOD_NAME" value="stockDataGetter" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -157,11 +164,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PortfolioTest.ScannerTest" />
         <item itemvalue="JUnit.PortfolioTest.addStock" />
         <item itemvalue="JUnit.PortfolioTest.stockStringTest" />
+        <item itemvalue="JUnit.PortfolioTest.stockDataGetter" />
+        <item itemvalue="JUnit.PortfolioTest.ScannerTest" />
         <item itemvalue="JUnit.PortfolioTest.tickerTest" />
-        <item itemvalue="JUnit.PortfolioTest.size" />
       </list>
     </recent_temporary>
   </component>
@@ -176,7 +183,7 @@
       <workItem from="1666810791683" duration="2320000" />
       <workItem from="1666815328576" duration="23958000" />
       <workItem from="1666962291584" duration="14601000" />
-      <workItem from="1667069766223" duration="7579000" />
+      <workItem from="1667069766223" duration="18499000" />
     </task>
     <servers />
   </component>

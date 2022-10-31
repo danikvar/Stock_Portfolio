@@ -1,8 +1,8 @@
-package StockData;
+package stockData;
 import java.io.PrintStream;
 
 
-public class TextGUI implements TextInterface{
+public class TextGUI implements TextInterface {
   private PrintStream out;
 
   public TextGUI(PrintStream out) {
@@ -51,6 +51,10 @@ public class TextGUI implements TextInterface{
     out.println("Enter date");
   }
 
+  @Override
+  public void totalValue() {
+    
+  }
 
 
 }
