@@ -35,14 +35,18 @@ public class TextController implements Controller{
               case "A":
                 view.getpath();
                 String path = in.nextLine();
-                model.loadPortfolio(user,path);
+               // model.loadPortfolio(user,path);
               case "B":
                 //create empty port
+              case "Finish": go();
             }
           case "D":
             DataHelpers.listPortfolios(user);
             view.showOptions1();
             //retrieve portfolio
+          case "Finish": go();
+          default:
+            quit = true;
         }
       }
       else {
@@ -53,9 +57,12 @@ public class TextController implements Controller{
           case "A":
             view.getpath();
             String path = in.nextLine();
-            model.loadPortfolio(user,path);
+           // model.loadPortfolio(user,path);
           case "B":
-            //create empty port
+            //create empty portfolio
+          case "Finish": go();
+          default:
+            quit = true;
         }
       }
       view.showOptions();
@@ -94,8 +101,8 @@ public class TextController implements Controller{
           catch(Exception e) {
             System.out.println(e);
           }
+        case "Finish": go();
         default:
-          view.showOptionError();
           quit = true;
       }
     }
