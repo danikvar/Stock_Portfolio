@@ -1,4 +1,4 @@
-package stockData;
+package StockData;
 public interface TextInterface {
 
   void showOptions();
@@ -13,9 +13,14 @@ public interface TextInterface {
 
   void addStockdetails2();
 
+  void addStockdetails3();
+
   void dateInput();
 
-  void totalValue();
+  void getpath();
 
+  void create();
+
+  void chooseOption();
   void showOptionError();
 }

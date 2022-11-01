@@ -1,5 +1,6 @@
-package stockData;
+package StockData;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -15,63 +16,72 @@ public class TextController implements Controller{
 
   }
   @Override
-  public void go() {
+  public void go() throws Exception {
     String input;
     boolean quit = false;
 
     while (!quit) {
       //tell view to show options
+      DataHelpers.getUsers();
+      String user = in.nextLine();
+      if(DataHelpers.getUsers().contains(user)){
+        view.chooseOption();
+        String option1 = in.next();
+        switch(option1) {
+          case "C":
+            view.createnew();
+          case "D":
+            DataHelpers.listPortfolios(user);
+            view.showOptions1();
+        }
+      }
+      else {
+        view.create();
+        view.createnew();
+        String fileoremptyport = in.nextLine();
+        switch (fileoremptyport) {
+          case "A":
+            view.getpath();
+          case "B":
+            //create empty port
+        }
+      }
       view.showOptions();
       //accept user input
       String option = in.next();
       switch (option) {
         case "E":
+          //ask for stock input.
           view.addStockdetails();
           in.nextLine();
           input = in.nextLine();
-          //ask for Integer input
+          //ask for shares input
           view.addStockdetails2();
           in.nextInt();
           int input2= in.nextInt();
+          //asl for date/data input.
+          view.addStockdetails3();
+          String input3 = in.next();
           //give to model
-          //TODO FIX THIS WITH THIRD INPUT
-          // HERE WE NEED TO CHECK INPUT 3 TO MAKE SURE THAT
-          // IF THEY ARE INPUTTING STRING THEY DO SO CORRECTLY
-          // WRAP THIS IN A TRY CATCH BLOCK AND IF IT THROWS AN
-          // ERROR ASK THEM TO TRY AGAIN
-          // Also I was thinking we should let them quit an restart if they
-          // enter some string so they dont get stuck. (Like if input == "q!", restart the application)
-          // I was thinking similar to something like this:
-
-          /*
-          while ( true ) {
-            in.nextLine();
-            input = in.nextLine();
-            //ask for Integer input
-            view.addStockdetails2();
-            in.nextInt();
-            int input2 = in.nextInt();
-            in.nextLine();
-            String input3 = in.nextLine();
-            try {
-              model.addStock(input, input2, input3);
-              break;
-            } catch (Exception E) {
-              System.out.println("Please make sure you are printing a valid sequence and try again!");
-              in.next()
-            } //end catch
+          try {
+            model.addStock(input, input2, input3);
+            break;
           }
-           */
-
-          //model.addStock(input,input2);
-          break;
+          catch(Exception e) {
+            System.out.println(e);
+          }
         case "Q":
           view.dateInput();
           in.nextLine();
           input = in.nextLine();
           //give to model
-          model.getTotalValues(input);
-          break;
+          try {
+            model.getTotalValues(input);
+            break;
+          }
+          catch(Exception e) {
+            System.out.println(e);
+          }
         default:
           view.showOptionError();
           quit = true;
