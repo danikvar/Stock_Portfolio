@@ -1,6 +1,8 @@
 package stockData;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -12,9 +14,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.Set;
 
 public class DataHelpers {
+
+  private static String thisDir = new File(System.getProperty("user.dir")).getAbsolutePath();
 
   private static String apiKey = "STCCIMO3IO23H86C";
   public static Set<String> getTickers() throws IllegalArgumentException{
@@ -154,6 +159,116 @@ public class DataHelpers {
       s = " " + s;
     }
     return s;
+  }
+
+  // this function just gets all the files in the Users folder
+  private static File[] getUserArray() {
+    String userDir = new StringBuilder().append(thisDir).append("\\Users").toString();
+
+    File userFolder = new File(userDir);
+    return userFolder.listFiles();
+  }
+
+  // This function gets all the folders in the Users folder and lists them
+  // Currently lists: "Test1, Test2, Test3, Test4, Test_User"
+  public static String getUsers() {
+
+    File[] listOfFiles = getUserArray();
+
+    StringBuilder myUsers = new StringBuilder();
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if(listOfFiles.length > 0) {
+      for (int i = 0; i < listOfFiles.length; i++) {
+
+        //System.out.println(listOfFiles[i].getPath());
+        myUsers.append(listOfFiles[i].getName());
+
+        if(i != listOfFiles.length - 1) {
+          myUsers.append(", ");
+        }
+
+      }
+    }
+
+
+    return myUsers.toString();
+  }
+
+
+  // this function gets the portfolio directory by reading the file "root.txt" created
+  // through setDirectory(User) which is called in createUser(String userName, String portfolioDirectory)
+  public static String getPortfolioDir(String userName) throws FileNotFoundException{
+
+    File[] listOfFiles = getUserArray();
+
+    StringBuilder myUsers = new StringBuilder();
+    String myDir = "";
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if(listOfFiles.length > 0) {
+      for (int i = 0; i < listOfFiles.length; i++) {
+        if(userName.equals(listOfFiles[i].getName())) {
+          //System.out.println(listOfFiles[i].getPath());
+          myDir = listOfFiles[i].getPath();
+          break;
+        }
+      }
+    }
+
+    if(myDir.isEmpty()) {
+      throw new FileNotFoundException("There is no User with a matching name." +
+              "Please check your input and try again");
+    }
+
+
+
+    //File dirFile = new File();
+    //System.out.println();
+    //System.out.println((new File(myDir).listFiles())[0].getPath());
+    try{
+      File dirFile = new File((myDir + "\\root.txt"));
+      Scanner scan = new Scanner(dirFile);
+      String portDir = scan.nextLine();
+      return portDir;
+    } catch (FileNotFoundException e) {
+      throw new FileNotFoundException("There is no Portfolio directory in 'root.txt' specified in the User File");
+    }
+
+  }
+
+  // This lists all the portfolios associated with a given user:
+  // For my test user i created a folder on my desktop with some JSON and txt files
+  // If I use my test folder it prints this: port1.json, port2.txt, port3.txt
+  // I would like to make sure that the user enters the extension they would like
+  // to save their data as.
+  public static String listPortfolios(String userName) throws FileNotFoundException{
+    String portDir = getPortfolioDir(userName);
+    File portFolder = new File(portDir);
+    File[] portList = portFolder.listFiles();
+
+    StringBuilder myPorts = new StringBuilder();
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if(portList.length > 0) {
+      for (int i = 0; i < portList.length; i++) {
+
+        //System.out.println(listOfFiles[i].getPath());
+        myPorts.append(portList[i].getName());
+
+        if(i != portList.length - 1) {
+          myPorts.append(", ");
+        }
+
+      }
+    }
+    return myPorts.toString();
   }
 
 

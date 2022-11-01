@@ -2,7 +2,10 @@ package stockData;
 
 import org.junit.Test;
 
-import java.sql.SQLOutput;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -153,9 +156,82 @@ public class PortfolioTest {
       System.out.println(myMap.containsKey(key));
     }
 
-
-
-
     //System.out.println(x.length());
+  }
+
+  @Test
+  public void getUsers() throws FileNotFoundException {
+    // Inputs needed:
+    System.out.println("Start");
+    System.out.println("".isEmpty());
+
+    String userName = "Test_User";
+    String myPort = "Test_Portfolio";
+
+    /////////////////////////////////////////////////
+
+    //TEsting getting the users
+    System.out.println(DataHelpers.getUsers());
+    // This is the current directory
+    String userDir = new File(System.getProperty("user.dir")).getAbsolutePath();
+    userDir = new StringBuilder().append(userDir).append("\\Users").toString();
+
+    File userFolder = new File(userDir);
+    File[] listOfFiles = userFolder.listFiles();
+
+    String myDir = "";
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if (listOfFiles.length > 0) {
+      for (int i = 0; i < listOfFiles.length; i++) {
+        if (userName.equals(listOfFiles[i].getName())) {
+          //System.out.println(listOfFiles[i].getPath());
+          myDir = listOfFiles[i].getPath();
+          break;
+        }
+
+      }
+    }
+
+
+    //File dirFile = new File();
+    //System.out.println();
+    //System.out.println((new File(myDir).listFiles())[0].getPath());
+    String portDir;
+    try {
+      File dirFile = new File((myDir + "\\root.txt"));
+      Scanner scan = new Scanner(dirFile);
+      portDir = scan.nextLine();
+      System.out.println("Good");
+    } catch (FileNotFoundException e) {
+      throw new FileNotFoundException("There is no Portfolio directory specified in the User File");
+    }
+
+    File portFolder = new File(portDir);
+    File[] portList = portFolder.listFiles();
+
+    StringBuilder myPorts = new StringBuilder();
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if(portList.length > 0) {
+      for (int i = 0; i < portList.length; i++) {
+
+        //System.out.println(listOfFiles[i].getPath());
+        myPorts.append(portList[i].getName());
+
+        if(i != portList.length - 1) {
+          myPorts.append(", ");
+        }
+
+      }
+    }
+    System.out.println(myPorts.toString());
+
+    //String rootDir = userDir.substring(0, userDir.indexOf(File.separator)+1);
+    //System.out.println(userDir);
   }
 }

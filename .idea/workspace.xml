@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Stock1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Stock1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockData/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/DataHelpers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,28 +64,12 @@
       <recent name="stockData" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PortfolioTest.dateParsing">
+  <component name="RunManager" selected="JUnit.PortfolioTest.getUsers">
     <configuration name="AlphaVantageDemo" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="AlphaVantageDemo" />
       <module name="HW_4" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PortfolioTest.ScannerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="HW_4" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="stockData.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="stockData" />
-      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
-      <option name="METHOD_NAME" value="ScannerTest" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -117,6 +101,22 @@
       <option name="PACKAGE_NAME" value="stockData" />
       <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
       <option name="METHOD_NAME" value="dateParsing" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PortfolioTest.getUsers" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockData.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockData" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
+      <option name="METHOD_NAME" value="getUsers" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -156,11 +156,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PortfolioTest.getUsers" />
         <item itemvalue="JUnit.PortfolioTest.dateParsing" />
         <item itemvalue="JUnit.PortfolioTest.addStock" />
         <item itemvalue="JUnit.PortfolioTest.stockStringTest" />
         <item itemvalue="JUnit.PortfolioTest.stockDataGetter" />
-        <item itemvalue="JUnit.PortfolioTest.ScannerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -175,7 +175,8 @@
       <workItem from="1666810791683" duration="2320000" />
       <workItem from="1666815328576" duration="23958000" />
       <workItem from="1666962291584" duration="14601000" />
-      <workItem from="1667069766223" duration="22806000" />
+      <workItem from="1667069766223" duration="23989000" />
+      <workItem from="1667312774910" duration="9199000" />
     </task>
     <servers />
   </component>
