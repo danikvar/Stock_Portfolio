@@ -26,13 +26,23 @@ public class TextController implements Controller{
       String user = in.nextLine();
       if(DataHelpers.getUsers().contains(user)){
         view.chooseOption();
-        String option1 = in.next();
+        String option1 = in.nextLine();
         switch(option1) {
           case "C":
             view.createnew();
+            String fileoremptyport = in.nextLine();
+            switch (fileoremptyport) {
+              case "A":
+                view.getpath();
+                String path = in.nextLine();
+                model.loadPortfolio(user,path);
+              case "B":
+                //create empty port
+            }
           case "D":
             DataHelpers.listPortfolios(user);
             view.showOptions1();
+            //retrieve portfolio
         }
       }
       else {
@@ -42,6 +52,8 @@ public class TextController implements Controller{
         switch (fileoremptyport) {
           case "A":
             view.getpath();
+            String path = in.nextLine();
+            model.loadPortfolio(user,path);
           case "B":
             //create empty port
         }
