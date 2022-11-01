@@ -1,15 +1,18 @@
 package stockData;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -62,8 +65,21 @@ public class PortfolioTest {
 
   @Test
   public void tickerTest() {
-    Set<String> allStocks = DataHelpers.getTickers();
+    Set<String> allStocks2 = DataHelpers.getTickers();
+    Set<String> allStocks = new HashSet<String>();
+    try{
+      File nameFile = new File("Tickers.txt");
+      Scanner scan = new Scanner(nameFile);
+      String line;
+      while(scan.hasNextLine()) {
+        line = scan.nextLine();
+        allStocks.add(line);
 
+      }
+    } catch(FileNotFoundException e) {
+
+    }
+    System.out.println(allStocks2.equals(allStocks));
     System.out.println(allStocks.toString());
   }
 
@@ -160,78 +176,33 @@ public class PortfolioTest {
   }
 
   @Test
-  public void getUsers() throws FileNotFoundException {
-    // Inputs needed:
-    System.out.println("Start");
-    System.out.println("".isEmpty());
+  public void loadPortTest(){
 
     String userName = "Test_User";
-    String myPort = "Test_Portfolio";
-
-    /////////////////////////////////////////////////
-
-    //TEsting getting the users
-    System.out.println(DataHelpers.getUsers());
-    // This is the current directory
-    String userDir = new File(System.getProperty("user.dir")).getAbsolutePath();
-    userDir = new StringBuilder().append(userDir).append("\\Users").toString();
-
-    File userFolder = new File(userDir);
-    File[] listOfFiles = userFolder.listFiles();
-
-    String myDir = "";
-
-    // Checking to see if we already have a folder for the user
-    // Otherwise we must create a new one
-
-    if (listOfFiles.length > 0) {
-      for (int i = 0; i < listOfFiles.length; i++) {
-        if (userName.equals(listOfFiles[i].getName())) {
-          //System.out.println(listOfFiles[i].getPath());
-          myDir = listOfFiles[i].getPath();
-          break;
-        }
-
-      }
-    }
-
-
-    //File dirFile = new File();
-    //System.out.println();
-    //System.out.println((new File(myDir).listFiles())[0].getPath());
-    String portDir;
+    String PortfolioName = "port1.json";
+    Portfolio myPort;
     try {
-      File dirFile = new File((myDir + "\\root.txt"));
-      Scanner scan = new Scanner(dirFile);
-      portDir = scan.nextLine();
-      System.out.println("Good");
+      myPort = (Portfolio) DataHelpers.loadPortfolio(userName, PortfolioName);
+      System.out.println(myPort.toString());
     } catch (FileNotFoundException e) {
-      throw new FileNotFoundException("There is no Portfolio directory specified in the User File");
+      throw new RuntimeException(e);
     }
 
-    File portFolder = new File(portDir);
-    File[] portList = portFolder.listFiles();
-
-    StringBuilder myPorts = new StringBuilder();
-
-    // Checking to see if we already have a folder for the user
-    // Otherwise we must create a new one
-
-    if(portList.length > 0) {
-      for (int i = 0; i < portList.length; i++) {
-
-        //System.out.println(listOfFiles[i].getPath());
-        myPorts.append(portList[i].getName());
-
-        if(i != portList.length - 1) {
-          myPorts.append(", ");
-        }
-
-      }
-    }
-    System.out.println(myPorts.toString());
-
-    //String rootDir = userDir.substring(0, userDir.indexOf(File.separator)+1);
-    //System.out.println(userDir);
+    String expected = "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n"
+            + "| TICKER |    DATE    |    SHARES     |     OPEN PRICE     |    SHARE VALUE    |\n"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n"
+            + "|  GOOG  | 2022-10-31 |      10       |       "
+            + "95.78        |       957.8       |\n"
+            + "|  NVDA  | 2022-07-15 |      100      |"
+            + "        20.3        |       2030        |\n"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n"
+            + "| TOTAL  |   Current  |      110      |"
+            + "       116.08       |      2987.8       |\n"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+            + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n";
+    Assert.assertEquals(expected, myPort.toString());
   }
 }

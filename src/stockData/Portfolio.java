@@ -2,21 +2,28 @@ package stockData;
 
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.stream.IntStream;
 
+import static stockData.DataHelpers.getTickers;
 import static stockData.DataHelpers.padLeft;
 import static stockData.DataHelpers.padRight;
 
 public class Portfolio implements StockPortfolio{
-  Map<String, Stock1> StockList;
+  private Map<String, Stock1> StockList;
+  private Set<String> stockTickers;
+
+  private String name;
 
   public Portfolio(){
     this.StockList = new HashMap<String, Stock1>();
+    this.stockTickers = getTickers();
   }
 
   /**
@@ -29,14 +36,41 @@ public class Portfolio implements StockPortfolio{
    * @param shares
    */
   @Override
-  public void addStock(String Stock, int shares, String data) {
+  public void addStock(String Stock, int shares, String data) throws IllegalArgumentException {
+
+    if(!stockTickers.contains(Stock)) {
+      throw new IllegalArgumentException("The ticker provided is not a valid ticker."
+              + "Please check the ticker and try again.");
+    }
+
+    Stock1 in_1;
     if(!StockList.containsKey(Stock)) {
-      Stock1 in_1 = new Stock1(Stock,shares, data);
-      StockList.put(Stock, in_1);
+      in_1 = new Stock1(Stock,shares, data);
     } else {
       Stock1 myStock = StockList.get(Stock);
-      myStock.addShares(shares);
+      in_1 = myStock.addShares(shares);
     }
+
+    StockList.put(Stock, in_1);
+
+  }
+
+  public void addStock(String Stock, int shares, Map<LocalDate, Double> priceData) throws IllegalArgumentException {
+
+    if(!stockTickers.contains(Stock)) {
+      throw new IllegalArgumentException("The ticker provided is not a valid ticker."
+              + "Please check the ticker and try again.");
+    }
+
+    Stock1 in_1;
+    if(!StockList.containsKey(Stock)) {
+      in_1 = new Stock1(Stock,shares, priceData);
+    } else {
+      Stock1 myStock = StockList.get(Stock);
+      in_1 = myStock.addShares(shares);
+    }
+
+    StockList.put(Stock, in_1);
 
   }
 

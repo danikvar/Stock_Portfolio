@@ -1,8 +1,10 @@
 package stockData;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
@@ -22,7 +25,37 @@ public class DataHelpers {
   private static String thisDir = new File(System.getProperty("user.dir")).getAbsolutePath();
 
   private static String apiKey = "STCCIMO3IO23H86C";
-  public static Set<String> getTickers() throws IllegalArgumentException{
+
+  public static Set<String> getTickers() throws IllegalArgumentException {
+    try{
+      return getAPITickers();
+    } catch(RuntimeException e) {
+      try {
+        return loadLocalTickers();
+      } catch (FileNotFoundException ex) {
+        throw new RuntimeException(ex);
+      }
+    }
+  }
+
+  private static Set<String> loadLocalTickers() throws FileNotFoundException {
+
+    Set<String> allStocks = new HashSet<String>();
+
+    try{
+      File nameFile = new File("Tickers.txt");
+      Scanner scan = new Scanner(nameFile);
+      String line;
+      while(scan.hasNextLine()) {
+        line = scan.nextLine();
+        allStocks.add(line);
+      }
+    } catch(FileNotFoundException e) {
+      throw new FileNotFoundException("There is no local Ticker file and the API cannot be reached.");
+    }
+    return allStocks;
+  }
+  private static Set<String> getAPITickers() throws RuntimeException {
     //the API key needed to use this web service.
     //Please get your own free API key here: https://www.alphavantage.co/
     //Please look at documentation here: https://www.alphavantage.co/documentation/
@@ -76,8 +109,23 @@ public class DataHelpers {
 
       }
     } catch(IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("API could not be contacted.");
     }
+
+    BufferedWriter out = null;
+    try {
+      out = new BufferedWriter(new FileWriter("Tickers.txt"));
+      Iterator it = stockNames.iterator();
+      while(it.hasNext()) {
+        out.write(String.valueOf(it.next()));
+        out.newLine();
+      }
+      out.close();
+    } catch (IOException e) {
+      throw new RuntimeException("The API file could not be written to");
+    }
+
+
 
     return stockNames;
 
@@ -270,6 +318,100 @@ public class DataHelpers {
     }
     return myPorts.toString();
   }
+
+  public static StockPortfolio loadPortfolio(String userName, String PortfolioName) throws FileNotFoundException {
+    String portDir = getPortfolioDir(userName);
+    File portFolder = new File(portDir);
+    File[] portList = portFolder.listFiles();
+
+    String myPort = "";
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if(portList.length > 0) {
+      for (int i = 0; i < portList.length; i++) {
+
+        //System.out.println(listOfFiles[i].getPath());
+        if(PortfolioName.equals(portList[i].getName())) {
+          //System.out.println(listOfFiles[i].getPath());
+          myPort = portList[i].getPath();
+          break;
+        }
+
+      }
+    }
+
+    if(myPort.isEmpty()) {
+      throw new FileNotFoundException("There is no Portfolio with a matching name." +
+              "Please check your input and try again");
+    } else {
+      return parsePortfolio(myPort);
+    }
+  }
+
+
+  public static StockPortfolio parsePortfolio(String portDir) throws FileNotFoundException {
+    File portFile = new File(portDir);
+    Scanner scan = new Scanner(portFile);
+    //System.out.println(scan.nextLine());
+    String line;
+
+    Portfolio myPortfolio = new Portfolio();
+    //Pattern btwnQuotes = Pattern.compile("\".*\\\\\\\"(.*)\\\\\\\".*\"");
+    while(scan.hasNextLine()) {
+      line = scan.nextLine();
+      if(line.contains("Stock")){
+
+        String line2 = scan.nextLine();
+        String ticker = line2.split("\"")[3];
+        line2 = scan.nextLine();
+        int shares = Integer.parseInt(line2.split("\"")[3]);
+        scan.nextLine();
+        line2 = scan.nextLine();
+
+        if(line2.contains("API")) {
+          myPortfolio.addStock(ticker, shares, "API");
+        } else {
+          Map<LocalDate, Double> priceData = new HashMap<LocalDate, Double>();
+          line2 = scan.nextLine();
+
+          while(!line2.contains("}")) {
+            String[] datePrice = line2.split("\"");
+            LocalDate myKey = LocalDate.parse(datePrice[1]);
+            Double price = Double.parseDouble(datePrice[3]);
+            priceData.put(myKey, price);
+            line2 = scan.nextLine();
+          }
+          // If there is an error with the ticker or shares this will say
+          try{
+            myPortfolio.addStock(ticker, shares, priceData);
+          } catch(IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
+          }
+        }
+
+      }
+    }
+
+    return myPortfolio;
+  }
+
+  public static void savePortfolio(StockPortfolio save,
+                                   String userName,
+                                   String PortfolioName) throws FileNotFoundException {
+    String portDir = getPortfolioDir(userName);
+
+  }
+
+  // This converts the portfolio to a json formatted string.
+  public static void toJSON(StockPortfolio save) {
+
+
+  }
+
+
+
 
 
 }

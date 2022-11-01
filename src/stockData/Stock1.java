@@ -41,6 +41,12 @@ public class Stock1 {
     // This function gets the value at the current date
   }
 
+  public Stock1(String ticker, int shares, Map<LocalDate, Double> data) {
+    this.shares = shares;
+    this.ticker = ticker;
+    this.stockData = data;
+  }
+
   // If the date string passed to this == "current" then it will
   // fetch the most current date available in stockData, otherwise it
   // searches stockData for key matching the date inputted.
@@ -139,8 +145,9 @@ public class Stock1 {
 
   // used to change the number of shares if a certain ticker is
   // added to a portfolio multiple times
-  public void addShares(int numShares) {
-    this.shares += numShares;
+  public Stock1 addShares(int numShares){
+    int totShares = this.shares + numShares;
+    return new Stock1(this.ticker, totShares, this.stockData);
   }
 
   private String[] getPadding( String ticker, int shares, DecimalFormat myDF, double myData) {
