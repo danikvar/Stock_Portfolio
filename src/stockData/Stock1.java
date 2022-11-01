@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -179,10 +180,35 @@ public class Stock1 {
 
   // Example String:
   // "(2020-10-05,32.4),(2022-09-31,46.7),...
-  private Map<LocalDate, Double> parseStock(String data) {
+  // IF A DATE IS ENTERED MORE THAN ONCE THEN ONLY THE
+  // FIRST TIME IT WAS ENTERED WILL BE USED
+  private Map<LocalDate, Double> parseStock(String data) throws IllegalArgumentException{
 
+    if(!data.matches("[0-9-,.); (]+")) {
+      throw new IllegalArgumentException("Unexpected character was found in stock data. "
+              + "Please try again.");
+    }
 
-    return null;
+    Map<LocalDate, Double> stockDateData = new HashMap<LocalDate, Double>();
+    String[] dateInfo = data.split(";");
+
+    for(int i = 0; i < dateInfo.length; i++) {
+
+      String m2 = dateInfo[i].replaceAll("[() ]", "");
+
+      String[] info2 = m2.split(",");
+
+      // This will throw an error if the date was entered wrong so ok here
+      LocalDate myKey = LocalDate.parse(info2[0]);
+
+      if(!stockDateData.containsKey(myKey)) {
+        stockDateData.put(myKey,Double.parseDouble(info2[1]));
+      }
+      // This will throw an error if the # was entered wrong, so we should be good here.
+
+    }
+
+    return stockDateData;
   }
 
 

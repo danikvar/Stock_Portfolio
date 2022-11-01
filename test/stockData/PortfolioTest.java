@@ -114,4 +114,48 @@ public class PortfolioTest {
     }
   }
 
+  public Map<LocalDate, Double> parseStock(String data) throws IllegalArgumentException {
+
+    if (!data.matches("[0-9-,.); (]+")) {
+      throw new IllegalArgumentException("Unexpected character was found in stock data. "
+              + "Please try again.");
+    }
+
+    Map<LocalDate, Double> stockDateData = new HashMap<LocalDate, Double>();
+    String[] dateInfo = data.split(";");
+
+    for (int i = 0; i < dateInfo.length; i++) {
+
+      System.out.println(dateInfo[i]);
+      String m2 = dateInfo[i].replaceAll("[() ]", "");
+
+      String[] info2 = m2.split(",");
+
+      // This will throw an error if the date was entered wrong so ok here
+      LocalDate myKey = LocalDate.parse(info2[0]);
+      // This will throw an error if the # was entered wrong so we should be good here.
+      stockDateData.put(myKey, Double.parseDouble(info2[1]));
+    }
+
+    return stockDateData;
+  }
+
+  @Test
+  public void dateParsing() {
+    String line = "(2022-10-15,55.5);(2022-10-14,44.4);(2022-08-15,33.3);(2022-07-15,22.2)";
+
+    Map<LocalDate, Double> myMap = parseStock(line);
+
+    for(LocalDate key: myMap.keySet()) {
+      System.out.println("okay?");
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+      System.out.println("*************************************************");
+      System.out.println(myMap.containsKey(key));
+    }
+
+
+
+
+    //System.out.println(x.length());
+  }
 }
