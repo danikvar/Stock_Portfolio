@@ -1,4 +1,4 @@
-package StockData;
+package stockData;
 
 
 import java.io.FileNotFoundException;
@@ -10,9 +10,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import static StockData.DataHelpers.getTickers;
-import static StockData.DataHelpers.padLeft;
-import static StockData.DataHelpers.padRight;
+import static stockData.DataHelpers.getTickers;
+import static stockData.DataHelpers.padLeft;
+import static stockData.DataHelpers.padRight;
 
 public class Portfolio implements StockPortfolio{
   private Map<String, Stock1> StockList;

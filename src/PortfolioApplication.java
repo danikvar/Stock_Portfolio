@@ -6,8 +6,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import StockData.DataHelpers;
-import StockData.Portfolio;
+import stockData.DataHelpers;
+import stockData.Portfolio;
 
 
 public class PortfolioApplication {

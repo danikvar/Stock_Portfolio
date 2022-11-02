@@ -1,10 +1,9 @@
-package StockData;
+package stockData;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import java.util.HashMap;
@@ -12,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static StockData.DataHelpers.padLeft;
-import static StockData.DataHelpers.padRight;
+import static stockData.DataHelpers.padLeft;
+import static stockData.DataHelpers.padRight;
 import static java.lang.Math.min;
 
 public class Stock1 {

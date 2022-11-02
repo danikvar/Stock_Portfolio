@@ -1,4 +1,4 @@
-package StockData;
+package stockData;
 import java.io.PrintStream;
 
 
@@ -17,6 +17,8 @@ public class TextGUI implements TextInterface{
     //StockData.Portfolio is displayed if present.
     out.println(" C : Create a new portfolio");
     out.println("D : Display a portfolio");
+    out.println("Finish : To finish and save the operation and go to the start.");
+    out.println("Enter a character other than C or D to quit");
   }
 
   public void create(){
@@ -33,6 +35,8 @@ public class TextGUI implements TextInterface{
     out.println("Menu: ");
     out.println("A : Do you want to upload a file?");
     out.println("B : Do you want a new empty portfolio to be created?");
+    out.println("Finish : To finish and save the operation and go to the start.");
+    out.println("Enter a character other than A or B to quit");
   }
 
   public void getpath(){
@@ -44,7 +48,8 @@ public class TextGUI implements TextInterface{
     out.println("Menu2: ");
     out.println("E : Add stock");
     out.println("Q : Determine total value on a date");
-    out.println("Enter a character other than E or Q to save the modifications and finish.");
+    out.println("Finish : To finish and save the operation and go to the start.");
+    out.println("Enter a character other than E or Q to quit");
   }
 
   public void showOptionError() {

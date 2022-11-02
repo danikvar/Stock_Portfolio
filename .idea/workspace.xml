@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/AlphaVantageDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/AlphaVantageDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/DataHelpers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/Portfolio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Stock1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/Stock1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/StockPortfolio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/TextController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/TextGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/TextInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/StockData/PortfolioTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StockData/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/TextController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StockData/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/TextGUI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,12 +78,12 @@
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="StockData.*" />
+          <option name="PATTERN" value="stockData.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="stockData" />
-      <option name="MAIN_CLASS_NAME" value="StockData.PortfolioTest" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
       <option name="METHOD_NAME" value="dateParsing" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -103,12 +94,12 @@
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="StockData.*" />
+          <option name="PATTERN" value="stockData.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="stockData" />
-      <option name="MAIN_CLASS_NAME" value="StockData.PortfolioTest" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
       <option name="METHOD_NAME" value="getUsers" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -119,12 +110,12 @@
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="StockData.*" />
+          <option name="PATTERN" value="stockData.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="stockData" />
-      <option name="MAIN_CLASS_NAME" value="StockData.PortfolioTest" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
       <option name="METHOD_NAME" value="loadPortTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -135,12 +126,12 @@
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="StockData.*" />
+          <option name="PATTERN" value="stockData.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="StockData" />
-      <option name="MAIN_CLASS_NAME" value="StockData.PortfolioTest" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
       <option name="METHOD_NAME" value="stockStringTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -151,12 +142,12 @@
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="StockData.*" />
+          <option name="PATTERN" value="stockData.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="stockData" />
-      <option name="MAIN_CLASS_NAME" value="StockData.PortfolioTest" />
+      <option name="MAIN_CLASS_NAME" value="stockData.PortfolioTest" />
       <option name="METHOD_NAME" value="tickerTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -186,7 +177,7 @@
       <workItem from="1666962291584" duration="14601000" />
       <workItem from="1667069766223" duration="23989000" />
       <workItem from="1667312774910" duration="19832000" />
-      <workItem from="1667341713045" duration="7206000" />
+      <workItem from="1667341713045" duration="7612000" />
     </task>
     <servers />
   </component>

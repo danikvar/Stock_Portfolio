@@ -1,6 +1,5 @@
-package StockData;
+package stockData;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -85,10 +84,10 @@ public class PortfolioTest {
 
   @Test
   public void stockStringTest() {
-    StockData.Stock1 myStock = new StockData.Stock1("GOOG", 12, "API");
+    stockData.Stock1 myStock = new stockData.Stock1("GOOG", 12, "API");
     System.out.println(myStock.sharesToJSON());
 
-    StockData.Stock1 myStock2 = new StockData.Stock1("NVDA", 23, "API");
+    stockData.Stock1 myStock2 = new stockData.Stock1("NVDA", 23, "API");
     StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
