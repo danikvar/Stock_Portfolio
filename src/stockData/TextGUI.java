@@ -92,6 +92,9 @@ public class TextGUI implements TextInterface {
     // a particular date requested.
     out.println("Enter date");
   }
-
+public void addAgain(){
+    out.println("Type 'yes' if you want to add stock again");
+    out.println("type anything else if want to finish");
+  }
 
 }
