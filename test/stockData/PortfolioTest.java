@@ -18,6 +18,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Test class that tests if portfolio operations are performed accurately.
+ */
+
 public class PortfolioTest {
 
   @org.junit.Test
