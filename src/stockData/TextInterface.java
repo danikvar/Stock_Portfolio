@@ -1,4 +1,5 @@
-package stockData;
+package stockdata;
+
 public interface TextInterface {
 
   void showOptions();
@@ -22,5 +23,6 @@ public interface TextInterface {
   void create();
 
   void chooseOption();
+
   void showOptionError();
 }

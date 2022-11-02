@@ -1,8 +1,12 @@
-package stockData;
+package stockdata;
+
 import java.io.PrintStream;
 
-
-public class TextGUI implements TextInterface{
+/**
+ * This class represents all the operations to be supported by a text based user interface
+ * to tell the user what input they must enter through print statements.
+ */
+public class TextGUI implements TextInterface {
   private PrintStream out;
 
   public TextGUI(PrintStream out) {
@@ -13,6 +17,7 @@ public class TextGUI implements TextInterface{
     //Enter name of the user
     out.println("Enter Name of user (New user name or existing name):");
   }
+
   public void chooseOption() {
     //StockData.Portfolio is displayed if present.
     out.println(" C : Create a new portfolio");
@@ -21,7 +26,7 @@ public class TextGUI implements TextInterface{
     out.println("Enter a character other than C or D to quit");
   }
 
-  public void create(){
+  public void create() {
     out.println(" Create a new portfolio");
   }
 
@@ -39,7 +44,7 @@ public class TextGUI implements TextInterface{
     out.println("Enter a character other than A or B to quit");
   }
 
-  public void getpath(){
+  public void getpath() {
     out.println("Enter file path:");
   }
 
@@ -62,11 +67,12 @@ public class TextGUI implements TextInterface{
     out.println("Enter stock");
   }
 
-  public void addStockdetails2(){
+  public void addStockdetails2() {
     //ask how many shares to add stock.
     out.println("How many shares?");
   }
-  public void addStockdetails3(){
+
+  public void addStockdetails3() {
     //Date when stock was bought.
     out.println("Enter date bought:");
   }
@@ -75,7 +81,6 @@ public class TextGUI implements TextInterface{
     // a particular date requested.
     out.println("Enter date");
   }
-
 
 
 }

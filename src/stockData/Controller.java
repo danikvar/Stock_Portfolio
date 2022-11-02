@@ -1,5 +1,7 @@
-package stockData;
+package stockdata;
+
+import java.io.FileNotFoundException;
 
 public interface Controller {
-  void go() throws Exception;
+  void controller() throws FileNotFoundException;
 }
