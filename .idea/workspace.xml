@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/StockData/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/StockData/TextController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/DataHelpers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockData/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/TextGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockData/TextInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

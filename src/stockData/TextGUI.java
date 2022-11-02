@@ -35,6 +35,13 @@ public class TextGUI implements TextInterface {
     out.println("Enter Portfolio to be displayed:");
   }
 
+  public void newUser() {
+    //StockData.Portfolio is created by two ways.
+    System.out.println("Please enter the full path to the local directory where your files will be stored.");
+    out.println("Finish : To finish and save the operation and go to the start.");
+    out.println("Enter a character other than A or B to quit");
+  }
+
   public void createnew() {
     //StockData.Portfolio is created by two ways.
     out.println("Menu: ");

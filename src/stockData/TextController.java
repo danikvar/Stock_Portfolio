@@ -3,6 +3,9 @@ package stockData;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
@@ -25,26 +28,38 @@ public class TextController implements Controller {
   @Override
   public void controller() throws FileNotFoundException {
     String input;
+    String user;
     boolean quit = false;
 
     while (!quit) {
       //tell view to show options
-      DataHelpers.getUsers();
-      String user = in.nextLine();
+      System.out.println(DataHelpers.getUsers());
+      System.out.println("Please enter a unique username consisting of alphanumeric characters" +
+              "and _ only or choose one from the list above to log in.");
+      user = in.nextLine();
+
+      while(!DataHelpers.isAlphaNumeric(user)) {
+        System.out.println("Please enter a username consisting only of numbers, letters, and '_'.");
+        user = in.nextLine();
+      }
+
       if (DataHelpers.getUsers().contains(user)) {
         view.chooseOption();
         String option1 = in.nextLine();
         switch (option1) {
+          // create a new portfolio
           case "C":
             view.createnew();
             String fileoremptyport = in.nextLine();
+            // create using path or create one for you
             switch (fileoremptyport) {
               case "A":
                 view.getpath();
                 String path = in.nextLine();
                 model = (Portfolio) DataHelpers.loadPortfolio(user,path);
+
               case "B":
-                //create empty port
+                model = new Portfolio();
               case "Finish":
                 controller();
             }
@@ -52,33 +67,45 @@ public class TextController implements Controller {
             System.out.println(DataHelpers.listPortfolios(user));
             view.showOptions1();
             String name  = in.nextLine();
+            model = (Portfolio) DataHelpers.loadPortfolio(user, name);
+
+            System.out.println("Please enter the date you would like for this portfolio"
+                    + " in YYYY-MM-DD format or 'current' to get all latest available stock"
+                    + " values");
+
             //retrieve portfolio
             String date = in.nextLine();
-            model.printPortfolioAt(date);
+            try{
+              model.printPortfolioAt(date);
+            } catch(Exception E) {
+              throw new IllegalArgumentException("There was some issue reading your date input" +
+                      "Please check the date and try again.");
+            }
+
+
           case "Finish":
             controller();
           default:
             quit = true;
         }
       } else {
-        view.create();
-        view.createnew();
-        String fileoremptyport = in.nextLine();
-        switch (fileoremptyport) {
-          case "A":
-            view.getpath();
-            String path = in.nextLine();
-          //  model = DataHelpers.createUser(user,path);
-          case "B":
-            view.getportName();
-            String name = in.nextLine();
-           // model = DataHelpers.createUser(user,name);
-          case "Finish":
+        System.out.println("Please enter the full path to the local directory"
+                + "where your files will be stored.");
+        String userPath = in.nextLine();
+        Path checkUserPath = Paths.get(userPath);
+
+        while( !Files.exists(checkUserPath)) {
+          System.out.println("Your directory does not exist or could not be found."
+                  + "Please check input and try again or type restart.");
+          userPath = in.nextLine();
+          if(userPath.equals( "restart")) {
             controller();
-          default:
-            quit = true;
+          }
+          checkUserPath = Paths.get(userPath);
         }
-      }
+        DataHelpers.createUser(user, userPath);
+        controller();
+        }
       view.showOptions();
       //accept user input
       String option = in.next();
@@ -111,7 +138,7 @@ public class TextController implements Controller {
           input = in.nextLine();
           //give to model
           try {
-            model.getTotalValues(input);
+            model.printPortfolioAt(input);
             break;
           } catch (Exception e) {
             System.out.println(e);
