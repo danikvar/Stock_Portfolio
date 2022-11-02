@@ -125,16 +125,13 @@ public class TextController implements Controller {
           int input2 = in.nextInt();
           //asl for date/data input.
           view.addStockdetails3();
-          String input3 = in.next();
+          String input3 = in.nextLine();
           //give to model
           try {
             model.addStock(input, input2, input3);
-            view.getportName();
-            String portName = in.nextLine();
             model.save(portName,user);
             view.addAgain();
             inp = in.nextLine();
-        
           } catch (Exception e) {
             System.out.println(e);
           }
