@@ -11,6 +11,8 @@ public interface TextInterface {
   void createnew();
 
   void addStock();
+  
+  void addAgain();
 
   void addStockdetails();
 
