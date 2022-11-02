@@ -21,6 +21,10 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * The data helpers class that handles the api data to get tickers and other information.
+ */
+
 public class DataHelpers {
 
   private static String thisDir = new File(System.getProperty("user.dir")).getAbsolutePath();
