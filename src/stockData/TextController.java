@@ -112,6 +112,8 @@ public class TextController implements Controller {
       switch (option) {
         case "E":
           String inp = "yes";
+          view.getportName();
+          String portName = in.nextLine();
           while(inp == "yes") {
           //ask for stock input.
           view.addStockdetails();
