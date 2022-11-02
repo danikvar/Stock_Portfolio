@@ -42,16 +42,19 @@ public class TextController implements Controller {
               case "A":
                 view.getpath();
                 String path = in.nextLine();
-                model.save(user,path);
+                model = (Portfolio) DataHelpers.loadPortfolio(user,path);
               case "B":
                 //create empty port
               case "Finish":
                 controller();
             }
           case "D":
-            DataHelpers.listPortfolios(user);
+            System.out.println(DataHelpers.listPortfolios(user));
             view.showOptions1();
+            String name  = in.nextLine();
             //retrieve portfolio
+            String date = in.nextLine();
+            model.printPortfolioAt(date);
           case "Finish":
             controller();
           default:
@@ -65,9 +68,11 @@ public class TextController implements Controller {
           case "A":
             view.getpath();
             String path = in.nextLine();
-            model.save(user,path);
+          //  model = DataHelpers.createUser(user,path);
           case "B":
-            //create empty portfolio
+            view.getportName();
+            String name = in.nextLine();
+           // model = DataHelpers.createUser(user,name);
           case "Finish":
             controller();
           default:
@@ -93,6 +98,9 @@ public class TextController implements Controller {
           //give to model
           try {
             model.addStock(input, input2, input3);
+            view.getportName();
+            String portName = in.nextLine();
+            model.save(portName,user);
             break;
           } catch (Exception e) {
             System.out.println(e);
