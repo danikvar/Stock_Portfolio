@@ -6,6 +6,8 @@ public interface TextInterface {
 
   void showOptions1();
 
+  void getportName();
+
   void createnew();
 
   void addStock();

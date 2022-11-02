@@ -45,7 +45,11 @@ public class TextGUI implements TextInterface {
   }
 
   public void getpath() {
-    out.println("Enter file path:");
+    out.println("Enter root directory:");
+  }
+
+  public void getportName() {
+    out.println("Enter name of the portfolio to be saved:");
   }
 
   public void addStock() {
