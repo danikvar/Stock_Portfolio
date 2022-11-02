@@ -192,6 +192,8 @@ public class PortfolioTest {
     String userName = "Test_User";
     String PortfolioName = "port1.json";
     Portfolio myPort;
+
+    DataHelpers.createUser("CreateTestUser", "C:\\Users\\danik\\OneDrive\\Desktop\\PortTestDir");
     try {
       myPort = (Portfolio) DataHelpers.loadPortfolio(userName, PortfolioName);
       System.out.println(myPort.toString());

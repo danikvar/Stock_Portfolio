@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -248,6 +249,20 @@ public class DataHelpers {
 
   // this function gets the portfolio directory by reading the file "root.txt" created
   // through setDirectory(User) which is called in createUser(String userName, String portfolioDirectory)
+
+  public static void createUser(String userName, String portfolioDirectory) {
+    File directory = new File("Users" + File.separator + userName);
+    directory.mkdirs();
+
+    try (PrintWriter out = new PrintWriter(directory.getPath()  + File.separator + "root.txt")) {
+      out.println(portfolioDirectory);
+    } catch (FileNotFoundException e) {
+      System.out.println("Your file has encountered an error while saving."
+              + "Please check portfolio directory.");
+      throw new RuntimeException(e);
+    }
+
+  }
   public static String getPortfolioDir(String userName) throws FileNotFoundException{
 
     File[] listOfFiles = getUserArray();
@@ -395,19 +410,6 @@ public class DataHelpers {
     }
 
     return myPortfolio;
-  }
-
-  public static void savePortfolio(StockPortfolio save,
-                                   String userName,
-                                   String PortfolioName) throws FileNotFoundException {
-    String portDir = getPortfolioDir(userName);
-
-  }
-
-  // This converts the portfolio to a json formatted string.
-  public static void toJSON(StockPortfolio save) {
-
-
   }
 
 

@@ -1,4 +1,4 @@
-package stockdata;
+package stockData;
 
 
 import java.io.FileNotFoundException;
