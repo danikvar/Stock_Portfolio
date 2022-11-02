@@ -111,6 +111,8 @@ public class TextController implements Controller {
       String option = in.next();
       switch (option) {
         case "E":
+          String inp = "yes";
+          while(inp == "yes") {
           //ask for stock input.
           view.addStockdetails();
           in.nextLine();
@@ -128,9 +130,12 @@ public class TextController implements Controller {
             view.getportName();
             String portName = in.nextLine();
             model.save(portName,user);
-            break;
+            view.addAgain();
+            inp = in.nextLine();
+        
           } catch (Exception e) {
             System.out.println(e);
+          }
           }
         case "Q":
           view.dateInput();
