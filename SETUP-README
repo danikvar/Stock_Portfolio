@@ -17,7 +17,10 @@ To run the application:
 • To create a new portfolio, enter "C".
 • Enter "B" for the program to create a new portfolio for you.
 • To add a new stock, enter "A".
-• Enter the ticker symbol, like GOOG, AAPL.
+• Enter one ticker symbol, like GOOG, AAPL, TWST, BBD, BBF, BBH.
 • Enter the number of shares.
 • Enter any date in YYYY-MM-DD,stock price (for eg: 2022-10-15,55.5)[You can also enter "API" for
   stock price if you want to retrieve price from the API.
+• Type "yes" to add 2nd stock. Do the previous 3 steps again.
+• Type "yes" to add 3rd stock. Do the previous 3 steps again.
+  
