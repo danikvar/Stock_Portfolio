@@ -42,7 +42,7 @@ public class TextController implements Controller {
               case "A":
                 view.getpath();
                 String path = in.nextLine();
-                // model.loadPortfolio(user,path);
+                model.save(user,path);
               case "B":
                 //create empty port
               case "Finish":
@@ -65,7 +65,7 @@ public class TextController implements Controller {
           case "A":
             view.getpath();
             String path = in.nextLine();
-            // model.loadPortfolio(user,path);
+            model.save(user,path);
           case "B":
             //create empty portfolio
           case "Finish":
