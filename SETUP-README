@@ -1,0 +1,23 @@
+Portfolio application is the class that has the main method.
+java -jar PortfolioApplication.jar should run the program.
+The controller prompts the model and the view to perform the operations.
+The view asks for name of the user.
+All the ticker data that can be inputted are in the Tickers.txt file. Some of the valid
+tickers are GOOG, AAPL, TWST, BBD, BBF, BBH, YEAR, BBW, BBY, CEAD, ZHDG.
+
+To run the application:
+• java -jar HWK_4.jar
+• Make sure that the Resources folder along with the jar file should be present together in
+  any folder.
+• The Resources folder contains Tickers.txt and Users folder.
+• To create a new portfolio, enter a new user name consisting of only alphanumeric characters and _.
+• Please enter the full path to the local directory where your files will be stored as a String.
+• A new user is created for you.
+• You will again be asked to enter the user name you gave before.
+• To create a new portfolio, enter "C".
+• Enter "B" for the program to create a new portfolio for you.
+• To add a new stock, enter "A".
+• Enter the ticker symbol, like GOOG, AAPL.
+• Enter the number of shares.
+• Enter any date in YYYY-MM-DD,stock price (for eg: 2022-10-15,55.5)[You can also enter "API" for
+  stock price if you want to retrieve price from the API.
