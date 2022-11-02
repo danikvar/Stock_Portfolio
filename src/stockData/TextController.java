@@ -136,6 +136,7 @@ public class TextController implements Controller {
             System.out.println(e);
           }
           }
+          controller();
         case "Q":
           view.dateInput();
           in.nextLine();
