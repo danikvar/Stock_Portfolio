@@ -1,25 +1,22 @@
-package stockData;
+package StockData;
 
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BinaryOperator;
-import java.util.stream.IntStream;
 
-import static stockData.DataHelpers.getTickers;
-import static stockData.DataHelpers.padLeft;
-import static stockData.DataHelpers.padRight;
+import static StockData.DataHelpers.getTickers;
+import static StockData.DataHelpers.padLeft;
+import static StockData.DataHelpers.padRight;
 
 public class Portfolio implements StockPortfolio{
   private Map<String, Stock1> StockList;
   private Set<String> stockTickers;
-
-  private String name;
 
   public Portfolio(){
     this.StockList = new HashMap<String, Stock1>();
@@ -250,29 +247,80 @@ public class Portfolio implements StockPortfolio{
     return this.printPortfolioAt("current");
   }
 
+  /**
+   * THIS SAVES DATA MANUALLY ALWAYS BUT ONLY PRINTS THE LAST 50 DAYS
+   * @return
+   */
   @Override
   public String portToJSON() {
     StringBuilder outBuild = new StringBuilder().append("{ \n");
+    outBuild.append("  \"Portfolio\": {\n");
 
     Iterator<String> iterator = StockList.keySet().iterator();
+    int cnt = 0;
     while (iterator.hasNext()) {
 
+      outBuild.append("    \"Stock"+ String.valueOf(cnt)
+              + "\": {\n");
       String stockName = iterator.next();
       Stock1 myStock = StockList.get(stockName);
-      outBuild.append("  \"");
-      outBuild.append(stockName);
-      outBuild.append("\":");
-      outBuild.append(String.valueOf(myStock.getShares()));
+      outBuild.append("      \"ticker\": \"" + stockName + "\",\n");
+      outBuild.append("      \"shares\": \""
+              + String.valueOf(myStock.getShares())
+              + "\",\n");
+      outBuild.append("      \"priceData\": [\n"
+              + "        {\n");
+      outBuild.append(myStock.sharesToJSON());
+      outBuild.append("        }\n" +
+              "      ]\n" +
+              "    }");
       if(iterator.hasNext()) {
         outBuild.append(",\n");
       }else{
-        outBuild.append("\n}");
+        outBuild.append("\n");
       }
+      cnt++;
 
     }
-
+    outBuild.append("  }\n" +
+            "}");
 
     return outBuild.toString();
+  }
+
+  /**
+   *
+   * This saves the current portfolio to the users chosen portfolio directory
+   * @param fileName the name of the file to save portfolio as
+   * @param User the name of the user to save to
+   * @throws IllegalArgumentException
+   */
+  @Override
+  public void save(String fileName, String User) throws IllegalArgumentException{
+    if(!fileName.matches("[A-Za-z0-9]+")) {
+      throw new IllegalArgumentException("File names may only contain letters and numbers."
+              + "If your filename has an extension please remove it. (It will be saved as .json)");
+    }
+
+    StringBuilder fullName = new StringBuilder();
+    try {
+      fullName.append(DataHelpers.getPortfolioDir(User));
+      fullName.append("\\");
+    } catch (FileNotFoundException e) {
+      System.out.println("Your file has encountered an error while finding the user directory."
+              + "Please check portfolio directory.");
+      throw new RuntimeException(e);
+    }
+
+    fullName.append(fileName).append(".json");
+
+    try (PrintWriter out = new PrintWriter(fullName.toString())) {
+      out.println(this.portToJSON());
+    } catch (FileNotFoundException e) {
+      System.out.println("Your file has encountered an error while saving."
+              + "Please check portfolio directory.");
+      throw new RuntimeException(e);
+    }
   }
 
 

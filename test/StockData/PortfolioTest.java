@@ -1,4 +1,4 @@
-package stockData;
+package StockData;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,13 +6,13 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -85,9 +85,10 @@ public class PortfolioTest {
 
   @Test
   public void stockStringTest() {
-    stockData.Stock1 myStock = new stockData.Stock1("GOOG", 12, "API");
+    StockData.Stock1 myStock = new StockData.Stock1("GOOG", 12, "API");
+    System.out.println(myStock.sharesToJSON());
 
-    stockData.Stock1 myStock2 = new stockData.Stock1("NVDA", 23, "API");
+    StockData.Stock1 myStock2 = new StockData.Stock1("NVDA", 23, "API");
     StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
@@ -101,6 +102,8 @@ public class PortfolioTest {
     System.out.println(outBuild.toString());
     System.out.println(myStock.printDataAt("current"));
     System.out.println(myStock2.printDataAt("current"));
+
+
   }
 
   @Test
@@ -156,6 +159,8 @@ public class PortfolioTest {
       stockDateData.put(myKey, Double.parseDouble(info2[1]));
     }
 
+
+
     return stockDateData;
   }
 
@@ -172,6 +177,13 @@ public class PortfolioTest {
       System.out.println(myMap.containsKey(key));
     }
 
+    List<LocalDate> topDates = new ArrayList<LocalDate>(myMap.keySet());
+    Collections.sort(topDates,Collections.reverseOrder());
+    topDates = topDates.subList(0,2);
+
+    for(int i = 0; i < 2; i++) {
+      System.out.println(topDates.get(i));
+    }
     //System.out.println(x.length());
   }
 
@@ -193,7 +205,7 @@ public class PortfolioTest {
             + "| TICKER |    DATE    |    SHARES     |     OPEN PRICE     |    SHARE VALUE    |\n"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n"
-            + "|  GOOG  | 2022-10-31 |      10       |       "
+            + "|  GOOG  | 2022-11-01 |      10       |       "
             + "95.78        |       957.8       |\n"
             + "|  NVDA  | 2022-07-15 |      100      |"
             + "        20.3        |       2030        |\n"
@@ -203,6 +215,12 @@ public class PortfolioTest {
             + "       116.08       |      2987.8       |\n"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n";
-    Assert.assertEquals(expected, myPort.toString());
+    //Assert.assertEquals(expected, myPort.toString());
+
+    System.out.println(myPort.portToJSON());
+
+    myPort.save("newTest1", userName);
+
+
   }
 }

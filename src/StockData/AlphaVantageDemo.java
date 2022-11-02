@@ -1,4 +1,4 @@
-package stockData;
+package StockData;
 
 import java.io.IOException;
 import java.io.InputStream;

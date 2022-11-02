@@ -1,6 +1,5 @@
 package StockData;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -35,7 +34,7 @@ public class TextController implements Controller{
               case "A":
                 view.getpath();
                 String path = in.nextLine();
-                model.loadPortfolio(user,path);
+                model = (Portfolio) DataHelpers.loadPortfolio(user,path);
               case "B":
                 //create empty port
             }
@@ -53,7 +52,7 @@ public class TextController implements Controller{
           case "A":
             view.getpath();
             String path = in.nextLine();
-            model.loadPortfolio(user,path);
+            model = (Portfolio) DataHelpers.loadPortfolio(user,path);
           case "B":
             //create empty port
         }

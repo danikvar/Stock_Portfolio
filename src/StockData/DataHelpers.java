@@ -1,4 +1,4 @@
-package stockData;
+package StockData;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

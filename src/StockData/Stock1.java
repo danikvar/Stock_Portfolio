@@ -1,16 +1,20 @@
-package stockData;
+package StockData;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static stockData.DataHelpers.padLeft;
-import static stockData.DataHelpers.padRight;
+import static StockData.DataHelpers.padLeft;
+import static StockData.DataHelpers.padRight;
+import static java.lang.Math.min;
 
 public class Stock1 {
 
@@ -219,6 +223,31 @@ public class Stock1 {
   }
 
 
+  // Prints only the top 50 dates
+  public String sharesToJSON() {
+
+    StringBuilder outBuild = new StringBuilder();
+    List<LocalDate> topDates = new ArrayList<LocalDate>(stockData.keySet());
+    Collections.sort(topDates,Collections.reverseOrder());
+    topDates = topDates.subList(0,min(50,topDates.size()));
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+    for(int i = 0; i < topDates.size(); i++) {
+      LocalDate key = topDates.get(i);
+      String curPrice = String.valueOf(stockData.get(key));
+      outBuild.append("          \"");
+      outBuild.append(dtf.format(key)).append("\": \"");
+      outBuild.append(curPrice).append("\"");
+
+      if (i == topDates.size()-1) {
+        outBuild.append("\n");
+      } else {
+        outBuild.append(",\n");
+      }
+
+    }
+    //l = l.subList(0,10);
+    return outBuild.toString();
+  }
 }
 
 
