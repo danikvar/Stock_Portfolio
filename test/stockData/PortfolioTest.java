@@ -1,5 +1,6 @@
-package stockData;
+package stockdata;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -7,16 +8,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class that tests if portfolio operations are performed accurately.
@@ -24,32 +25,23 @@ import java.util.regex.Pattern;
 
 public class PortfolioTest {
 
-  @org.junit.Test
+  @Test
   public void addStock() {
     Portfolio myPort = new Portfolio();
-    myPort.addStock("GOOG",3, "API");
-    myPort.addStock("GOOG",2, "API");
-    myPort.addStock("NVDA",1, "API");
-    /*
-    double[] myVals = myPort.getTotalValues("current");
-    System.out.println(myPort.size());
+    myPort.addStock("GOOG", 3, "API");
+    myPort.addStock("GOOG", 2, "API");
+    myPort.addStock("NVDA", 1, "API");
 
+    String a = myPort.printPortfolioAt("current");
+    assertEquals("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n" +
+            "| TICKER |    DATE    |    SHARES     |     OPEN PRICE     |    SHARE VALUE    |\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n" +
+            "|  GOOG  | 2022-11-01 |       5       |       95.59        |      477.95       |\n" +
+            "|  NVDA  | 2022-11-01 |       1       |       138.11       |      138.11       |\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n" +
+            "| TOTAL  |   Current  |       6       |       233.7        |      616.06       |\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n",a);
 
-    System.out.println("**********************FINAL**********************");
-    System.out.println("open");
-    System.out.println(myVals[0]);
-    System.out.println("Done");
-    for(double i:myVals) {
-      System.out.println(i);
-    }
-
-     */
-
-    System.out.println("_______________________________________________________");
-    System.out.println(myPort.printPortfolioAt("current"));
-
-    //System.out.println("_______________________________________________________");
-    //System.out.println(myPort.portToJSON());
   }
 
   @Test
@@ -57,11 +49,11 @@ public class PortfolioTest {
     Map<LocalDate, Double> allStocks = DataHelpers.getStockData("GOOG");
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
     Set<LocalDate> keys = allStocks.keySet();
-    for ( LocalDate key : keys ) {
+    for (LocalDate key : keys) {
 
-      System.out.println( dtf.format(key));
+      System.out.println(dtf.format(key));
     }
-    System.out.println( "_____________MAX_______________" );
+    System.out.println("_____________MAX_______________");
 
     System.out.println(dtf.format(Collections.max(keys)));
   }
@@ -70,16 +62,15 @@ public class PortfolioTest {
   public void tickerTest() {
     Set<String> allStocks2 = DataHelpers.getTickers();
     Set<String> allStocks = new HashSet<String>();
-    try{
+    try {
       File nameFile = new File("Tickers.txt");
       Scanner scan = new Scanner(nameFile);
       String line;
-      while(scan.hasNextLine()) {
+      while (scan.hasNextLine()) {
         line = scan.nextLine();
         allStocks.add(line);
-
       }
-    } catch(FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
 
     }
     System.out.println(allStocks2.equals(allStocks));
@@ -88,24 +79,20 @@ public class PortfolioTest {
 
   @Test
   public void stockStringTest() {
-    stockData.Stock1 myStock = new stockData.Stock1("GOOG", 12, "API");
-    System.out.println(myStock.sharesToJSON());
+    Stock1 myStock = new Stock1("GOOG", 12, "API");
 
-    stockData.Stock1 myStock2 = new stockData.Stock1("NVDA", 23, "API");
-    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    Stock1 myStock2 = new Stock1("NVDA", 23, "API");
+    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" +
+            "~~~~~");
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-
-
-
-
     outBuild.append("| TICKER |    DATE    |    SHARES     |");
     outBuild.append("     OPEN PRICE     |    SHARE VALUE    |\n");
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-    System.out.println(outBuild.toString());
-    System.out.println(myStock.printDataAt("current"));
-    System.out.println(myStock2.printDataAt("current"));
 
+    System.out.println(outBuild.toString());
+    assertEquals("|  GOOG  | 2022-11-01 |      12       |       95.59        |   " +
+            "   1147.08      |",myStock.printDataAt("current"));
 
   }
 
@@ -119,7 +106,7 @@ public class PortfolioTest {
 
       boolean startEnd = myLine.contains(new StringBuilder("{"))
               || myLine.contains(new StringBuilder("}"));
-      if(! startEnd) {
+      if (!startEnd) {
 
         System.out.println("SCANNER 1");
         Pattern p = Pattern.compile("\"([^\"]*)\"");
@@ -139,6 +126,7 @@ public class PortfolioTest {
     }
   }
 
+  /*@Test
   public Map<LocalDate, Double> parseStock(String data) throws IllegalArgumentException {
 
     if (!data.matches("[0-9-,.); (]+")) {
@@ -162,42 +150,31 @@ public class PortfolioTest {
       stockDateData.put(myKey, Double.parseDouble(info2[1]));
     }
 
-
-
     return stockDateData;
-  }
+  }*/
 
-  @Test
+  /*@Test
   public void dateParsing() {
     String line = "(2022-10-15,55.5);(2022-10-14,44.4);(2022-08-15,33.3);(2022-07-15,22.2)";
 
     Map<LocalDate, Double> myMap = parseStock(line);
 
-    for(LocalDate key: myMap.keySet()) {
+    for (LocalDate key : myMap.keySet()) {
       System.out.println("okay?");
       DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
       System.out.println("*************************************************");
       System.out.println(myMap.containsKey(key));
     }
 
-    List<LocalDate> topDates = new ArrayList<LocalDate>(myMap.keySet());
-    Collections.sort(topDates,Collections.reverseOrder());
-    topDates = topDates.subList(0,2);
-
-    for(int i = 0; i < 2; i++) {
-      System.out.println(topDates.get(i));
-    }
     //System.out.println(x.length());
-  }
+  } */
 
   @Test
-  public void loadPortTest(){
+  public void loadPortTest() {
 
     String userName = "Test_User";
     String PortfolioName = "port1.json";
     Portfolio myPort;
-
-    DataHelpers.createUser("CreateTestUser", "C:\\Users\\danik\\OneDrive\\Desktop\\PortTestDir");
     try {
       myPort = (Portfolio) DataHelpers.loadPortfolio(userName, PortfolioName);
       System.out.println(myPort.toString());
@@ -210,7 +187,7 @@ public class PortfolioTest {
             + "| TICKER |    DATE    |    SHARES     |     OPEN PRICE     |    SHARE VALUE    |\n"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n"
-            + "|  GOOG  | 2022-11-01 |      10       |       "
+            + "|  GOOG  | 2022-10-31 |      10       |       "
             + "95.78        |       957.8       |\n"
             + "|  NVDA  | 2022-07-15 |      100      |"
             + "        20.3        |       2030        |\n"
@@ -220,12 +197,6 @@ public class PortfolioTest {
             + "       116.08       |      2987.8       |\n"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n";
-    //Assert.assertEquals(expected, myPort.toString());
-
-    System.out.println(myPort.portToJSON());
-
-    myPort.save("newTest1", userName);
-
-
+    assertEquals(expected, myPort.toString());
   }
 }
