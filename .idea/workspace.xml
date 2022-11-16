@@ -7,46 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/stockdataa/Pair.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockdataa/Stock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockdataa/StockPortfolio.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stockdataa/TextController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HW_4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/HW_4.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jar_run/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/HW_4.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jar_run/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/PortfolioApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jar_run/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/Resources/Tickers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Users/CreateTestUser/root.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/Tickers.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/Users/CreateTestUser/root.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/Users/Test_User/root.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/AlphaVantageDemo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/Controller.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/DataHelpers.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/Portfolio.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/Stock1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/StockPortfolio.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/TextController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/TextGUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockData/TextInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockValue$Person.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockValue.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/HW_4/stockData/PortfolioTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Portfolio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/Stock1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Stock1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/StockPortfolio.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/TextGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockData/TextInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/TextInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/stockData/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +195,7 @@
       <workItem from="1668013708407" duration="13607000" />
       <workItem from="1668102522422" duration="16982000" />
       <workItem from="1668371145179" duration="30947000" />
-      <workItem from="1668593848942" duration="17534000" />
+      <workItem from="1668593848942" duration="18131000" />
     </task>
     <servers />
   </component>
