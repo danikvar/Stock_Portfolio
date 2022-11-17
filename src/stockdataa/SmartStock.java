@@ -154,7 +154,10 @@ public class SmartStock implements Stock {
         }
 
 
-        stockDateData.put(myKey, myPair);
+        if(numShares > 0) {
+          stockDateData.put(myKey, myPair);
+        }
+
       }
       // This will throw an error if the # was entered wrong, so we should be good here.
 
@@ -204,8 +207,8 @@ public class SmartStock implements Stock {
    */
 
   public SmartStock(String ticker, String data,
-                    Map<LocalDate, Pair<Double,Double>> BuyDates) {
-    this.shares = shares;
+                    Map<LocalDate, Pair<Double,Double>> BuyDates,
+                    boolean onlyInts) {
     this.ticker = ticker;
 
     if (data.equals("API")) {
@@ -216,6 +219,20 @@ public class SmartStock implements Stock {
 
     this.BuyDates = BuyDates;
 
+    double myShares = 0.0;
+    for(LocalDate key: this.BuyDates.keySet()) {
+      double curShares = this.BuyDates.get(key).a;
+      if(onlyInts) {
+        if((curShares % 1) != 0) {
+          throw new IllegalArgumentException("The number of shares must be a whole " +
+                  "positive value. Please check your input and try again.");
+
+        }
+      }
+      myShares += curShares;
+    }
+
+    this.shares = myShares;
 
     // This function gets the value at the current date
   }
@@ -339,6 +356,45 @@ public class SmartStock implements Stock {
 
   }
 
+  public Pair<Double, Double> getValue(String date) {
+    LocalDate myKey;
+    String output = "";
+    Set<LocalDate> keys = stockData.keySet();
+
+    if (date.contains("current")) {
+      myKey = Collections.max(keys);
+    } else {
+      // create a date object from our string date
+      myKey = LocalDate.parse(date);
+    }
+
+    LocalDate minDate = Collections.min(this.BuyDates.keySet());
+    if(myKey.isBefore(minDate)) {
+      return new Pair<Double, Double>(0.0,0.0);
+    }
+
+    if(myKey.isAfter(LocalDate.now())) {
+      throw new IllegalArgumentException("Cannot retrieve future prices. " +
+              "Try again.");
+    }
+
+    double myPrice;
+
+    try {
+      myPrice = stockData.get(myKey);
+    } catch(NullPointerException e) {
+      throw new IllegalArgumentException("Price could not be found at that date." +
+              " Please try again.");
+    }
+
+    Pair<Double, Double> myComm = this.getShareCommm(date);
+
+    // a = price at date and b = # of stocks at date
+    return new Pair<Double, Double>(myPrice,myComm.a);
+
+
+  }
+
   private Map<LocalDate, Double> getIntervalPriceVals(SortedSet<LocalDate> priceKeys,
                                                       LocalDate curBuyKey,
                                                       LocalDate nextBuy,
@@ -389,6 +445,7 @@ public class SmartStock implements Stock {
   }
 
 
+  //TODO: Change the print function
   /**
    * If the date string passed to this == "current" then it will.
    * fetch the most current date available in stockData, otherwise it.
@@ -413,11 +470,20 @@ public class SmartStock implements Stock {
       myKey = LocalDate.parse(date);
     }
 
+    //outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
+    //outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
+
+    LocalDate minDate = Collections.min(this.BuyDates.keySet());
+    boolean preBuyDate = myKey.isBefore(minDate);
 
     if (!stockData.containsKey(myKey)) {
       output = "| " + padOne(ticker, 6) + " | " + date + " | "
-              + padOne(String.valueOf(shares), 13)
-              + " |       NO DATA      |       NO DATA     |";
+              + padOne(String.valueOf(shares), 18)
+              + "     NO DATA      |      NO DATA      |      NO DATA      |";
+    } else if (preBuyDate) {
+      output = "| " + padOne(ticker, 6) + " | " + date + " | "
+              + padOne("0", 18)
+              + "       0          |      NO DATA      |        0          |";
     } else {
       // this makes sure we dont have big numbers in scientific notation
       // It will print up to 10 digits
@@ -427,15 +493,19 @@ public class SmartStock implements Stock {
 
       //TODO: fix here
       double myData = stockData.get(myKey);
-
-      String[] padded = getPadding(ticker, shares, df, myData);
+      Pair <Double, Double> shareComm = this.getShareCommm(date);
+      double curShares = shareComm.a;
+      double costBasis = getCostBasis(date);
+      // myData needs to include cost basis, close price, and total value
+      String[] padded = getPadding(ticker, curShares, df, myData, costBasis);
 
 
       output = "| " + padded[0]
               + " | " + date
               + " | " + padded[1]
               + " | " + padded[2]
-              + " | " + padded[3] + " |";
+              + " | " + padded[3]
+              + " | " + padded[4] + " |";
 
     }
 
@@ -443,7 +513,49 @@ public class SmartStock implements Stock {
     return output;
   }
 
+  //TODO UPDATE PADDING FOR NEW TABLE
+  private String[] getPadding(String ticker, double shares, DecimalFormat myDF, double myData, double cBasis) {
 
+    //outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
+    //outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
+    int[] padAmount = new int[5];
+
+    double totVal = myData * shares;
+
+    padAmount[0] = Math.max(0, 10 - ticker.length());
+    padAmount[1] = Math.max(0, 18 - myDF.format(shares).length());
+    padAmount[2] = Math.max(0, 16 - myDF.format(cBasis).length());
+    padAmount[3] = Math.max(0, 17 - myDF.format(myData).length());
+    padAmount[4] = Math.max(0, 17 - myDF.format(totVal).length());
+
+
+    int[] leftPad = new int[5];
+    int[] rightPad = new int[5];
+
+    for (int i = 0; i < 5; i++) {
+      if (padAmount[i] != 0) {
+        leftPad[i] = padAmount[i] / 2;
+        rightPad[i] = padAmount[i] - leftPad[i];
+      } else {
+        leftPad[i] = 0;
+        rightPad[i] = 0;
+      }
+
+    }
+
+    String[] output = new String[5];
+
+    output[0] = padRight(padLeft(ticker, leftPad[0]), rightPad[0]);
+    output[1] = padRight(padLeft(myDF.format(shares), leftPad[1]), rightPad[1]);
+    output[2] = padRight(padLeft(myDF.format(cBasis), leftPad[2]), rightPad[2]);
+    output[3] = padRight(padLeft(myDF.format(myData), leftPad[2]), rightPad[2]);
+    output[4] = padRight(padLeft(myDF.format(totVal), leftPad[3]), rightPad[3]);
+
+    return output;
+  }
+
+
+    //TODO: FIX DESCRIPTION
   /**
    * This function returns the actual double value of any main
    * numeric stock data point. It takes a date which is in the
@@ -557,41 +669,7 @@ public class SmartStock implements Stock {
     return output;
   }
 
-  //TODO UPDATE
-  private String[] getPadding(String ticker, double shares, DecimalFormat myDF, double myData) {
-    int[] padAmount = new int[4];
 
-    double totVal = myData * ((double) shares);
-
-    padAmount[0] = Math.max(0, 6 - ticker.length());
-    padAmount[1] = Math.max(0, 13 - String.valueOf(shares).length());
-    padAmount[2] = Math.max(0, 18 - myDF.format(myData).length());
-    padAmount[3] = Math.max(0, 17 - myDF.format(totVal).length());
-
-
-    int[] leftPad = new int[4];
-    int[] rightPad = new int[4];
-
-    for (int i = 0; i < 4; i++) {
-      if (padAmount[i] != 0) {
-        leftPad[i] = padAmount[i] / 2;
-        rightPad[i] = padAmount[i] - leftPad[i];
-      } else {
-        leftPad[i] = 0;
-        rightPad[i] = 0;
-      }
-
-    }
-
-    String[] output = new String[7];
-
-    output[0] = padRight(padLeft(ticker, leftPad[0]), rightPad[0]);
-    output[1] = padRight(padLeft(String.valueOf(shares), leftPad[1]), rightPad[1]);
-    output[2] = padRight(padLeft(myDF.format(myData), leftPad[2]), rightPad[2]);
-    output[3] = padRight(padLeft(myDF.format(totVal), leftPad[3]), rightPad[3]);
-
-    return output;
-  }
 
   // Example String:
   // "(2020-10-05,32.4),(2022-09-31,46.7),...
@@ -637,7 +715,7 @@ public class SmartStock implements Stock {
   /**
    * Prints only the top 50 dates.
    */
-  //TODO UPDATE
+  //TODO UPDATE THE TO JSON FUNCTION
 
   public String sharesToJSON() {
 
@@ -738,9 +816,33 @@ public class SmartStock implements Stock {
   // at a given date
   public Pair<Double, Double> getShareCommm (String date) {
 
-    LocalDate start = LocalDate.parse(date);
+    Map<LocalDate, Pair<Double, Double>> trimShareDates;
 
-    HashMap<LocalDate, Pair<Double, Double>> trimShareDates = trimBuyList(date);
+    if(date == "current") {
+      trimShareDates = this.BuyDates;
+    } else {
+      trimShareDates = trimBuyList(date);
+    }
+
+    LocalDate checkKey;
+    try{
+      checkKey = LocalDate.parse(date);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse date string. ");
+    }
+
+    LocalDate minDate = Collections.min(this.BuyDates.keySet());
+
+    if(checkKey.isBefore(minDate)) {
+      return new Pair<Double, Double>(0.0, 0.0);
+    }
+
+    if(checkKey.isAfter(LocalDate.now())) {
+      throw new IllegalArgumentException("Cannot retrieve future prices. " +
+              "Try again.");
+    }
+
+
 
     Pair<Double, Double> totShareComm = new Pair<>(0.0, 0.0);
 
@@ -751,13 +853,39 @@ public class SmartStock implements Stock {
 
   }
 
-  //TODO finish the COST BASIS
+
   public double getCostBasis(String date) throws IllegalStateException {
 
 
-    Pair<Double, Double> totShareComm = new Pair<>(0.0, 0.0);
+    Pair<Double, Double> shareComm;
 
-    HashMap<LocalDate, Pair<Double, Double>> trimShareDates = trimBuyList(date);
+    Map<LocalDate, Pair<Double, Double>> trimShareDates;
+
+    if(date == "current") {
+      trimShareDates = this.BuyDates;
+    } else {
+      trimShareDates = trimBuyList(date);
+    }
+
+    LocalDate checkKey;
+    try{
+      checkKey = LocalDate.parse(date);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse date string. ");
+    }
+
+    LocalDate minDate = Collections.min(this.BuyDates.keySet());
+
+    if(checkKey.isBefore(minDate)) {
+      return 0.0;
+    }
+
+    if(checkKey.isAfter(LocalDate.now())) {
+      throw new IllegalArgumentException("Cannot retrieve future prices. " +
+              "Try again.");
+    }
+
+
 
     double costBasis = 0;
     for( LocalDate key: trimShareDates.keySet()) {
@@ -771,8 +899,10 @@ public class SmartStock implements Stock {
                         "please check that the price inputs include the buy date.");
         throw new IllegalStateException(myError.toString());
       }
-      double myCost = this.stockData.get(key);
-      totShareComm = totShareComm.add(trimShareDates.get(key));
+      double myPrice = this.stockData.get(key);
+      shareComm = trimShareDates.get(key);
+
+      costBasis += (myPrice * shareComm.a) + shareComm.b;
     }
     return costBasis;
 

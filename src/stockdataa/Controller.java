@@ -7,5 +7,12 @@ import java.io.FileNotFoundException;
  */
 
 public interface Controller {
+
+  /**
+   * Controller method that performs all operations through model and view.
+   * @throws FileNotFoundException when portfolio file not found.
+   */
+
   void controller() throws FileNotFoundException;
+
 }

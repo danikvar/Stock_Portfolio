@@ -88,6 +88,7 @@ public class SmartPortfolio implements StockPortfolio {
   @Override
   public double[] getTotalValues(String date) {
     double[] myVal = new double[]{0.0, 0.0};
+
     if (stockList.size() > 0) {
 
       for (String myKey : stockList.keySet()) {
@@ -97,19 +98,65 @@ public class SmartPortfolio implements StockPortfolio {
 
         SmartStock myStock = stockList.get(myKey);
 
-        double price = myStock.getData(date);
-        double totVal = price * ((double) myStock.getShares());
+        // TODO IMPLEMENT STOCK LIST GET TOTAL VALUES
+        Pair<Double, Double> priceShares = myStock.getValue(date);
+        double totVal = priceShares.a * priceShares.b;
 
-        myVal[0] += price;
+        myVal[0] += priceShares.a;
         myVal[1] += totVal;
 
       }
     }
+
     return myVal;
   }
 
   /**
-   * Gets number of stocks in portfolio.
+   * Gets total costBasis of a portfolio at a date.
+   *
+   * @param date date for the portfolio to be retrieved.
+   * @return the total costBasis data.
+   */
+  public double getCostBasis(String date) {
+    double costBasis = 0.0;
+
+    if (stockList.size() > 0) {
+
+      for (String myKey : stockList.keySet()) {
+
+        //System.out.println("KEY:");
+        //System.out.println(myKey);
+
+        SmartStock myStock = stockList.get(myKey);
+
+        costBasis += myStock.getCostBasis(date);
+
+      }
+    }
+
+    return costBasis;
+  }
+
+  /**
+   * Prints total costBasis of a portfolio at a date.
+   *
+   * @param date date for the portfolio to be retrieved.
+   * @return the total costBasis data.
+   */
+  public String printCostBasis(String date) {
+    double costBasis = this.getCostBasis(date);
+
+    StringBuilder output = new StringBuilder();
+    output.append("Your total cost basis on ");
+    output.append(date);
+    output.append(" is: ");
+    output.append(String.valueOf(costBasis));
+    return output.toString();
+
+  }
+
+  /**
+   * Gets the total # of shares in portfolio at current date.
    *
    * @return the number of stocks in portfolio.
    */
@@ -122,8 +169,29 @@ public class SmartPortfolio implements StockPortfolio {
       for (String myKey : stockList.keySet()) {
 
         SmartStock myStock = stockList.get(myKey);
+        Pair<Double, Double> myShares = myStock.getShareCommm("current");
 
-        myVal += myStock.getShares();
+        myVal += myShares.a;
+      }
+    }
+    return myVal;
+  }
+
+  /**
+   * Gets the total # of shares in portfolio at a given date.
+   *
+   * @return the number of shares in portfolio.
+   */
+  public int getNumStocks(String date) {
+    int myVal = 0;
+    if (stockList.size() > 0) {
+
+      for (String myKey : stockList.keySet()) {
+
+        SmartStock myStock = stockList.get(myKey);
+        Pair<Double, Double> myShares = myStock.getShareCommm(date);
+
+        myVal += myShares.a;
       }
     }
     return myVal;
@@ -151,29 +219,29 @@ public class SmartPortfolio implements StockPortfolio {
             "~~~~~~~~~~~~~~~~~");
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
-    //| TICKER |    DATE    |    TOTAL SHARES     |    COST BASIS    |     CLOSE PRICE     |    SHARE VALUE    |
-    outBuild.append("| TICKER |    DATE    |    SHARES     |");
-    outBuild.append("     OPEN PRICE     |    SHARE VALUE    |\n");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    //| TICKER |    DATE    |    TOTAL SHARES     |    COST BASIS    |     CLOSE PRICE     |    TOTAL VALUE    |
+    outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
+    outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
     for (String stockName : stockList.keySet()) {
       SmartStock myStock = stockList.get(stockName);
       outBuild.append(myStock.printDataAt(date) + "\n");
     }
 
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
     DecimalFormat df = new DecimalFormat("#");
     df.setMaximumFractionDigits(10);
 
     String[] paddedVals = getPortPadding(
-            this.getNumStocks(),
-            df, this.getTotalValues(date)
+            this.getNumStocks(date),
+            df, this.getTotalValues(date),
+            this.getCostBasis(date)
     );
 
-
-    outBuild.append("| TOTAL  | ");
+    outBuild.append("|    TOTAL   | ");
 
     if (date.contains("current")) {
       outBuild.append("  Current ");
@@ -187,10 +255,12 @@ public class SmartPortfolio implements StockPortfolio {
     outBuild.append(paddedVals[1]);
     outBuild.append(" | ");
     outBuild.append(paddedVals[2]);
+    outBuild.append(" | ");
+    outBuild.append(paddedVals[3]);
     outBuild.append(" |\n");
 
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
 
     return outBuild.toString();
@@ -210,18 +280,22 @@ public class SmartPortfolio implements StockPortfolio {
    * @param myData date and price data.
    * @return a string array of portfolio padded correctly.
    */
-  private String[] getPortPadding(int shares, DecimalFormat myDF, double[] myData) {
-    int[] padAmount = new int[3];
+  private String[] getPortPadding(int shares, DecimalFormat myDF,
+                                  double[] myData, double costBasis) {
 
-    padAmount[0] = Math.max(0, 13 - String.valueOf(shares).length());
-    padAmount[1] = Math.max(0, 18 - myDF.format(myData[0]).length());
-    padAmount[2] = Math.max(0, 17 - myDF.format(myData[1]).length());
+    //|    TOTAL SHARES    |    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |);
+    int[] padAmount = new int[4];
+
+    padAmount[0] = Math.max(0, 18 - String.valueOf(shares).length());
+    padAmount[1] = Math.max(0, 16 - myDF.format(costBasis).length());
+    padAmount[2] = Math.max(0, 17 - myDF.format(myData[0]).length());
+    padAmount[3] = Math.max(0, 17 - myDF.format(myData[1]).length());
 
 
-    int[] leftPad = new int[3];
-    int[] rightPad = new int[3];
+    int[] leftPad = new int[4];
+    int[] rightPad = new int[4];
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
       if (padAmount[i] != 0) {
         leftPad[i] = padAmount[i] / 2;
         rightPad[i] = padAmount[i] - leftPad[i];
@@ -235,8 +309,9 @@ public class SmartPortfolio implements StockPortfolio {
     String[] output = new String[3];
 
     output[0] = padRight(padLeft(String.valueOf(shares), leftPad[0]), rightPad[0]);
-    output[1] = padRight(padLeft(myDF.format(myData[0]), leftPad[1]), rightPad[1]);
-    output[2] = padRight(padLeft(myDF.format(myData[1]), leftPad[2]), rightPad[2]);
+    output[1] = padRight(padLeft(myDF.format(costBasis), leftPad[1]), rightPad[1]);
+    output[2] = padRight(padLeft(myDF.format(myData[0]), leftPad[2]), rightPad[2]);
+    output[3] = padRight(padLeft(myDF.format(myData[1]), leftPad[3]), rightPad[3]);
 
 
     return output;

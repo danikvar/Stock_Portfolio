@@ -11,10 +11,6 @@ public interface TextInterface {
 
   void getportName();
 
-  void createnew();
-
-  void addStock();
-  
   void addAgain();
 
   void addStockdetails();
@@ -23,13 +19,19 @@ public interface TextInterface {
 
   void addStockdetails3();
 
-  void getpath();
-
-  void create();
+  void showporttype();
 
   void chooseOption();
 
-  void pressEnter();
-
   void getDate();
+
+  void showSmartopt();
+
+  void fromDate();
+
+  void endDate();
+
+  void costDate();
+
+  void addStockdetailsmart2();
 }

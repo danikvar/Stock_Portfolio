@@ -8,6 +8,10 @@
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +76,7 @@
       <recent name="stockdataa" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PortfolioTest.parseBuyDates">
+  <component name="RunManager" selected="JUnit.PortfolioTest.addBigSmartStock">
     <configuration name="AlphaVantageDemo" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -98,7 +102,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PortfolioTest.buyIteratorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PortfolioTest.addBigSmartStock" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="HW_4" />
       <extension name="coverage">
         <pattern>
@@ -108,23 +112,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="stockdataa" />
       <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
-      <option name="METHOD_NAME" value="buyIteratorTest" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PortfolioTest.createTimeInterval" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="HW_4" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="stockdataa.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="stockdataa" />
-      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
-      <option name="METHOD_NAME" value="createTimeInterval" />
+      <option name="METHOD_NAME" value="addBigSmartStock" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -162,13 +150,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="PortfolioTest.printStock" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockdataa.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockdataa" />
+      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
+      <option name="METHOD_NAME" value="printStock" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PortfolioTest.addBigSmartStock" />
+        <item itemvalue="JUnit.PortfolioTest.printStock" />
         <item itemvalue="JUnit.PortfolioTest.parseBuyDates" />
         <item itemvalue="JUnit.PortfolioTest.pairTest" />
         <item itemvalue="JUnit.PortfolioTest.SacnFile" />
-        <item itemvalue="JUnit.PortfolioTest.buyIteratorTest" />
-        <item itemvalue="JUnit.PortfolioTest.createTimeInterval" />
       </list>
     </recent_temporary>
   </component>
@@ -196,6 +200,8 @@
       <workItem from="1668102522422" duration="16982000" />
       <workItem from="1668371145179" duration="30947000" />
       <workItem from="1668593848942" duration="18131000" />
+      <workItem from="1668635321237" duration="4112000" />
+      <workItem from="1668707776324" duration="13526000" />
     </task>
     <servers />
   </component>

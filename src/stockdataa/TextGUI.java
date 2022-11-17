@@ -23,7 +23,16 @@ public class TextGUI implements TextInterface {
 
   public void showOptions() {
     //Enter name of the user
-    out.println("Enter Name of user (New user name or existing name):");
+    System.out.println("Please enter a unique username consisting of alphanumeric characters"
+            +
+            " and _ only or choose one from the list above to log in.");
+  }
+
+
+  public void showporttype() {
+    //Enter name of the user
+    out.println("1 : Create a flexible portfolio");
+    out.println("2 : Create a inflexible portfolio");
   }
 
   /**
@@ -164,6 +173,32 @@ public class TextGUI implements TextInterface {
   public void addAgain() {
     out.println("Type 'yes' if you want to add stock again");
     out.println("type anything else if want to finish");
+  }
+
+  public void showSmartopt(){
+    System.out.println("A: add stock");
+    System.out.println("B: display portfolio at a certain date");
+    System.out.println("C: display portfolio performance");
+    System.out.println("D: get cost basis at a date");
+  }
+
+
+  public void fromDate() {
+    System.out.println("Enter the beginning date to determine the performance in 'yyyy-MM-dd'");
+  }
+
+  public void endDate() {
+    System.out.println("Enter the end date to determine the performance in 'yyyy-MM-dd'");
+  }
+
+  public void costDate(){
+    System.out.println("Enter date to determine cost basis:");
+  }
+
+  @Override
+  public void addStockdetailsmart2() {
+    System.out.println("Enter buy date, shares and commission fee in format (yyyy-MM-dd, " +
+            "SHARES, COMM)");
   }
 
 }

@@ -43,6 +43,8 @@ public class PortfolioTest {
 
   private Random dgen1;
 
+  private Random dgen2;
+
   @Before
   public void setUp() throws Exception {
     this.int_gen = new Random(100);
@@ -50,6 +52,7 @@ public class PortfolioTest {
     this.int_gen3 = new Random(102);
     this.int_gen4 = new Random(103);
     this.dgen1 = new Random(104);
+    this.dgen2 = new Random(105);
   }
 
   @Test
@@ -214,6 +217,179 @@ public class PortfolioTest {
       Assert.assertEquals(totShare, myPort.getNumStocks());
       Assert.assertEquals(totStock, myPort.size());
       Assert.assertEquals(totVal, myPort.getTotalValues(setDate)[1], 0.0000001);
+    }
+
+  }
+
+
+  @Test
+  public void addBigSmartStock() {
+
+    Set<String> localOutput = new HashSet<>();
+    try {
+      localOutput = DataHelpers.loadLocalTickers();
+    } catch (FileNotFoundException e) {
+      fail();
+    }
+
+    String[] tickers = localOutput.stream().toArray(String[]::new);
+
+
+    String fetchDate = "2020-05-05";
+
+    String alphabet = "ABCDEFGHIJLKMNOPQRSTUVWXYZ"
+            + "abcdefghijklmnopqrstuvwxyz";
+
+    SmartPortfolio myPort = new SmartPortfolio();
+    double[] n1 = int_gen.doubles(tickers.length, 0, 100).toArray();
+    double[] p3 = int_gen2.doubles(tickers.length, 1, 1000).toArray();
+    double[] p1 = int_gen3.doubles(tickers.length, 1, 1000).toArray();
+    double[] p2 = int_gen4.doubles(tickers.length, 2, 1000).toArray();
+    int[] shareArr = int_gen4.ints(tickers.length, 2, 1000).toArray();
+    int[] n5 = int_gen4.ints(tickers.length, 0, alphabet.length() - 1).toArray();
+    double[] prices = dgen1.doubles(tickers.length,
+            0, 500).toArray();
+
+    double[] p4 = dgen2.doubles(tickers.length,
+            0, 10).toArray();
+
+    double totPrice = 0;
+    double totShare = 0;
+    double totVal = 0;
+    int totStock = 0;
+    double totCB = 0;
+    double totComm = 0.0;
+
+    String setDate = "1000-01-01";
+
+    Set<LocalDate> maxDates = new HashSet<>();
+
+    for(int i = 0; i < 50; i++) {
+
+      String myTicker = tickers[i];
+      double num1 = n1[i];
+      int num5 = n5[i];
+      double price1 = prices[i];
+      double price2 = p1[i];
+      double price3 = p2[i];
+      double price4 = p3[i];
+      double rDub = p4[i];
+      double share1 = (double) shareArr[i];
+
+      StringBuilder priceData = new StringBuilder();
+      priceData.append("(2020-01-15,");
+      priceData.append(price1);
+      priceData.append(");(2020-05-01,");
+      priceData.append(price2);
+      priceData.append(");(2021-12-01,");
+      priceData.append(price3);
+      priceData.append(");(2020-05-05,");
+      priceData.append(price4);
+      priceData.append(");(2020-05-04,1.0)");
+
+
+      Pair<Double,Double> myPair = new Pair<Double,Double>(share1, rDub);
+      Pair<Double,Double> myPair2 = new Pair<Double,Double>(share1*2,rDub*2);
+
+      Pair<Double,Double> myPair3 = new Pair<Double,Double>(share1*3,num1);
+
+      LocalDate myDate  = LocalDate.parse("2020-01-15");
+      LocalDate myDate2  = LocalDate.parse("2020-05-01");
+      LocalDate myDate3  = LocalDate.parse("2021-12-01");
+
+      HashMap<LocalDate, Pair<Double,Double>> myBuyDates = new HashMap<LocalDate, Pair<Double,Double>>();
+
+
+      myBuyDates.put(myDate,myPair);
+      myBuyDates.put(myDate2,myPair2);
+      myBuyDates.put(myDate3,myPair3);
+
+      StringBuilder buyString = new StringBuilder();
+      buyString.append("(2020-01-15,");
+      buyString.append(share1);
+      buyString.append(",");
+      buyString.append(rDub);
+      buyString.append(");(2020-05-01,");
+      buyString.append(share1*2);
+      buyString.append(",");
+      buyString.append(rDub*2);
+      buyString.append(");(2021-12-01,");
+      buyString.append(share1*3);
+      buyString.append(",");
+      buyString.append(num1);
+      buyString.append(")");
+
+
+      StringBuilder wrongData3 = new StringBuilder();
+      wrongData3.append("(2020-01-15,,");
+      wrongData3.append(price1);
+      wrongData3.append(");(2020-05-01,");
+      wrongData3.append(price2);
+      wrongData3.append(");(2021-12-01,");
+      wrongData3.append(price3);
+      wrongData3.append(");(2020-05-05,");
+      wrongData3.append(price4);
+      wrongData3.append(")");
+
+      StringBuilder wrongData1 = new StringBuilder();
+      wrongData1.append("(2020-01-15,");
+      wrongData1.append(price1);
+      wrongData1.append(");(2020-05-01,");
+      wrongData1.append(price2);
+      wrongData1.append(");((2021-12-01,");
+      wrongData1.append(price3);
+      wrongData1.append(");(2020-05-05,");
+      wrongData1.append(price4);
+      wrongData1.append(")");
+
+      StringBuilder wrongData2 = new StringBuilder();
+      wrongData2.append("(2020-01-15" +
+              String.valueOf(alphabet.charAt(num5)) + ",");
+      wrongData2.append(price1);
+      wrongData2.append(");(2020-05-01,");
+      wrongData2.append(price2);
+      wrongData2.append(");(2021-12-01,");
+      wrongData2.append(price3);
+      wrongData2.append(");(2020-05-05,");
+      wrongData2.append(price4);
+      wrongData2.append(")");
+
+
+      SmartStock wrongStock = new SmartStock(myTicker, wrongData1.toString(), myBuyDates, true);
+      Assert.assertEquals(price4, wrongStock.getData(fetchDate), 0.0000001);
+      wrongStock = new SmartStock(myTicker, wrongData3.toString(), myBuyDates, true);
+      Assert.assertEquals(price4, wrongStock.getData(fetchDate), 0.0000001);
+
+      try{
+        wrongStock = new SmartStock(myTicker, wrongData2.toString(), myBuyDates, true);
+        fail();
+      } catch(Exception e) {
+        // we should remove all incorrect data
+        System.out.println("pass");
+      }
+
+      SmartStock newStock = new SmartStock(myTicker,priceData.toString(),
+              buyString.toString(), true);
+      myPort.addStock(myTicker,priceData.toString(), buyString.toString(), true);
+
+      totCB += newStock.getCostBasis(fetchDate);
+      Pair<Double, Double> pVal = newStock.getValue(fetchDate);
+      totPrice += pVal.a;
+
+      Pair<Double, Double> cVal = newStock.getShareCommm(fetchDate);
+      totShare += cVal.a;
+      totVal += pVal.b * pVal.a;
+      totStock += 1;
+
+      // checks all shares are ints
+      Assert.assertEquals((totShare % 1), 0.0, 0.00000001);
+
+      Assert.assertEquals(totPrice, myPort.getTotalValues(fetchDate)[0], 0.0000001);
+      Assert.assertEquals( (int) totShare, myPort.getNumStocks(fetchDate));
+      Assert.assertEquals(totStock, myPort.size());
+      Assert.assertEquals(totVal, myPort.getTotalValues(fetchDate)[1], 0.0000001);
+      Assert.assertEquals(totCB, myPort.getCostBasis(fetchDate), 0.0000001);
+
     }
 
   }
@@ -474,9 +650,72 @@ public class PortfolioTest {
   }
 
   @Test
-  public void parseBuyDates() {
+  public void printStock() {
+    Pair<Double,Double> myPair = new Pair<Double,Double>(10.0,1.0);
+    Pair<Double,Double> myPair2 = new Pair<Double,Double>(20.0,2.0);
 
-    System.out.println(myError.toString());
+    Pair<Double,Double> myPair3 = new Pair<Double,Double>(20.0,7.0);
+
+    LocalDate myDate  = LocalDate.parse("2020-01-15");
+    LocalDate myDate2  = LocalDate.parse("2020-05-01");
+    LocalDate myDate3  = LocalDate.parse("2021-12-01");
+
+    HashMap<LocalDate, Pair<Double,Double>> myBuyDates = new HashMap<LocalDate, Pair<Double,Double>>();
+
+
+    myBuyDates.put(myDate,myPair);
+    myBuyDates.put(myDate2,myPair2);
+    myBuyDates.put(myDate3,myPair3);
+
+    String prices = "(2020-01-15,5.0);(2020-05-01,10.0);(2021-12-01,100.0);(2020-05-05,1.0)";
+
+    double mycostBasis = (10.0 * 5.0 + 1.0) + (20.0 * 10.0 + 2.0);
+    double myShares = 10.0 + 20.0;
+    double myComm = 1.0 + 2.0;
+    double myValue = (myShares) * 1.0;
+
+    SmartStock myStock = new SmartStock("GOOG", prices, myBuyDates, true);
+
+    StringBuilder outBuild = new StringBuilder();
+    outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
+    outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+
+
+    String fetchDate = "2020-05-05";
+    System.out.println(outBuild.toString());
+    System.out.println(myStock.printDataAt(fetchDate));
+
+    Pair<Double, Double> myStockValue = myStock.getValue(fetchDate);
+    Assert.assertEquals(myValue, (myStockValue.a * myStockValue.b), 0.00001);
+
+    Pair<Double, Double> curComm = myStock.getShareCommm(fetchDate);
+
+    Assert.assertEquals(myShares, curComm.a, 0.000001);
+    Assert.assertEquals(myComm, curComm.b, 0.000001);
+
+    double costB = myStock.getCostBasis(fetchDate);
+
+    Assert.assertEquals(mycostBasis, costB, 0.000001);
+
+    String fetchDate2 = "2015-05-05";
+
+    Pair<Double, Double> myStockValue2 = myStock.getValue(fetchDate2);
+    Assert.assertEquals(0.0, (myStockValue2.a * myStockValue2.b), 0.00001);
+
+    Pair<Double, Double> curComm2 = myStock.getShareCommm(fetchDate2);
+
+    Assert.assertEquals(0, curComm2.a, 0.000001);
+    Assert.assertEquals(0, curComm2.b, 0.000001);
+
+    double costB2 = myStock.getCostBasis(fetchDate2);
+
+    Assert.assertEquals(0, costB2, 0.000001);
+  }
+
+  @Test
+  public void parseBuyDates() {
     Pair<Double,Double> myPair = new Pair<Double,Double>(10.0,1.0);
     Pair<Double,Double> myPair2 = new Pair<Double,Double>(20.0,2.0);
 
