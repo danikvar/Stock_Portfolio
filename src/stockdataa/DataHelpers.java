@@ -688,7 +688,7 @@ public class DataHelpers {
     //System.out.println();
     //System.out.println((new File(myDir).listFiles())[0].getPath());
     try {
-      File dirFile = new File((myDir + "\\root.txt"));
+      File dirFile = new File((myDir + File.separator + "root.txt"));
       Scanner scan = new Scanner(dirFile);
       String portDir = scan.nextLine();
       return portDir;
@@ -742,10 +742,12 @@ public class DataHelpers {
    * loads the portfolio.
    * @param userName      name of the user.
    * @param portfolioName name of the portfolio.
+   * @param
    * @return the portfolio for the user.
    * @throws FileNotFoundException when portfolio is not found.
    */
-  public static StockPortfolio loadPortfolio(String userName, String portfolioName)
+  public static StockPortfolio loadPortfolio(String userName, String portfolioName,
+                                             int portType)
           throws FileNotFoundException {
     String portDir = getPortfolioDir(userName);
     File portFolder = new File(portDir);
@@ -774,7 +776,7 @@ public class DataHelpers {
               +
               "Please check your input and try again");
     } else {
-      return parsePortfolio(myPort);
+      return parsePortfolio(myPort, portType);
     }
   }
 
@@ -782,10 +784,19 @@ public class DataHelpers {
    * converts the portfolio file to a string.
    *
    * @param portDir directory where the portfolio is present.
+   * @param portType type of portfolio 1 for simple
    * @return the string formatted portfolio.
    * @throws FileNotFoundException where portfolio is not found.
    */
-  public static StockPortfolio parsePortfolio(String portDir) throws FileNotFoundException {
+  public static StockPortfolio parsePortfolio(String portDir, int portType) throws FileNotFoundException {
+    if(portType == 1) {
+      return parseSimple(portDir);
+    } else {
+      return parseSmart(portDir);
+    }
+  }
+
+  public static StockPortfolio parseSimple(String portDir) throws FileNotFoundException {
     File portFile = new File(portDir);
     Scanner scan = new Scanner(portFile);
     //System.out.println(scan.nextLine());
@@ -821,6 +832,81 @@ public class DataHelpers {
           // If there is an error with the ticker or shares this will say
           try {
             myPortfolio.addStock(ticker, Integer.parseInt(shares), priceData);
+          } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
+          }
+        }
+
+      }
+    }
+
+
+    return myPortfolio;
+  }
+
+  public static StockPortfolio parseSmart(String portDir) throws FileNotFoundException {
+    File portFile = new File(portDir);
+    Scanner scan = new Scanner(portFile);
+    //System.out.println(scan.nextLine());
+    String line;
+
+    SmartPortfolio myPortfolio = new SmartPortfolio();
+    //Pattern btwnQuotes = Pattern.compile("\".*\\\\\\\"(.*)\\\\\\\".*\"");
+    // TODO: CHECK THIS
+    while (scan.hasNextLine()) {
+      line = scan.nextLine();
+      if (line.contains("Stock")) {
+
+        String line2 = scan.nextLine();
+        String ticker = line2.split("\"")[3];
+        line2 = scan.nextLine();
+
+        String priceString;
+        Map<LocalDate, Double> priceData = new HashMap<LocalDate, Double>();
+        if (line2.contains("API")) {
+          priceString = "API";
+          line2 = scan.nextLine();
+          //myPortfolio.addStock(ticker, "API", "OK", true);
+        } else {
+
+          line2 = scan.nextLine();
+          while (!line2.contains("}")) {
+            String[] datePrice = line2.split("\"");
+            LocalDate myKey = LocalDate.parse(datePrice[1]);
+            Double price = Double.parseDouble(datePrice[3]);
+            priceData.put(myKey, price);
+            line2 = scan.nextLine();
+          }
+          // If there is an error with the ticker or shares this will say
+
+        }
+
+        Map<LocalDate, Pair<Double, Double>> buyData = new HashMap<>();
+        while( !line2.contains("buyData")) {
+          line2 = scan.nextLine();
+        }
+        line2 = scan.nextLine();
+        line2 = scan.nextLine();
+
+
+        while (!line2.contains("}")) {
+          String[] datePrice = line2.split("\"");
+          LocalDate myKey = LocalDate.parse(datePrice[1]);
+          Double share = Double.parseDouble(datePrice[3]);
+          Double comm = Double.parseDouble(datePrice[5]);
+          Pair<Double, Double> newPair = new Pair<Double, Double>(share, comm);
+          buyData.put(myKey, newPair);
+          line2 = scan.nextLine();
+        }
+        if(priceData.size() == 0) {
+          try {
+            myPortfolio.addStock(ticker, "API", buyData, true);
+          } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e);
+          }
+        } else {
+          try {
+            myPortfolio.addStock(ticker, priceData, buyData, true);
           } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e);
           }

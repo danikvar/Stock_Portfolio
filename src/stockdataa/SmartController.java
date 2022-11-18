@@ -44,7 +44,7 @@ public class SmartController extends AbstractController {
             System.out.println(stockdataa.DataHelpers.listPortfolios(user));
             view.showOptions1();
             String name = in.nextLine();
-            model = (SmartPortfolio) stockdataa.DataHelpers.loadPortfolio(user, name);
+            model = (SmartPortfolio) stockdataa.DataHelpers.loadPortfolio(user, name, 2);
             getDatetoDisplay(model);
             break;
           default:
@@ -70,7 +70,8 @@ public class SmartController extends AbstractController {
                 String date1 = in.nextLine();
                 view.endDate();
                 String date2 = in.nextLine();
-                model.portfolioPerformance(date1, date2);
+                System.out.println(model.portfolioPerformance(date1, date2));
+
               } catch (Exception e) {
                 System.out.println(e);
               }
@@ -78,7 +79,7 @@ public class SmartController extends AbstractController {
               try {
                 view.costDate();
                 String d = in.nextLine();
-                model.printCostBasis(d);
+                System.out.println(model.printCostBasis(d));
               } catch (Exception e) {
                 System.out.println(e);
               }

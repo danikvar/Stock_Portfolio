@@ -111,9 +111,10 @@ abstract class AbstractController implements Controller {
       //TODO TRY CATCH HERE
       if(model instanceof Portfolio) {
         inputTemp2 = addSimple();
-      }
-      if(model instanceof SmartPortfolio){
+      } else if (model instanceof SmartPortfolio){
        inputTemp2 = addSmart();
+      } else {
+        throw new IllegalStateException("Model is not allowed.");
       }
       //ask for date/data input.
       view.addStockdetails3();

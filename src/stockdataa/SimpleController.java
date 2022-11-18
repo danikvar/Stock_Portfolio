@@ -49,7 +49,7 @@ public class SimpleController extends AbstractController{
         System.out.println(stockdataa.DataHelpers.listPortfolios(user));
         view.showOptions1();
         String name = in.nextLine();
-        model = (Portfolio) stockdataa.DataHelpers.loadPortfolio(user, name);
+        model = (Portfolio) stockdataa.DataHelpers.loadPortfolio(user, name, 1);
         getDatetoDisplay(model);
         break;
       case "Finish":

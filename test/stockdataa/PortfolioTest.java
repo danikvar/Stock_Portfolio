@@ -435,6 +435,75 @@ public class PortfolioTest {
 
   }
 
+
+  @Test
+  public void printTests() {
+
+    System.out.println();
+    SmartPortfolio myPort = new SmartPortfolio();
+    Assert.assertEquals(0, myPort.getNumStocks());
+    Assert.assertEquals(0, myPort.size());
+
+    StringBuilder buyString = new StringBuilder();
+    buyString.append("(2020-01-15,");
+    buyString.append(10.0);
+    buyString.append(",");
+    buyString.append(1.0);
+    buyString.append(");(2020-05-01,");
+    buyString.append(10.0);
+    buyString.append(",");
+    buyString.append(1.0);
+    buyString.append(");(2021-12-01,");
+    buyString.append(10.0);
+    buyString.append(",");
+    buyString.append(1.0);
+    buyString.append(")");
+
+    StringBuilder buyString2 = new StringBuilder();
+    buyString2.append("(2020-05-15,");
+    buyString2.append(10.0);
+    buyString2.append(",");
+    buyString2.append(1.0);
+    buyString2.append(")");
+
+    myPort.addStock("GOOG", "API", buyString.toString(), true);
+
+    Assert.assertEquals(30, myPort.getNumStocks("current"));
+    Assert.assertEquals(1, myPort.size());;
+
+
+    myPort.addStock("GOOG", "API", buyString2.toString(), true);
+    Assert.assertEquals(40, myPort.getNumStocks());
+    Assert.assertEquals(1, myPort.size());
+
+
+    myPort.addStock("NVDA", "API", buyString.toString(), true);
+    Assert.assertEquals(70, myPort.getNumStocks());
+    Assert.assertEquals(2, myPort.size());
+
+
+    myPort.addStock("AAPL", "API", buyString.toString(), true);
+    Assert.assertEquals(100, myPort.getNumStocks());
+    Assert.assertEquals(3, myPort.size());
+
+    try{
+      System.out.println(myPort.toString());
+    } catch(Exception e) {
+      Assert.fail();
+    }
+
+
+    try{
+      System.out.println(myPort.portfolioPerformance("2020-01-15", "2020-05-15"));
+    } catch(Exception e) {
+      Assert.fail();
+    }
+
+    System.out.println(myPort.portToJSON());
+
+
+  }
+
   @Test
   public void stockDataGetter() {
     //LocalDate d1 = LocalDate.parse("2020-05-01");
@@ -1069,7 +1138,7 @@ public class PortfolioTest {
     String PortfolioName = "port1.json";
     Portfolio myPort;
     try {
-      myPort = (Portfolio) DataHelpers.loadPortfolio(userName, PortfolioName);
+      myPort = (Portfolio) DataHelpers.loadPortfolio(userName, PortfolioName, 1);
       System.out.println(myPort.toString());
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);

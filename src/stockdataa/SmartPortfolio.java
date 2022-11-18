@@ -5,10 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static stockdataa.DataHelpers.getTickers;
 import static stockdataa.DataHelpers.padLeft;
@@ -70,6 +75,66 @@ public class SmartPortfolio implements StockPortfolio {
     stockList.put(stock, in_1);
 
   }
+
+  public void addStock(String stock, String data,
+                       Map<LocalDate, Pair<Double, Double>> buyData, boolean onlyInts)
+          throws IllegalArgumentException {
+
+    stock = stock.replaceAll("[^A-Za-z0-9-]", "");
+    if (!data.equals("API")) {
+      data = data.replaceAll("[^0-9-,.); (]", "");
+    }
+    if (!this.stockTickers.contains(stock)) {
+      throw new IllegalArgumentException("The ticker provided is not a valid ticker."
+              + "Please check the ticker and try again.");
+    }
+
+    SmartStock in_1;
+    LocalDate curDate = LocalDate.now();
+
+    //TODO: Implement OnlyInts without fucking up method
+    // Add boolean in constructor??
+    // Use Map = myStock.parseShares(sharesData, true)
+    //  !Check that all shares values are ints!   ---> myStock.addShares(MAP)
+    if (!this.stockList.containsKey(stock)) {
+      in_1 = new SmartStock(stock, data, buyData, onlyInts);
+    } else {
+      SmartStock myStock = this.stockList.get(stock);
+      in_1 = myStock.addShares(buyData, onlyInts);
+    }
+
+    stockList.put(stock, in_1);
+
+  }
+
+  public void addStock(String stock, Map<LocalDate, Double> data,
+                       Map<LocalDate, Pair<Double, Double>> buyData, boolean onlyInts)
+          throws IllegalArgumentException {
+
+    stock = stock.replaceAll("[^A-Za-z0-9-]", "");
+    if (!this.stockTickers.contains(stock)) {
+      throw new IllegalArgumentException("The ticker provided is not a valid ticker."
+              + "Please check the ticker and try again.");
+    }
+
+    SmartStock in_1;
+    LocalDate curDate = LocalDate.now();
+
+    //TODO: Implement OnlyInts without fucking up method
+    // Add boolean in constructor??
+    // Use Map = myStock.parseShares(sharesData, true)
+    //  !Check that all shares values are ints!   ---> myStock.addShares(MAP)
+    if (!this.stockList.containsKey(stock)) {
+      in_1 = new SmartStock(stock, data, buyData, onlyInts);
+    } else {
+      SmartStock myStock = this.stockList.get(stock);
+      in_1 = myStock.addShares(buyData, onlyInts);
+    }
+
+    stockList.put(stock, in_1);
+
+  }
+
 
 
   @Override
@@ -177,6 +242,131 @@ public class SmartPortfolio implements StockPortfolio {
     return myVal;
   }
 
+
+  /**
+   * This outputs a graph or portfolio performance over time
+   * @param date1 the performance start date in YYYY-MM-DD format
+   * @param date2 the performance end date in YYYY-MM-DD format
+   * @throws IllegalArgumentException when date string provided are invalid.
+   */
+
+  public String portfolioPerformance(String date1, String date2) {
+
+    LocalDate d1;
+    LocalDate d2;
+    try{
+      d1 = LocalDate.parse(date1);
+      d2 = LocalDate.parse(date2);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Your date strings could not be parsed. " +
+              "Please check your inputs and try again");
+    }
+
+    Pair<Character, Integer> myPair = DataHelpers.createTimeInterval(d1, d2);
+    char timeType = myPair.a;
+    int timeSplit = myPair.b;
+    int counter = 0;
+    //Map<LocalDate, Double> map = stock.timeIntervalValues
+    Map<LocalDate, Double> totVals = new HashMap<>();
+
+    for(String key: this.stockList.keySet()) {
+      SmartStock curStock = stockList.get(key);
+      Map<LocalDate, Double> stockVals = curStock.timeIntervalValues(date1, date2,timeType);
+      stockVals.forEach((k, v) -> totVals.merge(k, v, Double::sum));
+      //System.out.println(totVals.size());
+    }
+
+    Pair<Double, Double> myAst = this.numAsterisk(totVals);
+    Map<LocalDate, Integer> allAst = getAsterisk(totVals, myAst);
+
+    StringBuilder graph = new StringBuilder();
+
+    graph.append("Performance of portfolio from");
+    graph.append(d1 + " to ");
+    graph.append(d2 + "\n\n");
+
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    counter = 0;
+
+    Comparator<LocalDate> comparator = LocalDate::compareTo;
+
+    SortedSet<LocalDate> astKeys = new TreeSet<>(comparator);
+    astKeys.addAll(allAst.keySet());
+
+    for(LocalDate dKey: astKeys) {
+      counter ++;
+      if(counter == timeSplit) {
+        graph.append(dtf.format(dKey));
+        graph.append(": ");
+        String asts = new String(new char[allAst.get(dKey)]).replace("\0", "*");
+        graph.append(asts);
+        graph.append("\n");
+        counter = 0;
+      }
+
+    }
+
+    graph.append("Scale: * = $");
+    graph.append(myAst.a);
+    graph.append(" realtive to a starting value of: $");
+    graph.append(myAst.b);
+    graph.append("\n");
+
+    return graph.toString();
+
+  }
+
+  //Here the pair returns the dividing value for the aserisk at a
+  // and the relative value at b
+  private Pair<Double, Double> numAsterisk(Map<LocalDate, Double> totVals) {
+
+    System.out.println(totVals.size());
+    double minVal = Collections.min(totVals.values());
+    double maxVal = Collections.min(totVals.values());
+    double range = maxVal - minVal;
+    double relVal = 0;
+
+    if(maxVal <= 50) {
+      return new Pair<Double,Double>(1.0, 0.0);
+    }
+    double ast = 1.0;
+
+    while(maxVal/ast > 50) {
+      ast = ast * 10;
+    }
+    if(ast <= 1){
+      return new Pair<Double, Double>(1.0, relVal);
+    }
+
+    if( (10.0 * ast) > range) {
+      relVal = minVal;
+      maxVal = maxVal - minVal;
+      minVal = 0;
+      while(maxVal/ast > 50) {
+        ast = ast * 10;
+      }
+      if(ast <= 1){
+        ast = 1;
+      }
+
+    }
+
+    return new Pair<Double, Double>(ast, relVal);
+  }
+  private Map<LocalDate, Integer> getAsterisk(Map<LocalDate, Double> totVals,
+                                              Pair<Double, Double> myAst) {
+
+    Map<LocalDate, Integer> allAst = new HashMap<LocalDate, Integer>();
+    for(LocalDate key: totVals.keySet()) {
+      double curVal = totVals.get(key);
+      curVal = curVal - myAst.b;
+      int numAst = ((int) (curVal/myAst.a));
+      allAst.put(key, numAst);
+    }
+
+    return allAst;
+  }
+
   /**
    * Gets the total # of shares in portfolio at a given date.
    *
@@ -215,9 +405,9 @@ public class SmartPortfolio implements StockPortfolio {
   @Override
   public String printPortfolioAt(String date) {
     //System.out.println("CURRENT DATE STRING = " + date);
-    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~" +
-            "~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
     //| TICKER |    DATE    |    TOTAL SHARES     |    COST BASIS    |     CLOSE PRICE     |    TOTAL VALUE    |
     outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
@@ -306,7 +496,7 @@ public class SmartPortfolio implements StockPortfolio {
 
     }
 
-    String[] output = new String[3];
+    String[] output = new String[4];
 
     output[0] = padRight(padLeft(String.valueOf(shares), leftPad[0]), rightPad[0]);
     output[1] = padRight(padLeft(myDF.format(costBasis), leftPad[1]), rightPad[1]);
@@ -336,7 +526,7 @@ public class SmartPortfolio implements StockPortfolio {
   @Override
   public String portToJSON() {
     StringBuilder outBuild = new StringBuilder().append("{ \n");
-    outBuild.append("  \"Portfolio\": {\n");
+    outBuild.append("  \"SmartPortfolio\": {\n");
 
     Iterator<String> iterator = stockList.keySet().iterator();
     int cnt = 0;
@@ -347,15 +537,24 @@ public class SmartPortfolio implements StockPortfolio {
       String stockName = iterator.next();
       SmartStock myStock = stockList.get(stockName);
       outBuild.append("      \"ticker\": \"" + stockName + "\",\n");
-      outBuild.append("      \"shares\": \""
-              + String.valueOf(myStock.getShares())
-              + "\",\n");
-      outBuild.append("      \"priceData\": [\n"
-              + "        {\n");
-      outBuild.append(myStock.sharesToJSON());
+      outBuild.append("      \"priceData\": [\n");
+      if(myStock.getDataSize() > 100) {
+        outBuild.append("          \"API\"\n"
+                + "      ],\n");
+      } else {
+        outBuild.append(myStock.sharesToJSON());
+        outBuild.append("        }\n" +
+                "      ],\n");
+      }
+
+      outBuild.append("     \"buyData\": [\n");
+      outBuild.append("       {\n");
+      outBuild.append(myStock.buyToJSON());
+
       outBuild.append("        }\n" +
               "      ]\n" +
               "    }");
+
       if (iterator.hasNext()) {
         outBuild.append(",\n");
       } else {
@@ -405,15 +604,7 @@ public class SmartPortfolio implements StockPortfolio {
     }
   }
 
-  /**
-   * This outputs a graph or portfolio performance over time
-   * @param date1 the performance start date in YYYY-MM-DD format
-   * @param date2 the performance end date in YYYY-MM-DD format
-   * @throws IllegalArgumentException when date string provided are invalid.
-   */
-  public String portfolioPerformance(String date1, String date2) throws IllegalArgumentException {
-    return null;
-  }
+
 
 }
 

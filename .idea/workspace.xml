@@ -8,7 +8,21 @@
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jar_run/HW_4_Original_API.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jar_run/PortfolioApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/DataHelpers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/DataHelpers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartStock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartStock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextInterface.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/SimpleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SimpleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
@@ -55,7 +69,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -76,28 +90,12 @@
       <recent name="stockdataa" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PortfolioTest.addBigSmartStock">
+  <component name="RunManager" selected="JUnit.PortfolioTest.printTests">
     <configuration name="AlphaVantageDemo" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="AlphaVantageDemo" />
       <module name="HW_4" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PortfolioTest.SacnFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="HW_4" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="stockdataa.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="stockdataa" />
-      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
-      <option name="METHOD_NAME" value="SacnFile" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -166,13 +164,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="PortfolioTest.printTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockdataa.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockdataa" />
+      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
+      <option name="METHOD_NAME" value="printTests" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PortfolioTest.printTests" />
         <item itemvalue="JUnit.PortfolioTest.addBigSmartStock" />
         <item itemvalue="JUnit.PortfolioTest.printStock" />
         <item itemvalue="JUnit.PortfolioTest.parseBuyDates" />
         <item itemvalue="JUnit.PortfolioTest.pairTest" />
-        <item itemvalue="JUnit.PortfolioTest.SacnFile" />
       </list>
     </recent_temporary>
   </component>
@@ -201,7 +215,9 @@
       <workItem from="1668371145179" duration="30947000" />
       <workItem from="1668593848942" duration="18131000" />
       <workItem from="1668635321237" duration="4112000" />
-      <workItem from="1668707776324" duration="13526000" />
+      <workItem from="1668707776324" duration="27570000" />
+      <workItem from="1668736515470" duration="78000" />
+      <workItem from="1668736600968" duration="106000" />
     </task>
     <servers />
   </component>

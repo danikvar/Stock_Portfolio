@@ -83,8 +83,35 @@ public class SmartStock implements Stock {
     // This function gets the value at the current date
   }
 
+  public SmartStock(String ticker, Map<LocalDate, Double> data,
+                    Map<LocalDate, Pair<Double,Double>> myBuyDates,
+                    boolean onlyInts) throws IllegalArgumentException {
+    double shares = 0;
+    this.ticker = ticker;
+
+    this.stockData = data;
+
+    //TODO: PARSE BUY DATES
+    // COMSHARES SHOULD BE IN FORMAT:
+    // "(DATESTRING1, SHARES1, COMM1);(DATESTRING2, SHARES2, COMM2); ..."
+
+    this.BuyDates = myBuyDates;
+
+
+    for(LocalDate key: this.BuyDates.keySet()) {
+      shares += this.BuyDates.get(key).a;
+    }
+
+    this.shares = shares;
+
+    // This function gets the value at the current date
+  }
+
+
   private Map<LocalDate, Pair<Double,Double>> parseBuyDates(String myBuyDates, boolean onlyInts)
           throws IllegalArgumentException {
+
+    System.out.println(myBuyDates);
 
     if (!myBuyDates.matches("[0-9-,.); (]+")) {
       throw new IllegalArgumentException("Unexpected character was found in stock data. "
@@ -127,6 +154,7 @@ public class SmartStock implements Stock {
         double numShares;
         double commFee;
         try{
+
           numShares = Double.parseDouble(info2[1]);
           commFee = Double.parseDouble(info2[2]);
           myPair = new Pair<Double, Double>(numShares, commFee);
@@ -445,7 +473,6 @@ public class SmartStock implements Stock {
   }
 
 
-  //TODO: Change the print function
   /**
    * If the date string passed to this == "current" then it will.
    * fetch the most current date available in stockData, otherwise it.
@@ -513,7 +540,14 @@ public class SmartStock implements Stock {
     return output;
   }
 
-  //TODO UPDATE PADDING FOR NEW TABLE
+
+  //TODO: Create doc
+
+  public int getDataSize() {
+    return this.stockData.size();
+  }
+
+
   private String[] getPadding(String ticker, double shares, DecimalFormat myDF, double myData, double cBasis) {
 
     //outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
@@ -548,8 +582,8 @@ public class SmartStock implements Stock {
     output[0] = padRight(padLeft(ticker, leftPad[0]), rightPad[0]);
     output[1] = padRight(padLeft(myDF.format(shares), leftPad[1]), rightPad[1]);
     output[2] = padRight(padLeft(myDF.format(cBasis), leftPad[2]), rightPad[2]);
-    output[3] = padRight(padLeft(myDF.format(myData), leftPad[2]), rightPad[2]);
-    output[4] = padRight(padLeft(myDF.format(totVal), leftPad[3]), rightPad[3]);
+    output[3] = padRight(padLeft(myDF.format(myData), leftPad[3]), rightPad[3]);
+    output[4] = padRight(padLeft(myDF.format(totVal), leftPad[4]), rightPad[4]);
 
     return output;
   }
@@ -625,6 +659,27 @@ public class SmartStock implements Stock {
 
     try {
       myBuyDates.putAll(parseBuyDates(BuyData, onlyInts));
+    } catch (Exception e) {
+      throw e;
+    }
+
+    double totShares = this.shares;
+    for(LocalDate key: myBuyDates.keySet()) {
+      totShares += myBuyDates.get(key).a;
+    }
+
+
+    return new SmartStock(this.ticker, totShares, this.stockData, myBuyDates);
+  }
+
+  public SmartStock addShares(Map<LocalDate, Pair<Double, Double>> buyData,
+                              boolean onlyInts) throws IllegalArgumentException {
+
+    Map<LocalDate, Pair<Double,Double>> myBuyDates = new HashMap<>();
+    myBuyDates.putAll(this.BuyDates);
+
+    try {
+      myBuyDates.putAll(buyData);
     } catch (Exception e) {
       throw e;
     }
@@ -742,6 +797,34 @@ public class SmartStock implements Stock {
     return outBuild.toString();
   }
 
+  public String buyToJSON() {
+
+    StringBuilder outBuild = new StringBuilder();
+    List<LocalDate> topDates = new ArrayList<LocalDate>(this.BuyDates.keySet());
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    DecimalFormat df = new DecimalFormat("#");
+    df.setMaximumFractionDigits(10);
+
+
+    for (int i = 0; i < topDates.size(); i++) {
+      LocalDate key = topDates.get(i);
+      Pair<Double, Double> curPair = this.BuyDates.get(key);
+      outBuild.append("          \"");
+      outBuild.append(dtf.format(key)).append("\": [ \"");
+      outBuild.append(df.format(curPair.a)).append("\", \"");
+      outBuild.append(df.format(curPair.b)).append("\"]");
+
+      if (i == topDates.size() - 1) {
+        outBuild.append("\n");
+      } else {
+        outBuild.append(",\n");
+      }
+
+    }
+    //l = l.subList(0,10);
+    return outBuild.toString();
+  }
+
 
   /**
    * Method to get the stock data from the stocks price list.
@@ -824,23 +907,25 @@ public class SmartStock implements Stock {
       trimShareDates = trimBuyList(date);
     }
 
-    LocalDate checkKey;
-    try{
-      checkKey = LocalDate.parse(date);
-    } catch(Exception e) {
-      throw new IllegalArgumentException("Cannot parse date string. ");
-    }
+   if(!date.equals("current")) {
+     LocalDate checkKey;
+     try{
+       checkKey = LocalDate.parse(date);
+     } catch(Exception e) {
+       throw new IllegalArgumentException("Cannot parse date string. ");
+     }
 
-    LocalDate minDate = Collections.min(this.BuyDates.keySet());
+     LocalDate minDate = Collections.min(this.BuyDates.keySet());
 
-    if(checkKey.isBefore(minDate)) {
-      return new Pair<Double, Double>(0.0, 0.0);
-    }
+     if(checkKey.isBefore(minDate)) {
+       return new Pair<Double, Double>(0.0, 0.0);
+     }
 
-    if(checkKey.isAfter(LocalDate.now())) {
-      throw new IllegalArgumentException("Cannot retrieve future prices. " +
-              "Try again.");
-    }
+     if(checkKey.isAfter(LocalDate.now())) {
+       throw new IllegalArgumentException("Cannot retrieve future prices. " +
+               "Try again.");
+     }
+   }
 
 
 
@@ -867,22 +952,24 @@ public class SmartStock implements Stock {
       trimShareDates = trimBuyList(date);
     }
 
-    LocalDate checkKey;
-    try{
-      checkKey = LocalDate.parse(date);
-    } catch(Exception e) {
-      throw new IllegalArgumentException("Cannot parse date string. ");
-    }
+    if(!date.equals("current")) {
+      LocalDate checkKey;
+      try{
+        checkKey = LocalDate.parse(date);
+      } catch(Exception e) {
+        throw new IllegalArgumentException("Cannot parse date string. ");
+      }
 
-    LocalDate minDate = Collections.min(this.BuyDates.keySet());
+      LocalDate minDate = Collections.min(this.BuyDates.keySet());
 
-    if(checkKey.isBefore(minDate)) {
-      return 0.0;
-    }
+      if(checkKey.isBefore(minDate)) {
+        return 0.0;
+      }
 
-    if(checkKey.isAfter(LocalDate.now())) {
-      throw new IllegalArgumentException("Cannot retrieve future prices. " +
-              "Try again.");
+      if(checkKey.isAfter(LocalDate.now())) {
+        throw new IllegalArgumentException("Cannot retrieve future prices. " +
+                "Try again.");
+      }
     }
 
 
