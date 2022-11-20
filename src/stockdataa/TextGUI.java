@@ -164,6 +164,7 @@ public class TextGUI implements TextInterface {
     out.println("Enter the price at each date you would like in the stock.");
     out.println(" It must be in the format (YYYY-MM-DD, XX.yy);(...);...");
     out.println(" Do not enter additional characters other than numerics and separators.");
+    out.println(" If wou would like to use the API to fetch prices just enter 'API'");
   }
 
   /**
@@ -198,7 +199,8 @@ public class TextGUI implements TextInterface {
   @Override
   public void addStockdetailsmart2() {
     System.out.println("Enter buy date, shares and commission fee in format (yyyy-MM-dd, " +
-            "SHARES, COMM)");
+            "SHARES, COMM);(...);(...). Each data point is encased in a parentheses and " +
+            "followed by a semicolon for extra dates.");
   }
 
 }

@@ -7,6 +7,8 @@ public class Pair<A,B> {
   public final A a;
   public final B b;
 
+  // in the case of buydate maps. A is always the shares and b is always the comission
+
   public Pair(A a, B b) {
     this.a = a;
     this.b = b;

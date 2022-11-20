@@ -36,10 +36,10 @@ public class SmartStock implements Stock {
   // and the values in the int[] will be
   // (0:open,1:high,2:low,3:close,4:volume) - length = 5
   private Map<LocalDate, Double> stockData;
+  // A map of dates and prices at those dates ^
 
   private Map<LocalDate, Pair<Double,Double>> BuyDates;
-
-
+  // ^ A map of Dates where stock was bought, and the shares/comission on those dates
 
 
   /**
@@ -58,25 +58,34 @@ public class SmartStock implements Stock {
     double shares = 0;
     this.ticker = ticker;
 
-    if (data.equals("API")) {
-      this.stockData = DataHelpers.getStockData(ticker);
+    Map<LocalDate, Double> myStockData;
+    if (data.contains("API")) {
+      myStockData = DataHelpers.getStockData(ticker);
     } else {
-      this.stockData = parseStock(data);
+      myStockData = parseStock(data);
     }
+
 
     //TODO: PARSE BUY DATES
     // COMSHARES SHOULD BE IN FORMAT:
     // "(DATESTRING1, SHARES1, COMM1);(DATESTRING2, SHARES2, COMM2); ..."
 
+    Map<LocalDate, Pair<Double,Double>> myBuyDateMap;
+
     try{
-      this.BuyDates = parseBuyDates(myBuyDates, onlyInts);
+      myBuyDateMap = parseBuyDates(myBuyDates, onlyInts);
     } catch(IllegalArgumentException e) {
       throw e;
     }
 
+    this.checkBuyDates(myStockData, myBuyDateMap);
+    this.stockData = myStockData;
+    this.BuyDates = myBuyDateMap;
+
     for(LocalDate key: this.BuyDates.keySet()) {
       shares += this.BuyDates.get(key).a;
     }
+
 
     this.shares = shares;
 
@@ -90,14 +99,10 @@ public class SmartStock implements Stock {
     this.ticker = ticker;
 
     this.stockData = data;
-
-    //TODO: PARSE BUY DATES
-    // COMSHARES SHOULD BE IN FORMAT:
-    // "(DATESTRING1, SHARES1, COMM1);(DATESTRING2, SHARES2, COMM2); ..."
-
     this.BuyDates = myBuyDates;
 
 
+    this.checkBuyDates(data, myBuyDates);
     for(LocalDate key: this.BuyDates.keySet()) {
       shares += this.BuyDates.get(key).a;
     }
@@ -107,11 +112,33 @@ public class SmartStock implements Stock {
     // This function gets the value at the current date
   }
 
+  /**
+   *  Ensures that each buy date in the stock is present in the data. Some API dates
+   *  are missing due to stock market closures. Returns true if all buyDates have matching price
+   *  dates and throws and error if not.
+   */
+  private boolean checkBuyDates(Map<LocalDate, Double> data,
+                                Map<LocalDate, Pair<Double,Double>> myBuyDates) throws
+          IllegalArgumentException {
+    for(LocalDate key: myBuyDates.keySet()) {
+      if(! data.containsKey(key)) {
+        StringBuilder errorBuild = new StringBuilder();
+        errorBuild.append("It seems like the buy date provided [")
+                .append(key.toString())
+                .append("] was not contained in the ")
+                .append("Price Data. If using the API this could be due to ")
+                .append("trading holidays. If this seems to be in error, please provide a custom")
+                .append("price input on the missing date.");
+        throw new IllegalArgumentException(errorBuild.toString());
+      }
+    }
+    return true;
+  }
 
   private Map<LocalDate, Pair<Double,Double>> parseBuyDates(String myBuyDates, boolean onlyInts)
           throws IllegalArgumentException {
 
-    System.out.println(myBuyDates);
+    //System.out.println(myBuyDates);
 
     if (!myBuyDates.matches("[0-9-,.); (]+")) {
       throw new IllegalArgumentException("Unexpected character was found in stock data. "
@@ -127,6 +154,7 @@ public class SmartStock implements Stock {
 
       String[] info2 = m2.split(",");
 
+      //System.out.println(info2[0]);
       // This will throw an error if the date was entered wrong so ok here
       LocalDate myKey;
       try{
@@ -167,7 +195,7 @@ public class SmartStock implements Stock {
         // Give descriptive message if the fee or shares are <= 0
         // We do not allow zero shares because a person cannot own 0 shares of a stock
         // and it creates unnecessary stress on the system
-        if(numShares <= 0 || commFee <= 0) {
+        if(numShares <= 0 || commFee < 0) {
           throw new IllegalArgumentException("Number of shares and commission fee must " +
                   "have positive values. Please check your input and try again.");
         }
@@ -276,6 +304,11 @@ public class SmartStock implements Stock {
   public Map<LocalDate, Pair<Double,Double>> getBuyDates() {
 
     return this.BuyDates;
+  }
+
+  public Map<LocalDate, Double> getStockData() {
+
+    return this.stockData;
   }
 
   /*
@@ -419,7 +452,6 @@ public class SmartStock implements Stock {
 
     // a = price at date and b = # of stocks at date
     return new Pair<Double, Double>(myPrice,myComm.a);
-
 
   }
 
@@ -770,7 +802,6 @@ public class SmartStock implements Stock {
   /**
    * Prints only the top 50 dates.
    */
-  //TODO UPDATE THE TO JSON FUNCTION
 
   public String sharesToJSON() {
 
@@ -977,6 +1008,7 @@ public class SmartStock implements Stock {
     double costBasis = 0;
     for( LocalDate key: trimShareDates.keySet()) {
 
+      String StockData = this.stockData.keySet().toString();
       if(! this.stockData.containsKey(key)) {
         StringBuilder myError = new StringBuilder();
         myError.append("The price at the buy date given [ ")

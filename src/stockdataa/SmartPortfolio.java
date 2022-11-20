@@ -1,6 +1,6 @@
 package stockdataa;
 
-
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -53,18 +53,14 @@ public class SmartPortfolio implements StockPortfolio {
     if (!data.equals("API")) {
       data = data.replaceAll("[^0-9-,.); (]", "");
     }
+
     if (!this.stockTickers.contains(stock)) {
       throw new IllegalArgumentException("The ticker provided is not a valid ticker."
               + "Please check the ticker and try again.");
     }
 
     SmartStock in_1;
-    LocalDate curDate = LocalDate.now();
 
-    //TODO: Implement OnlyInts without fucking up method
-    // Add boolean in constructor??
-    // Use Map = myStock.parseShares(sharesData, true)
-    //  !Check that all shares values are ints!   ---> myStock.addShares(MAP)
     if (!this.stockList.containsKey(stock)) {
       in_1 = new SmartStock(stock, data, sharesData, onlyInts);
     } else {
@@ -73,7 +69,6 @@ public class SmartPortfolio implements StockPortfolio {
     }
 
     stockList.put(stock, in_1);
-
   }
 
   public void addStock(String stock, String data,
@@ -92,10 +87,6 @@ public class SmartPortfolio implements StockPortfolio {
     SmartStock in_1;
     LocalDate curDate = LocalDate.now();
 
-    //TODO: Implement OnlyInts without fucking up method
-    // Add boolean in constructor??
-    // Use Map = myStock.parseShares(sharesData, true)
-    //  !Check that all shares values are ints!   ---> myStock.addShares(MAP)
     if (!this.stockList.containsKey(stock)) {
       in_1 = new SmartStock(stock, data, buyData, onlyInts);
     } else {
@@ -137,6 +128,7 @@ public class SmartPortfolio implements StockPortfolio {
 
 
 
+  // Gets the number of different stocks
   @Override
   public int size() {
     return stockList.size();
@@ -146,6 +138,7 @@ public class SmartPortfolio implements StockPortfolio {
   // FOLLOW LOGIC FROM THE TIME INTERVAL FUNC
   /**
    * Gets total value of a portfolio at a date.
+   *
    *
    * @param date date for the portfolio to be retrieved.
    * @return the total value data.
@@ -281,7 +274,7 @@ public class SmartPortfolio implements StockPortfolio {
 
     StringBuilder graph = new StringBuilder();
 
-    graph.append("Performance of portfolio from");
+    graph.append("Performance of portfolio from ");
     graph.append(d1 + " to ");
     graph.append(d2 + "\n\n");
 
@@ -320,9 +313,9 @@ public class SmartPortfolio implements StockPortfolio {
   // and the relative value at b
   private Pair<Double, Double> numAsterisk(Map<LocalDate, Double> totVals) {
 
-    System.out.println(totVals.size());
     double minVal = Collections.min(totVals.values());
-    double maxVal = Collections.min(totVals.values());
+    double maxVal = Collections.max(totVals.values());
+
     double range = maxVal - minVal;
     double relVal = 0;
 
@@ -338,10 +331,13 @@ public class SmartPortfolio implements StockPortfolio {
       return new Pair<Double, Double>(1.0, relVal);
     }
 
+
     if( (10.0 * ast) > range) {
       relVal = minVal;
       maxVal = maxVal - minVal;
+
       minVal = 0;
+
       while(maxVal/ast > 50) {
         ast = ast * 10;
       }
@@ -551,8 +547,8 @@ public class SmartPortfolio implements StockPortfolio {
       outBuild.append("       {\n");
       outBuild.append(myStock.buyToJSON());
 
-      outBuild.append("        }\n" +
-              "      ]\n" +
+      outBuild.append("       }\n" +
+              "     ]\n" +
               "    }");
 
       if (iterator.hasNext()) {
@@ -586,7 +582,7 @@ public class SmartPortfolio implements StockPortfolio {
     StringBuilder fullName = new StringBuilder();
     try {
       fullName.append(DataHelpers.getPortfolioDir(user));
-      fullName.append("\\");
+      fullName.append(File.separator);
     } catch (FileNotFoundException e) {
       System.out.println("Your file has encountered an error while finding the user directory."
               + "Please check portfolio directory.");

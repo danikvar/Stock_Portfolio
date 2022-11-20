@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -748,7 +749,7 @@ public class DataHelpers {
    */
   public static StockPortfolio loadPortfolio(String userName, String portfolioName,
                                              int portType)
-          throws FileNotFoundException {
+          throws FileNotFoundException, ParseException {
     String portDir = getPortfolioDir(userName);
     File portFolder = new File(portDir);
     File[] portList = portFolder.listFiles();
@@ -788,7 +789,8 @@ public class DataHelpers {
    * @return the string formatted portfolio.
    * @throws FileNotFoundException where portfolio is not found.
    */
-  public static StockPortfolio parsePortfolio(String portDir, int portType) throws FileNotFoundException {
+  public static StockPortfolio parsePortfolio(String portDir, int portType) throws
+          FileNotFoundException, ParseException {
     if(portType == 1) {
       return parseSimple(portDir);
     } else {
@@ -844,7 +846,8 @@ public class DataHelpers {
     return myPortfolio;
   }
 
-  public static StockPortfolio parseSmart(String portDir) throws FileNotFoundException {
+  public static StockPortfolio parseSmart(String portDir) throws
+          FileNotFoundException, ParseException {
     File portFile = new File(portDir);
     Scanner scan = new Scanner(portFile);
     //System.out.println(scan.nextLine());
@@ -860,7 +863,10 @@ public class DataHelpers {
         String line2 = scan.nextLine();
         String ticker = line2.split("\"")[3];
         line2 = scan.nextLine();
-
+        if(!line2.contains("priceData")) {
+          throw new ParseException("The PriceData must be the next line after the ticker", 1);
+        }
+        line2 = scan.nextLine();
         String priceString;
         Map<LocalDate, Double> priceData = new HashMap<LocalDate, Double>();
         if (line2.contains("API")) {

@@ -2,17 +2,13 @@ package stockdataa;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class SmartController extends AbstractController {
-  private Scanner in;
-  private stockdataa.TextInterface view;
-  private SmartPortfolio model;
-
   public SmartController(SmartPortfolio model, InputStream in, TextInterface view) {
     super(model, in, view);
-
   }
 
   public void controller() throws FileNotFoundException {
@@ -38,13 +34,33 @@ public class SmartController extends AbstractController {
             inp = "yes";
             view.getportName();
             String portName = in.nextLine();
-            inp = addabs(inp, portName, user, model);
+            while(quit != true) {
+              try{
+                inp = addabs(inp, portName, user, model, "smart");
+                break;
+              } catch (Exception e) {
+                System.out.println("Found this exception adding Stock:");
+                System.out.println(e.toString());
+                System.out.println("Type add to try again or 'quit' to quit.");
+                String response = in.nextLine();
+                if(response.equals("quit")){
+                  quit = true;
+                  break;
+                }
+              }
+            }
+
             break;
           case "D":
             System.out.println(stockdataa.DataHelpers.listPortfolios(user));
             view.showOptions1();
             String name = in.nextLine();
-            model = (SmartPortfolio) stockdataa.DataHelpers.loadPortfolio(user, name, 2);
+            try {
+              model = (SmartPortfolio) DataHelpers.loadPortfolio(user, name, 2);
+            } catch (ParseException e) {
+              System.out.println(e.toString());
+              controller();
+            }
             getDatetoDisplay(model);
             break;
           default:
@@ -58,7 +74,7 @@ public class SmartController extends AbstractController {
             case "A":
               //abstract add
               String portName = in.nextLine();
-              inp = addabs(inp, portName, user, model);
+              inp = addabs(inp, portName, user, model, "smart");
             case "B":
               quit = displayPort(model);
               if (quit) {
@@ -79,7 +95,7 @@ public class SmartController extends AbstractController {
               try {
                 view.costDate();
                 String d = in.nextLine();
-                System.out.println(model.printCostBasis(d));
+                System.out.println(((SmartPortfolio) model).printCostBasis(d));
               } catch (Exception e) {
                 System.out.println(e);
               }

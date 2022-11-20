@@ -2,14 +2,11 @@ package stockdataa;
 
 import java.io.InputStream;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class SimpleController extends AbstractController{
-  private Scanner in;
-  private stockdataa.TextInterface view;
-  private stockdataa.Portfolio model;
-
   public SimpleController(Portfolio model, InputStream in, TextInterface view) {
     super(model,in,view);
 
@@ -23,7 +20,7 @@ public class SimpleController extends AbstractController{
     while (!quit) {
     //tell view to show options
     System.out.println(stockdataa.DataHelpers.getUsers());
-    view.showOptions();
+    this.view.showOptions();
     user = in.nextLine();
 
     getUser(user);
@@ -39,7 +36,7 @@ public class SimpleController extends AbstractController{
           inp = "yes";
           view.getportName();
           String portName = in.nextLine();
-          inp = addabs(inp, portName, user, model);
+          inp = addabs(inp, portName, user, model, "reg");
 
       if (Objects.equals(inp, "getvalue")) {
         getDatetoDisplay(model);
@@ -49,7 +46,11 @@ public class SimpleController extends AbstractController{
         System.out.println(stockdataa.DataHelpers.listPortfolios(user));
         view.showOptions1();
         String name = in.nextLine();
-        model = (Portfolio) stockdataa.DataHelpers.loadPortfolio(user, name, 1);
+        try {
+          model = (Portfolio) DataHelpers.loadPortfolio(user, name, 1);
+        } catch (ParseException e) {
+          throw new RuntimeException(e);
+        }
         getDatetoDisplay(model);
         break;
       case "Finish":

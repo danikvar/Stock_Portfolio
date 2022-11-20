@@ -36,12 +36,13 @@ public class TextController implements Controller {
     input = in.nextInt();
     switch (input) {
       case 1:
-        Controller co = new SimpleController((Portfolio) model, System.in, view);
-        co.controller();
+        Controller c = new SmartController(new SmartPortfolio(), System.in, view);
+        c.controller();
 
       case 2:
-        Controller c = new SmartController((SmartPortfolio) model, System.in, view);
-        c.controller();
+        Controller co = new SimpleController(new Portfolio(), System.in, view);
+        co.controller();
+
       default:
         controller();
     }

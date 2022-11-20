@@ -8,9 +8,9 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 abstract class AbstractController implements Controller {
-  private Scanner in;
-  private stockdataa.TextInterface view;
-  private stockdataa.StockPortfolio model;
+  protected Scanner in;
+  protected stockdataa.TextInterface view;
+  protected stockdataa.StockPortfolio model;
 
   public AbstractController(StockPortfolio model, InputStream in, TextInterface view) {
     this.model = model;
@@ -87,6 +87,9 @@ abstract class AbstractController implements Controller {
   public void getDatetoDisplay(StockPortfolio model) {
     view.getDate();
     String input = in.nextLine();
+    if(input.equals("")) {
+      input = in.nextLine();
+    }
     //give to model
     try {
       if (input.contains("current")) {
@@ -100,7 +103,7 @@ abstract class AbstractController implements Controller {
     }
   }
 
-  public String addabs(String inp, String portName, String user, StockPortfolio model) {
+  public String addabs(String inp, String portName, String user, StockPortfolio model, String type) {
     boolean onlyInts = true;
     String inputTemp2;
     while (inp.equals("yes")) {
@@ -108,10 +111,11 @@ abstract class AbstractController implements Controller {
       view.addStockdetails();
 
       String input = in.nextLine();
+      boolean check = model instanceof SmartPortfolio;
       //TODO TRY CATCH HERE
-      if(model instanceof Portfolio) {
+      if(type == "reg") {
         inputTemp2 = addSimple();
-      } else if (model instanceof SmartPortfolio){
+      } else if (type == "smart"){
        inputTemp2 = addSmart();
       } else {
         throw new IllegalStateException("Model is not allowed.");
@@ -145,16 +149,6 @@ abstract class AbstractController implements Controller {
   public String addSmart(){
     view.addStockdetailsmart2();
     String str = in.nextLine();
-    String rem = str.substring(str.indexOf(",")+1);
-    String get = rem.substring(0, rem.indexOf(","));
-
-    while(!get.matches("[0-9]+")) {
-      System.out.println("Please enter an postive integer value for shares.");
-      view.addStockdetailsmart2();
-      str = in.nextLine();
-      rem = str.substring(str.indexOf(",")+1);
-      get = rem.substring(0, rem.indexOf(","));
-    }
-    return get;
+    return str;
   }
 }

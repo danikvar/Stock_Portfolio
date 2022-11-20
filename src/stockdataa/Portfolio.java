@@ -37,7 +37,7 @@ public class Portfolio implements StockPortfolio {
    * of shares.
    *
    * @param stock  stock data.
-   * @param shares number of shares.
+   * @param sharesData number of shares.
    */
   @Override
   public void addStock(String stock, String data, String sharesData, boolean onlyInts)
