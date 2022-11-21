@@ -163,6 +163,8 @@ public class SmartStock implements Stock {
 
     Pair<Double,Double> curShares = this.getShareCommm(date.toString());
 
+    String sold = "No shares sold";
+
     if(curShares.a < amount) {
       String overSell = new StringBuilder()
               .append("Cannot sell more shares than you currently have!)")
@@ -175,10 +177,16 @@ public class SmartStock implements Stock {
     } else {
       Pair<Double, Double> newSold = new Pair<>(amount, commFee);
       this.SoldDates.merge(date, newSold, Pair::add);
+      sold = new StringBuilder()
+              .append("Succesfully sold [")
+              .append(amount)
+              .append("] shares on [")
+              .append(date)
+              .append("].").toString();
     }
 
 
-    return null;
+    return sold;
   }
 
   // TODO: PUT THE BELOW IN THE PORTFOLIO METHOD TO SELL.

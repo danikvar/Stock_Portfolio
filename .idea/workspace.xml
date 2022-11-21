@@ -6,18 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/AbstractController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/AbstractController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Pair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" afterDir="false" />
+    <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,8 +187,23 @@
       <workItem from="1668881413354" duration="6583000" />
       <workItem from="1668953427539" duration="10409000" />
       <workItem from="1668974597943" duration="1617000" />
-      <workItem from="1669036952204" duration="18789000" />
+      <workItem from="1669036952204" duration="19216000" />
     </task>
+    <task id="LOCAL-00001" summary="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
+      <created>1669069182724</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669069182724</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
+      <created>1669069234161</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669069234161</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,6 +224,8 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
+    <MESSAGE value="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
