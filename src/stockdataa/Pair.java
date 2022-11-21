@@ -21,6 +21,13 @@ public class Pair<A,B> {
     return new Pair<Double, Double>(myA, myB);
   }
 
+  public Pair<Double,Double> addBMinusA(Pair<Double,Double> other) {
+    double myA = (Double) this.a - other.a;
+    double myB = (Double) this.b + other.b;
+
+    return new Pair<Double, Double>(myA, myB);
+  }
+
   /*
   public A getA() {
     return a;

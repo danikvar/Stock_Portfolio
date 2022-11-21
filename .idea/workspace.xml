@@ -7,32 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/HW_4_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/HW_4_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HW_5_Latest_Iteration.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jar_run/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/Resources/Tickers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Users/Test_User/root.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Users/Test_User/root.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hw4.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/it1.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/it_2.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/Pair.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/Pair.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SimpleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SimpleController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/AbstractController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/AbstractController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartStock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartStock.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Pair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Portfolio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/SimpleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SimpleController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/TextController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/TextGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -211,7 +195,9 @@
       <workItem from="1668736600968" duration="106000" />
       <workItem from="1668736723548" duration="682000" />
       <workItem from="1668881413354" duration="6583000" />
-      <workItem from="1668953427539" duration="10208000" />
+      <workItem from="1668953427539" duration="10409000" />
+      <workItem from="1668974597943" duration="1617000" />
+      <workItem from="1669036952204" duration="18789000" />
     </task>
     <servers />
   </component>
@@ -237,91 +223,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartController.java</url>
-          <line>82</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartController.java</url>
-          <line>93</line>
-          <option name="timeStamp" value="56" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>518</line>
-          <option name="timeStamp" value="96" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>517</line>
-          <option name="timeStamp" value="97" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>523</line>
-          <option name="timeStamp" value="99" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>528</line>
-          <option name="timeStamp" value="101" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>524</line>
-          <option name="timeStamp" value="102" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>534</line>
-          <option name="timeStamp" value="103" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>537</line>
-          <option name="timeStamp" value="104" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>61</line>
-          <option name="timeStamp" value="117" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>64</line>
-          <option name="timeStamp" value="119" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>72</line>
-          <option name="timeStamp" value="120" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="122" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>80</line>
-          <option name="timeStamp" value="123" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>82</line>
-          <option name="timeStamp" value="124" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>81</line>
-          <option name="timeStamp" value="125" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
-          <line>85</line>
-          <option name="timeStamp" value="126" />
-        </line-breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.io.FileNotFoundException" package="java.io" />
+          <option name="timeStamp" value="128" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -111,7 +111,7 @@ abstract class AbstractController implements Controller {
       view.addStockdetails();
 
       String input = in.nextLine();
-      boolean check = model instanceof SmartPortfolio;
+      //boolean check = model instanceof SmartPortfolio;
       //TODO TRY CATCH HERE
       if(type == "reg") {
         inputTemp2 = addSimple();

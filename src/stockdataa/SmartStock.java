@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static stockdataa.DataHelpers.padLeft;
 import static stockdataa.DataHelpers.padRight;
@@ -40,10 +41,23 @@ public class SmartStock implements Stock {
 
   private Map<LocalDate, Pair<Double,Double>> BuyDates;
   // ^ A map of Dates where stock was bought, and the shares/comission on those dates
+  private Map<LocalDate, Pair<Double,Double>> SoldDates;
+  // ^ A map of Dates where stock was sold, how many shares were sold, and
+  //   the commission at those dates.
+  //   Key = Date Sold.
+  //   ValueMap KeySet = Set of dates that the shares sold on the Key Date were bought on
+  //   ValuePair = pair of total shares sold[s] and commission fee [b] on the key date.
 
+
+  // Not needed unless we plan to track
+  //private Map<LocalDate, List<LocalDate>> SoldInv;
+  // ^ This is basically an inverse of the previous map
+  // The key here is a buyDate from which shares were sold
+  // The value here is a list of dates which those shares were
+  //     sold on. --> used for easier selling and removal
 
   /**
-   * Constrcutor that gets each stock.
+   * Constructor that gets each stock.
    *
    * @param ticker of the stock.
    * @param data   date and price of the stock.
@@ -55,6 +69,10 @@ public class SmartStock implements Stock {
 
   public SmartStock(String ticker, String data,
                     String myBuyDates, boolean onlyInts) throws IllegalArgumentException {
+
+    this.SoldDates = new HashMap<LocalDate, Pair<Double,Double>>();
+    //this.SoldInv = new HashMap<LocalDate, List<LocalDate>>();
+
     double shares = 0;
     this.ticker = ticker;
 
@@ -92,9 +110,142 @@ public class SmartStock implements Stock {
     // This function gets the value at the current date
   }
 
+  /***
+   * This function sells stock by updating the buyDates map. If the data given is
+   * 'FIFO' then it sells the earliest bought shares. If the date given is 'LIFO'
+   * it will sell the latest bought shares until the amount is satisfied. Otherwise,
+   * sells shares at specified date. In the case where the number of shares to sell
+   * is greater than the total number of shares at a certain date then it will sell
+   * all shares and return a string informing that only X amount of shares were sold.
+   *
+   * @param date The date to shares are sold on. YYYY-MM-DD string or 'LIFO'/'FIFO'.
+   * @param amount The total amount of shares to sell.
+   * @param commFee The commission fee for this transaction.
+   * @param onlyInts boolean to check if only integer values of shares can be sold.
+   * @return Returns a string with the amount of shares sold and each date sold at.
+   * @throws IllegalArgumentException if onlyInts and the share amount is fractional,
+   *        negative shares or negative Fee, or more shares than bought at date.
+   */
+
+
+  public String sellStock(LocalDate date, double amount, double commFee, boolean onlyInts) throws
+          IllegalArgumentException {
+
+    if(date.isAfter(LocalDate.now())) {
+      throw new IllegalArgumentException("Cannot sell on future dates. " +
+              "Please check that the date input is before/on the current date.");
+    }
+
+    // Pre-check error conditions and end conditions
+    if(amount == 0) {
+      return("Sold no shares, since amount to sell was 0. No commission fee was charged.");
+    } else if (amount < 0 || commFee < 0) {
+      throw new IllegalArgumentException("Cannot sell negative shares or pay negative" +
+              " commission. Please check input and try again.");
+    }
+
+    if (onlyInts && (amount % 1) != 0) {
+      throw new IllegalArgumentException("Cannot sell fractional shares" +
+              ". Please check input and try again.");
+    }
+
+    LocalDate maxSellDate = Collections.max(this.SoldDates.keySet());
+    LocalDate maxBuyDate = Collections.max(this.BuyDates.keySet());
+
+    if(date.isBefore(maxBuyDate) || date.isBefore(maxSellDate)) {
+      String pastSell = new StringBuilder()
+              .append("Though selling shares on past dates is allowed, selling")
+              .append(" on a date before the most recent transaction is not.")
+              .append("Please ensure your input does not conflict with past transactions.")
+              .toString();
+      throw new IllegalArgumentException(pastSell);
+    }
+
+    Pair<Double,Double> curShares = this.getShareCommm(date.toString());
+
+    if(curShares.a < amount) {
+      String overSell = new StringBuilder()
+              .append("Cannot sell more shares than you currently have!)")
+              .append(" You currently only have [")
+              .append(curShares.a)
+              .append("] shares as of [")
+              .append(date)
+              .append("].").toString();
+      throw new IllegalArgumentException(overSell);
+    } else {
+      Pair<Double, Double> newSold = new Pair<>(amount, commFee);
+      this.SoldDates.merge(date, newSold, Pair::add);
+    }
+
+
+    return null;
+  }
+
+  // TODO: PUT THE BELOW IN THE PORTFOLIO METHOD TO SELL.
+  // TODO: Check the date string in portfolio method then call sellStock
+  //  sellFIFO, or sellLIFO can be added if track profit, otherwise it does
+  //  not matter since costBasis or Total Value do not change based on price of stock
+  //  on buyDate for the sold stock.
+
+  // TODO: Update getTotalValue, getCostBasis, and printDataAt() to work with sales
+  // TODO: ^ getShareComm and CostBasis was updated. Check that rest of functions
+  //         work with this
+  // For Value at a certain date, we just need the total shares at X date
+  // For CostBasis we need to know Total Shares * Price, commission paid for buys,
+  // and the commission paid on sales up until X date
+
+  // We would only need to know what dates bought we sold IF we want to track profit over time,
+  //          since we are not --> only need to know # sold on X date and commission
+
+
+  /*
+
+   * This function sells stock by updating the buyDates map. If the data given is
+   * 'FIFO' then it sells the earliest bought shares. If the date given is 'LIFO'
+   * it will sell the latest bought shares until the amount is satisfied. Otherwise,
+   * sells shares at specified date. In the case where the number of shares to sell
+   * is greater than the total number of shares
+   *
+   * @param d1 The date to sell shares. Either YYYY-MM-DD string or 'LIFO'/'FIFO'.
+   * @param amount The total amount of shares to sell as a String.
+   * @param CF The commission fee for this transaction.
+   * @param onlyInts boolean to check if only integer values of shares can be sold.
+   * @return Returns a string with the amount of shares sold and each date sold at.
+   * @throws IllegalArgumentException if onlyInts and the share amount is fractional,
+   *        trying to sell negative shares or negative Fee, or more shares than currently owned.
+
+  give -> [LocalDate date, double amount, double commFee, boolean onlyInts]
+
+  try{
+      amntSell = Double.parseDouble(amount);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse amount to sell. " +
+              "Please check input and try again.");
+    }
+
+    try{
+      commFee = Double.parseDouble(CF);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse commission fee. " +
+              "Please check input and try again.");
+    }
+
+    LocalDate date;
+    try{
+      date = LocalDate.parse(d1);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse date to sell at. " +
+              "Please check input and try again.");
+    }
+   */
+
   public SmartStock(String ticker, Map<LocalDate, Double> data,
                     Map<LocalDate, Pair<Double,Double>> myBuyDates,
                     boolean onlyInts) throws IllegalArgumentException {
+
+    this.SoldDates = new HashMap<LocalDate, Pair<Double,Double>>();
+    //this.SoldInv = new HashMap<LocalDate, List<LocalDate>>();
+
     double shares = 0;
     this.ticker = ticker;
 
@@ -104,7 +255,14 @@ public class SmartStock implements Stock {
 
     this.checkBuyDates(data, myBuyDates);
     for(LocalDate key: this.BuyDates.keySet()) {
-      shares += this.BuyDates.get(key).a;
+
+      double curShares = this.BuyDates.get(key).a;
+
+      if(onlyInts && (curShares % 1) != 0) {
+        throw new IllegalArgumentException("Cannot have fractional shares. " +
+                "Please try again.");
+      }
+      shares += curShares;
     }
 
     this.shares = shares;
@@ -193,9 +351,10 @@ public class SmartStock implements Stock {
         }
 
         // Give descriptive message if the fee or shares are <= 0
-        // We do not allow zero shares because a person cannot own 0 shares of a stock
-        // and it creates unnecessary stress on the system
-        if(numShares <= 0 || commFee < 0) {
+        // We do allow zero shares because it signifies that a person sold the shares
+        // at date X, but we want to keep the fee
+        // We cannot have negative shares or negative commission
+        if(numShares < 0 || commFee < 0) {
           throw new IllegalArgumentException("Number of shares and commission fee must " +
                   "have positive values. Please check your input and try again.");
         }
@@ -223,7 +382,9 @@ public class SmartStock implements Stock {
   }
 
 
-  /**
+  /*
+
+    NOT USED AT THE MOMENT KEEPING FOR TESTING
    * Constructor that gets each stock.
    *
    * @param ticker of the stock.
@@ -231,7 +392,7 @@ public class SmartStock implements Stock {
    * @param data   maps date and price of the stock.
    * @param buyDate string of the date the stock was bought in yyyy-MM-DD format.
    * @param commission the commission fee for the transaction
-   */
+
 
   private SmartStock(String ticker, double shares, Map<LocalDate, Double> data,
                      String buyDate, double commission) {
@@ -252,6 +413,8 @@ public class SmartStock implements Stock {
     this.BuyDates = myBuyDates;
   }
 
+  */
+
 
   /**
    * Constrcutor that gets each stock.
@@ -265,6 +428,10 @@ public class SmartStock implements Stock {
   public SmartStock(String ticker, String data,
                     Map<LocalDate, Pair<Double,Double>> BuyDates,
                     boolean onlyInts) {
+
+    this.SoldDates = new HashMap<LocalDate, Pair<Double,Double>>();
+    //this.SoldInv = new HashMap<LocalDate, List<LocalDate>>();
+
     this.ticker = ticker;
 
     if (data.equals("API")) {
@@ -695,7 +862,7 @@ public class SmartStock implements Stock {
       throw e;
     }
 
-    double totShares = this.shares;
+    double totShares = 0.0;
     for(LocalDate key: myBuyDates.keySet()) {
       totShares += myBuyDates.get(key).a;
     }
@@ -716,9 +883,14 @@ public class SmartStock implements Stock {
       throw e;
     }
 
-    double totShares = this.shares;
+    double totShares = 0.0;
     for(LocalDate key: myBuyDates.keySet()) {
-      totShares += myBuyDates.get(key).a;
+      double newShares = myBuyDates.get(key).a;
+      if(onlyInts && (newShares % 1) != 0) {
+        throw new IllegalArgumentException("Cannot have fractional shares. " +
+                "Please try again.");
+      }
+      totShares += newShares;
     }
 
 
@@ -925,17 +1097,23 @@ public class SmartStock implements Stock {
 
 
   //TODO Write descriptor for getting commission paid and amount of shares
+  //TODO test proper shareComm functioning in the case of selling stock
+  //TODO check other functions that use getShareComm
 
   // Returns a pair <Double,Double> that holds the # of shares and the commission
-  // at a given date
+  // at a given date --> if shares were sold then the commission is summed and
+  // shares subtracted
   public Pair<Double, Double> getShareCommm (String date) {
 
     Map<LocalDate, Pair<Double, Double>> trimShareDates;
+    Map<LocalDate, Pair<Double, Double>> trimSellDates;
 
     if(date == "current") {
       trimShareDates = this.BuyDates;
+      trimSellDates = this.SoldDates;
     } else {
       trimShareDates = trimBuyList(date);
+      trimSellDates = trimSellList(date);
     }
 
    if(!date.equals("current")) {
@@ -965,22 +1143,32 @@ public class SmartStock implements Stock {
     for( LocalDate key: trimShareDates.keySet()) {
       totShareComm = totShareComm.add(trimShareDates.get(key));
     }
+
+    if(! trimSellDates.isEmpty()) {
+      for(LocalDate sellKey: trimSellDates.keySet()) {
+        totShareComm = totShareComm.addBMinusA(trimSellDates.get(sellKey));
+      }
+    }
+
     return totShareComm;
 
   }
 
-
+  //TODO: Double check cost basis works properly with sales
   public double getCostBasis(String date) throws IllegalStateException {
 
 
     Pair<Double, Double> shareComm;
 
     Map<LocalDate, Pair<Double, Double>> trimShareDates;
+    Map<LocalDate, Pair<Double, Double>> trimSellDates;
 
     if(date == "current") {
       trimShareDates = this.BuyDates;
+      trimSellDates = this.SoldDates;
     } else {
       trimShareDates = trimBuyList(date);
+      trimSellDates = trimSellList(date);
     }
 
     if(!date.equals("current")) {
@@ -1008,7 +1196,7 @@ public class SmartStock implements Stock {
     double costBasis = 0;
     for( LocalDate key: trimShareDates.keySet()) {
 
-      String StockData = this.stockData.keySet().toString();
+      //String StockData = this.stockData.keySet().toString();
       if(! this.stockData.containsKey(key)) {
         StringBuilder myError = new StringBuilder();
         myError.append("The price at the buy date given [ ")
@@ -1023,6 +1211,12 @@ public class SmartStock implements Stock {
 
       costBasis += (myPrice * shareComm.a) + shareComm.b;
     }
+
+    if(! trimSellDates.isEmpty()) {
+      for(LocalDate sellKey: trimSellDates.keySet()) {
+        costBasis += trimSellDates.get(sellKey).b;
+      }
+    }
     return costBasis;
 
   }
@@ -1035,6 +1229,17 @@ public class SmartStock implements Stock {
 
     trimShareDates.keySet().removeIf(k -> k.isAfter(start));
     return trimShareDates;
+  }
+
+
+  private HashMap<LocalDate, Pair<Double, Double>> trimSellList(String date){
+    LocalDate start = LocalDate.parse(date);
+
+    HashMap<LocalDate, Pair<Double, Double>> trimSellDates = new
+            HashMap<LocalDate,  Pair<Double, Double>>(this.SoldDates);
+
+    trimSellDates.keySet().removeIf(k -> k.isAfter(start));
+    return trimSellDates;
   }
 
 }

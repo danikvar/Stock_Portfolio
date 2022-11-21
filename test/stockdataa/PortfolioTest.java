@@ -1133,7 +1133,7 @@ public class PortfolioTest {
   public void loadPortTest() {
 
     String userName = "Test_User";
-    String PortfolioName = "myportDan.json";
+    String PortfolioName = "DanTest.json";
     SmartPortfolio myPort;
     try {
       myPort = (SmartPortfolio) DataHelpers.loadPortfolio(userName, PortfolioName, 2);
@@ -1143,14 +1143,11 @@ public class PortfolioTest {
       throw new RuntimeException(e);
     }
 
-    String test = "**************************************************************************" +
-            "*******************************************************************************" +
-            "**************************************************************************************" +
-            "****************************************************************************************" +
-            "***********************************************************************************";
-
-    System.out.println(myPort.portfolioPerformance("2020-01-01",
-            "2022-10-15"));
+    System.out.println(myPort.toString());
+    System.out.println(myPort.portfolioPerformance("2021-11-11",
+            "2022-11-18"));
+    String a = "**************************************";
+    System.out.println(a.length());
     //System.out.println(test.length());
   }
 

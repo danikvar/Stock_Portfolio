@@ -316,6 +316,10 @@ public class SmartPortfolio implements StockPortfolio {
     double minVal = Collections.min(totVals.values());
     double maxVal = Collections.max(totVals.values());
 
+    System.out.println("Maximum Value: ");
+    System.out.println(maxVal);
+    System.out.println("Minimum Value: ");
+    System.out.println(minVal);
     double range = maxVal - minVal;
     double relVal = 0;
 
@@ -324,6 +328,12 @@ public class SmartPortfolio implements StockPortfolio {
     }
     double ast = 1.0;
 
+    System.out.println("Max/Ast Value 1: ");
+    System.out.println(maxVal/ast);
+    System.out.println("Ast Value 1: ");
+    System.out.println(ast);
+    System.out.println("Relative Value: ");
+    System.out.println(relVal);
     while(maxVal/ast > 50) {
       ast = ast * 10;
     }
@@ -331,21 +341,45 @@ public class SmartPortfolio implements StockPortfolio {
       return new Pair<Double, Double>(1.0, relVal);
     }
 
-
+    System.out.println("PRE LOOP");
     if( (10.0 * ast) > range) {
       relVal = minVal;
       maxVal = maxVal - minVal;
-
       minVal = 0;
+      ast = 1;
 
-      while(maxVal/ast > 50) {
-        ast = ast * 10;
+      System.out.println("Max/Ast Value 1: ");
+      System.out.println(maxVal/ast);
+      System.out.println("Ast Value 1: ");
+      System.out.println(ast);
+      System.out.println("Relative Value: ");
+      System.out.println(relVal);
+
+      while(maxVal/ast > 48) {
+        System.out.println("Max/Ast Value: ");
+        System.out.println(maxVal/ast);
+        System.out.println("Ast Value: ");
+        System.out.println(ast);
+        if(ast == 1) {
+          ast = 10;
+        } else {
+          ast += 10;
+        }
+
       }
       if(ast <= 1){
         ast = 1;
       }
 
     }
+
+    relVal = Math.round(relVal * 100.0) / 100.0;
+
+    if(relVal > ast + 1){
+      relVal -= (ast+1);
+    }
+
+
 
     return new Pair<Double, Double>(ast, relVal);
   }

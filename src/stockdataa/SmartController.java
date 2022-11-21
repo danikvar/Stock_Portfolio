@@ -14,6 +14,7 @@ public class SmartController extends AbstractController {
   public void controller() throws FileNotFoundException {
     String input;
     String user;
+    String currentPort = "";
     boolean quit = false;
 
     while (!quit) {
@@ -34,6 +35,7 @@ public class SmartController extends AbstractController {
             inp = "yes";
             view.getportName();
             String portName = in.nextLine();
+            currentPort= portName;
             while(quit != true) {
               try{
                 inp = addabs(inp, portName, user, model, "smart");
@@ -55,9 +57,10 @@ public class SmartController extends AbstractController {
             System.out.println(stockdataa.DataHelpers.listPortfolios(user));
             view.showOptions1();
             String name = in.nextLine();
+            currentPort = name;
             try {
               model = (SmartPortfolio) DataHelpers.loadPortfolio(user, name, 2);
-            } catch (ParseException e) {
+            } catch (Exception e) {
               System.out.println(e.toString());
               controller();
             }
@@ -67,19 +70,31 @@ public class SmartController extends AbstractController {
             quit = true;
             break;
         }
+
+        // Once a porfolio is loaded/displayed we go here
         view.showSmartopt();
         String opt = in.nextLine();
         while(!Objects.equals(opt, "Finish")) {
+          //System.out.println("Current Option is:");
+          //System.out.println(opt);
           switch (opt) {
             case "A":
               //abstract add
-              String portName = in.nextLine();
-              inp = addabs(inp, portName, user, model, "smart");
+              //String portName = in.nextLine();
+              currentPort = currentPort.substring(0, currentPort.lastIndexOf('.'));
+              inp = addabs(inp, currentPort, user, model, "smart");
+              System.out.println("Choose one of the following options" +
+                      " or type 'Finish' to finish");
+              view.showSmartopt();
+              opt = in.nextLine();
+              break;
             case "B":
-              quit = displayPort(model);
-              if (quit) {
-                break;
-              }
+              displayPort(model);
+              System.out.println("Choose one of the following options" +
+                      " or type 'Finish' to finish");
+              view.showSmartopt();
+              opt = in.nextLine();
+              break;
             case "C":
               try {
                 view.fromDate();
@@ -91,6 +106,11 @@ public class SmartController extends AbstractController {
               } catch (Exception e) {
                 System.out.println(e);
               }
+              System.out.println("Choose one of the following options or type" +
+                      " 'Finish' to finish");
+              view.showSmartopt();
+              opt = in.nextLine();
+              break;
             case "D":
               try {
                 view.costDate();
@@ -99,8 +119,11 @@ public class SmartController extends AbstractController {
               } catch (Exception e) {
                 System.out.println(e);
               }
+              System.out.println("Choose one of the following options" +
+                      " or type 'Finish' to finish");
               view.showSmartopt();
               opt = in.nextLine();
+              break;
             default:
               quit = true;
           }
