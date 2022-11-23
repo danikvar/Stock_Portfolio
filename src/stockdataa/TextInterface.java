@@ -25,7 +25,8 @@ public interface TextInterface {
 
   void getDate();
 
-  void showSmartopt();
+  void showSmartopt(String add, String disp, String perf,
+                    String CB, String sell);
 
   void fromDate();
 
@@ -34,4 +35,19 @@ public interface TextInterface {
   void costDate();
 
   void addStockdetailsmart2();
+
+  /**
+   * Prints the exception passed to the view.
+   */
+  void AddStockError(Exception e);
+
+  /**
+   * Get the commission value.
+   */
+  void addCommission();
+
+  /**
+   * ask for the date to perform a transaction
+   */
+  void addDate();
 }

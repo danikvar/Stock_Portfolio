@@ -18,6 +18,8 @@ abstract class AbstractController implements Controller {
     this.in = new Scanner(in);
   }
 
+
+
   /**
    * Gets username from the user.
    * @param user name of the user

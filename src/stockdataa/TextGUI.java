@@ -143,7 +143,7 @@ public class TextGUI implements TextInterface {
    */
   public void addStockdetails() {
     //Enter stock ticker.
-    out.println("Enter stock");
+    out.println("Enter stock ticker:");
   }
 
   /**
@@ -155,6 +155,24 @@ public class TextGUI implements TextInterface {
     out.println("How many shares?");
   }
 
+  /**
+   * ask the commission fee
+   */
+
+  public void addCommission() {
+    //ask how many shares to add stock.
+    out.println("Please enter the commission fee.");
+  }
+
+  /**
+   * ask for the date to perform a transaction
+   */
+
+  public void addDate() {
+    //ask how many shares to add stock.
+    out.println("Please enter the date for this transaction "
+            + "in YYYY-MM-DD format.");
+  }
   /**
    * Date when stock was bought.
    */
@@ -176,14 +194,90 @@ public class TextGUI implements TextInterface {
     out.println("type anything else if want to finish");
   }
 
-  public void showSmartopt(){
-    System.out.println("A: add stock");
-    System.out.println("B: display portfolio at a certain date");
-    System.out.println("C: display portfolio performance");
-    System.out.println("D: get cost basis at a date");
+  public void showSmartopt(String add, String disp, String perf,
+                           String CB, String sell){
+    System.out.println("Choose one of the following options" +
+            " or type 'Finish' to finish");
+    if(!add.equals("")) {
+      this.addOption(add);
+    }
+
+    if(!disp.equals("")) {
+      this.displayOption(disp);
+    }
+
+    if(!perf.equals("")) {
+      this.performanceOption(perf);
+    }
+
+    if(!CB.equals("")) {
+      this.costBasisOption(CB);
+    }
+
+    if(!sell.equals("")) {
+      this.sellOption(sell);
+    }
+  }
+
+  /**
+   * Helper function to print the option to add stock
+   * at some input Opt.
+   * @param Opt The input to add stock
+   */
+  public void addOption(String Opt) {
+    StringBuilder output = new StringBuilder();
+    output.append(Opt)
+            .append(": Add stock");
+    System.out.println(output.toString());
   }
 
 
+  /**
+   * Helper function to print the option to display portfolio
+   * at some input Opt.
+   * @param Opt The input to add stock
+   */
+  public void displayOption(String Opt) {
+    StringBuilder output = new StringBuilder();
+    output.append(Opt)
+            .append(": Display portfolio at a certain date");
+    System.out.println(output.toString());
+  }
+
+  /**
+   * Helper function to print the option to display portfolio performance graph
+   * at some input Opt.
+   * @param Opt The input to add stock
+   */
+  public void performanceOption(String Opt) {
+    StringBuilder output = new StringBuilder();
+    output.append(Opt)
+            .append(": Display portfolio performance");
+    System.out.println(output.toString());
+  }
+
+  /**
+   * Helper function to print the option to display Cost Basis
+   * at some input Opt.
+   * @param Opt The input to add stock
+   */
+  public void costBasisOption(String Opt) {
+    StringBuilder output = new StringBuilder();
+    output.append(Opt)
+            .append(": Get cost basis at a date");
+    System.out.println(output.toString());
+  }
+  /**
+   * Helper function to print the option to sell stock
+   * at some input Opt.
+   * @param Opt The input to add stock
+   */
+  public void sellOption(String Opt) {
+    StringBuilder output = new StringBuilder();
+    output.append(Opt)
+            .append(": Sell Stock");
+    System.out.println(output.toString());
+  }
   public void fromDate() {
     System.out.println("Enter the beginning date to determine the performance in 'yyyy-MM-dd'");
   }
@@ -201,6 +295,15 @@ public class TextGUI implements TextInterface {
     System.out.println("Enter buy date, shares and commission fee in format (yyyy-MM-dd, " +
             "SHARES, COMM);(...);(...). Each data point is encased in a parentheses and " +
             "followed by a semicolon for extra dates.");
+  }
+
+
+
+  @Override
+  public void AddStockError(Exception e) {
+    System.out.println("Found this exception adding Stock:");
+    System.out.println(e.toString());
+    System.out.println("Type 'yes' to try again or 'quit' to quit.");
   }
 
 }

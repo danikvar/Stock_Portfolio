@@ -35,6 +35,17 @@ public class SmartPortfolio implements StockPortfolio {
   }
 
   /**
+   * USED FOR TESTING
+   * Portfolio constructor that initializes a portfolio
+   * with a given stock list.
+   */
+  public SmartPortfolio(Map<String, SmartStock> myList) {
+    this.stockList = myList;
+    this.stockTickers = getTickers();
+  }
+
+
+  /**
    * I changed this method signature to be void since it should just change the object.
    * There is no reason to return something every time we add a stock.
    * If the ticker is not already in the portfolio then add the stock to the
@@ -71,6 +82,97 @@ public class SmartPortfolio implements StockPortfolio {
     stockList.put(stock, in_1);
   }
 
+  /**
+   * Adds stock to portfolio by taking in map arguments, without parsing.
+   *
+   * @param stock The stock name
+   * @param data the price data map
+   * @param buyData the buy data map
+   * @param soldData the sold data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
+
+  public void addStock(String stock, Map<LocalDate, Double> data,
+                       Map<LocalDate, Pair<Double, Double>> buyData,
+                       Map<LocalDate, Pair<Double, Double>> soldData, boolean onlyInts)
+          throws IllegalArgumentException {
+
+    stock = stock.replaceAll("[^A-Za-z0-9-]", "");
+    if (!this.stockTickers.contains(stock)) {
+      throw new IllegalArgumentException("The ticker provided is not a valid ticker."
+              + "Please check the ticker and try again.");
+    }
+
+    SmartStock in_1;
+
+
+
+    if (!this.stockList.containsKey(stock)) {
+      in_1 = new SmartStock(stock, data, buyData, soldData, onlyInts);
+    } else {
+      SmartStock myStock = this.stockList.get(stock);
+      in_1 = myStock.addShares(buyData, soldData, onlyInts);
+    }
+
+    stockList.put(stock, in_1);
+
+  }
+
+
+
+  /**
+   * Adds stock to portfolio by taking in map arguments, only parsing the
+   * price data given as a string. This is used for API generally.
+   *
+   * @param stock The stock name
+   * @param data the price data map string
+   * @param buyData the buy data map
+   * @param soldData the sold data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
+
+  public void addStock(String stock, String data,
+                       Map<LocalDate, Pair<Double, Double>> buyData,
+                       Map<LocalDate, Pair<Double, Double>> soldData, boolean onlyInts)
+          throws IllegalArgumentException {
+
+    stock = stock.replaceAll("[^A-Za-z0-9-]", "");
+    if (!data.equals("API")) {
+      data = data.replaceAll("[^0-9-,.); (]", "");
+    }
+    if (!this.stockTickers.contains(stock)) {
+      throw new IllegalArgumentException("The ticker provided is not a valid ticker."
+              + "Please check the ticker and try again.");
+    }
+
+    SmartStock in_1;
+    LocalDate curDate = LocalDate.now();
+
+    if (!this.stockList.containsKey(stock)) {
+      in_1 = new SmartStock(stock, data, buyData, soldData, onlyInts);
+    } else {
+      SmartStock myStock = this.stockList.get(stock);
+      //TODO: Overload addShares method
+      in_1 = myStock.addShares(buyData, soldData, onlyInts);
+    }
+
+    stockList.put(stock, in_1);
+
+  }
+
+  /**
+   * Adds stock to portfolio by taking in map arguments, only parsing the
+   * price data given as a string. This is used for API generally.
+   *
+   * @param stock The stock name
+   * @param data the price data map
+   * @param buyData the buy data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
+
   public void addStock(String stock, String data,
                        Map<LocalDate, Pair<Double, Double>> buyData, boolean onlyInts)
           throws IllegalArgumentException {
@@ -98,6 +200,15 @@ public class SmartPortfolio implements StockPortfolio {
 
   }
 
+  /**
+   * Adds stock to portfolio by taking in map arguments without parsing.
+   *
+   * @param stock The stock name
+   * @param data the price data map
+   * @param buyData the buy data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
   public void addStock(String stock, Map<LocalDate, Double> data,
                        Map<LocalDate, Pair<Double, Double>> buyData, boolean onlyInts)
           throws IllegalArgumentException {
@@ -109,12 +220,9 @@ public class SmartPortfolio implements StockPortfolio {
     }
 
     SmartStock in_1;
-    LocalDate curDate = LocalDate.now();
 
-    //TODO: Implement OnlyInts without fucking up method
-    // Add boolean in constructor??
-    // Use Map = myStock.parseShares(sharesData, true)
-    //  !Check that all shares values are ints!   ---> myStock.addShares(MAP)
+
+
     if (!this.stockList.containsKey(stock)) {
       in_1 = new SmartStock(stock, data, buyData, onlyInts);
     } else {
@@ -126,6 +234,49 @@ public class SmartPortfolio implements StockPortfolio {
 
   }
 
+  // TODO: Portfolio Selling --> Test This!
+  public void sellStock(String ticker, String shares, String CF, String dateStr, boolean onlyInts)
+          throws IllegalArgumentException {
+
+    if(!this.stockList.containsKey(ticker)) {
+      throw new IllegalArgumentException("Your portfolio does not contain this stock."
+              + "Please check your ticker input.");
+    }
+
+    double amount;
+    double commFee;
+    LocalDate date;
+
+    try{
+      amount = Double.parseDouble(shares);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse amount to sell. " +
+              "Please check input and try again.");
+    }
+
+    try{
+      commFee = Double.parseDouble(CF);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse commission fee. " +
+              "Please check input and try again.");
+    }
+
+    try{
+      date = LocalDate.parse(dateStr);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Cannot parse date to sell at. " +
+              "Please check input and try again.");
+    }
+
+    SmartStock soldStock = this.stockList.get(ticker);
+    String soldOutput = soldStock.sellStock(date, amount, commFee, onlyInts);
+    this.stockList.put(ticker, soldStock);
+
+    System.out.println(soldOutput);
+  }
+
+
+
 
 
   // Gets the number of different stocks
@@ -134,8 +285,6 @@ public class SmartPortfolio implements StockPortfolio {
     return stockList.size();
   }
 
-  //TODO: FIX THIS PART GET TOTAL VALUE CORRECTLY
-  // FOLLOW LOGIC FROM THE TIME INTERVAL FUNC
   /**
    * Gets total value of a portfolio at a date.
    *
@@ -151,13 +300,11 @@ public class SmartPortfolio implements StockPortfolio {
 
       for (String myKey : stockList.keySet()) {
 
-        //System.out.println("KEY:");
-        //System.out.println(myKey);
-
         SmartStock myStock = stockList.get(myKey);
 
-        // TODO IMPLEMENT STOCK LIST GET TOTAL VALUES
+
         Pair<Double, Double> priceShares = myStock.getValue(date);
+
         double totVal = priceShares.a * priceShares.b;
 
         myVal[0] += priceShares.a;
@@ -400,6 +547,7 @@ public class SmartPortfolio implements StockPortfolio {
   /**
    * Gets the total # of shares in portfolio at a given date.
    *
+   * @param date YYYY-MM-DD string of date to fetch shares at
    * @return the number of shares in portfolio.
    */
   public int getNumStocks(String date) {
@@ -572,6 +720,7 @@ public class SmartPortfolio implements StockPortfolio {
         outBuild.append("          \"API\"\n"
                 + "      ],\n");
       } else {
+        outBuild.append("       {\n");
         outBuild.append(myStock.sharesToJSON());
         outBuild.append("        }\n" +
                 "      ],\n");
@@ -579,11 +728,22 @@ public class SmartPortfolio implements StockPortfolio {
 
       outBuild.append("     \"buyData\": [\n");
       outBuild.append("       {\n");
-      outBuild.append(myStock.buyToJSON());
+      outBuild.append(myStock.buySellToJSON(true));
+
+      // If we have sold stock we add a second item to our array which is
+      // our sales transactions map
+
+      if(myStock.hasSold()) {
+        outBuild.append("       },\n");
+        outBuild.append("       {\n");
+        outBuild.append(myStock.buySellToJSON(false));
+      }
 
       outBuild.append("       }\n" +
-              "     ]\n" +
-              "    }");
+                "     ]\n" +
+                "    }");
+
+
 
       if (iterator.hasNext()) {
         outBuild.append(",\n");

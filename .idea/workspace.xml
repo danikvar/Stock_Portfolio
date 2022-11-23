@@ -6,8 +6,26 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
+    <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Small change to sellStock function">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/DataHelpers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/DataHelpers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/Pair.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/Pair.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartPortfolio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartStock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/SmartStock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextGUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextGUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/TextInterface.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/AbstractController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartPortfolio.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/SmartStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/TextGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/TextInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/TextInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,10 +107,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="All in HW_4" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PortfolioTest.PortfolioSaleTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="HW_4" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockdataa.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockdataa" />
+      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
+      <option name="METHOD_NAME" value="PortfolioSaleTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PortfolioTest.StockSaleTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HW_4" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="stockdataa.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="stockdataa" />
+      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
+      <option name="METHOD_NAME" value="StockSaleTest" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -129,29 +171,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PortfolioTest.printTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="HW_4" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="stockdataa.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="stockdataa" />
-      <option name="MAIN_CLASS_NAME" value="stockdataa.PortfolioTest" />
-      <option name="METHOD_NAME" value="printTests" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.PortfolioApplication" />
+        <item itemvalue="JUnit.PortfolioTest.PortfolioSaleTest" />
+        <item itemvalue="JUnit.PortfolioTest.StockSaleTest" />
         <item itemvalue="JUnit.PortfolioTest.loadPortTest" />
         <item itemvalue="JUnit.PortfolioTest.parseStockTest" />
-        <item itemvalue="JUnit.PortfolioTest.printTests" />
-        <item itemvalue="JUnit.All in HW_4" />
       </list>
     </recent_temporary>
   </component>
@@ -187,7 +213,9 @@
       <workItem from="1668881413354" duration="6583000" />
       <workItem from="1668953427539" duration="10409000" />
       <workItem from="1668974597943" duration="1617000" />
-      <workItem from="1669036952204" duration="19216000" />
+      <workItem from="1669036952204" duration="35879000" />
+      <workItem from="1669133021722" duration="140000" />
+      <workItem from="1669161683149" duration="10750000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
       <created>1669069182724</created>
@@ -203,7 +231,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669069234161</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Small change to sellStock function">
+      <created>1669069512072</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1669069512072</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,7 +260,8 @@
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
     <MESSAGE value="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller" />
+    <MESSAGE value="Small change to sellStock function" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small change to sellStock function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -234,6 +270,130 @@
           <properties class="java.io.FileNotFoundException" package="java.io" />
           <option name="timeStamp" value="128" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.StringIndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="144" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartController.java</url>
+          <line>76</line>
+          <option name="timeStamp" value="161" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartController.java</url>
+          <line>77</line>
+          <option name="timeStamp" value="162" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>936</line>
+          <option name="timeStamp" value="163" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>937</line>
+          <option name="timeStamp" value="164" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>955</line>
+          <option name="timeStamp" value="165" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1166</line>
+          <option name="timeStamp" value="166" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1171</line>
+          <option name="timeStamp" value="167" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1179</line>
+          <option name="timeStamp" value="168" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1180</line>
+          <option name="timeStamp" value="169" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1184</line>
+          <option name="timeStamp" value="170" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1186</line>
+          <option name="timeStamp" value="171" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1189</line>
+          <option name="timeStamp" value="172" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1190</line>
+          <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>965</line>
+          <option name="timeStamp" value="174" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>945</line>
+          <option name="timeStamp" value="175" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>949</line>
+          <option name="timeStamp" value="178" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>964</line>
+          <option name="timeStamp" value="179" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>963</line>
+          <option name="timeStamp" value="180" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>962</line>
+          <option name="timeStamp" value="181" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>961</line>
+          <option name="timeStamp" value="182" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/DataHelpers.java</url>
+          <line>958</line>
+          <option name="timeStamp" value="183" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1193</line>
+          <option name="timeStamp" value="184" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1192</line>
+          <option name="timeStamp" value="185" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/stockdataa/SmartStock.java</url>
+          <line>1200</line>
+          <option name="timeStamp" value="187" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

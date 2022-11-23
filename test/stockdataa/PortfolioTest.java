@@ -1151,7 +1151,150 @@ public class PortfolioTest {
     //System.out.println(test.length());
   }
 
+  @Test
+  public void StockSaleTest() {
+  //TODO: Implement selling in the portfolio not in the stock
+    // TODO: Add selling to controller.
+    // TODO: Test performance graph with sold stock
+    String buy = "(2022-01-15,2,1);(2022-01-18,2,1)";
+    String price = "(2022-01-15,1); "
+            + "(2022-01-16,1);"
+            + "(2022-01-17,1);"
+            + "(2022-01-18,1);"
+            + "(2022-01-19,1);"
+            + "(2022-01-20,1);"
+            + "(2022-01-21,1);"
+            + "(2022-01-22,1);"
+            + "(2022-01-23,1);"
+            + "(2022-01-24,1);"
+            + "(2022-01-25,1);"
+            + "(2022-01-26,1);"
+            + "(2022-01-27,1);";
+    SmartStock myStock = new SmartStock("NVDA",price,buy, true);
 
+    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+
+    //| TICKER |    DATE    |    TOTAL SHARES     |    COST BASIS    |     CLOSE PRICE     |    TOTAL VALUE    |
+    outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
+    outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+
+
+    System.out.println(outBuild.toString());
+    System.out.println(myStock.printDataAt("2022-01-16"));
+    System.out.println(myStock.printDataAt("2022-01-19"));
+
+    LocalDate saleDate = LocalDate.parse("2022-01-20");
+    String stockSale = myStock.sellStock(saleDate,3,1,true);
+    System.out.println(stockSale);
+
+    System.out.println(myStock.printDataAt("2022-01-22"));
+
+  }
+
+
+  @Test
+  public void PortfolioSaleTest() throws FileNotFoundException, ParseException {
+    //TODO: Implement selling in the portfolio not in the stock
+    // TODO: Add selling to controller.
+    // TODO: Test performance graph with sold stock
+    String buy = "(2022-01-15,2,1);(2022-01-18,2,1)";
+    String price = "(2022-01-15,1); "
+            + "(2022-01-16,1);"
+            + "(2022-01-17,1);"
+            + "(2022-01-18,1);"
+            + "(2022-01-19,1);"
+            + "(2022-01-20,1);"
+            + "(2022-01-21,1);"
+            + "(2022-01-22,1);"
+            + "(2022-01-23,1);"
+            + "(2022-01-24,1);"
+            + "(2022-01-25,1);"
+            + "(2022-01-26,1);"
+            + "(2022-01-27,1);";
+    SmartStock myStock = new SmartStock("NVDA",price,buy, true);
+    SmartStock myStock2 = new SmartStock("IBM",price,buy, true);
+    Map<String, SmartStock> myList = new HashMap<String, SmartStock>();
+    myList.put("NVDA", myStock);
+    myList.put("IBM", myStock2);
+
+    SmartPortfolio myPort = new SmartPortfolio(myList);
+
+    System.out.println(myPort.printPortfolioAt("2022-01-16"));
+
+    double[] valueAt16 = myPort.getTotalValues("2022-01-16");
+    Assert.assertEquals(4, valueAt16[1], 0.000001);
+    Assert.assertEquals(6, myPort.getCostBasis("2022-01-16"), 0.000001);
+
+    System.out.println(myPort.printPortfolioAt("2022-01-19"));
+
+    double[] valueAt19 = myPort.getTotalValues("2022-01-19");
+    Assert.assertEquals(8, valueAt19[1], 0.000001);
+    Assert.assertEquals(12, myPort.getCostBasis("2022-01-19"), 0.000001);
+
+
+    String saleDate = "2022-01-20";
+    myPort.sellStock("IBM","3","3", saleDate, true);
+
+    System.out.println(myPort.printPortfolioAt("2022-01-22"));
+
+    System.out.println(myPort.portfolioPerformance("2022-01-16", "2022-01-22"));
+
+    double[] valueAt22 = myPort.getTotalValues("2022-01-22");
+
+
+    // loading and saving test
+    myPort.save("SellPortTest","DanUser");
+    SmartPortfolio newPort = (SmartPortfolio) DataHelpers.loadPortfolio(
+            "DanUser", "SellPortTest.json", 2);
+
+    double[] valueAt22New = newPort.getTotalValues("2022-01-22");
+    System.out.println(newPort.printPortfolioAt("2022-01-22"));
+
+    Assert.assertEquals(valueAt22[1], valueAt22New[1], 0.000001);
+    Assert.assertEquals(myPort.getCostBasis("2022-01-22"), newPort.getCostBasis("2022-01-22"), 0.000001);
+
+    String buy2 = "(2022-03-16,2,1);(2022-03-18,2,1)";
+    SmartStock myStock3 = new SmartStock("NVDA","API",buy2, true);
+    SmartStock myStock4 = new SmartStock("IBM","API",buy2, true);
+    Map<String, SmartStock> myList2 = new HashMap<String, SmartStock>();
+    myList2.put("NVDA", myStock3);
+    myList2.put("IBM", myStock4);
+
+    SmartPortfolio myPortAPI = new SmartPortfolio(myList2);
+
+    try {
+      myPortAPI.sellStock("IBM","3","3", saleDate, true);
+      Assert.fail();
+    } catch(Exception e) {
+      System.out.println("pass");
+    }
+
+
+    myPortAPI.sellStock("IBM","3","3", "2022-03-20", true);
+
+    System.out.println(myPortAPI.printPortfolioAt("2022-03-18"));
+    double[] valueAt22API = myPortAPI.getTotalValues("2022-03-22");
+
+
+    System.out.println(myPortAPI.printPortfolioAt("2022-03-22"));
+
+
+    // loading and saving test
+    myPortAPI.save("SellPortTestAPI","DanUser");
+    SmartPortfolio newPortAPI = (SmartPortfolio) DataHelpers.loadPortfolio(
+            "DanUser", "SellPortTestAPI.json", 2);
+
+    double[] valueAt22NewAPI = newPortAPI.getTotalValues("2022-03-22");
+    System.out.println(newPortAPI.printPortfolioAt("2022-03-22"));
+
+    Assert.assertEquals(valueAt22API[1], valueAt22NewAPI[1], 0.000001);
+    Assert.assertEquals(myPortAPI.getCostBasis("2022-03-19"), newPortAPI.getCostBasis("2022-03-19"), 0.000001);
+    Assert.assertEquals(myPortAPI.getCostBasis("2022-03-22"), newPortAPI.getCostBasis("2022-03-22"), 0.000001);
+  }
   @Test
   public void parseStockTest() {
     String buy = "(2020-01-01,10,10)";

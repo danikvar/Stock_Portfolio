@@ -138,7 +138,11 @@ public class SmartStock implements Stock {
 
     // Pre-check error conditions and end conditions
     if(amount == 0) {
-      return("Sold no shares, since amount to sell was 0. No commission fee was charged.");
+      StringBuilder outBuild = new StringBuilder()
+              .append("Sold no shares of [")
+              .append(this.ticker)
+              .append("], since amount to sell was 0. No commission fee was charged.");
+      return(outBuild.toString());
     } else if (amount < 0 || commFee < 0) {
       throw new IllegalArgumentException("Cannot sell negative shares or pay negative" +
               " commission. Please check input and try again.");
@@ -149,10 +153,22 @@ public class SmartStock implements Stock {
               ". Please check input and try again.");
     }
 
-    LocalDate maxSellDate = Collections.max(this.SoldDates.keySet());
-    LocalDate maxBuyDate = Collections.max(this.BuyDates.keySet());
+    boolean beforeSell = false;
+    boolean beforeBuy = false;
+    if(!this.SoldDates.isEmpty()) {
+      LocalDate maxSellDate = Collections.max(this.SoldDates.keySet());
+      beforeSell = date.isBefore(maxSellDate);
+    }
 
-    if(date.isBefore(maxBuyDate) || date.isBefore(maxSellDate)) {
+    if(!this.BuyDates.isEmpty()) {
+      LocalDate maxBuyDate = Collections.max(this.BuyDates.keySet());
+      beforeBuy = date.isBefore(maxBuyDate);
+    } else {
+      // This should never happen, but just in case.
+      throw new IllegalArgumentException("Cannot sell shares before buying shares.");
+    }
+
+    if( beforeBuy ||  beforeSell) {
       String pastSell = new StringBuilder()
               .append("Though selling shares on past dates is allowed, selling")
               .append(" on a date before the most recent transaction is not.")
@@ -180,7 +196,9 @@ public class SmartStock implements Stock {
       sold = new StringBuilder()
               .append("Succesfully sold [")
               .append(amount)
-              .append("] shares on [")
+              .append("] shares of [")
+              .append(this.ticker)
+              .append("] on [")
               .append(date)
               .append("].").toString();
     }
@@ -189,15 +207,7 @@ public class SmartStock implements Stock {
     return sold;
   }
 
-  // TODO: PUT THE BELOW IN THE PORTFOLIO METHOD TO SELL.
-  // TODO: Check the date string in portfolio method then call sellStock
-  //  sellFIFO, or sellLIFO can be added if track profit, otherwise it does
-  //  not matter since costBasis or Total Value do not change based on price of stock
-  //  on buyDate for the sold stock.
 
-  // TODO: Update getTotalValue, getCostBasis, and printDataAt() to work with sales
-  // TODO: ^ getShareComm and CostBasis was updated. Check that rest of functions
-  //         work with this
   // For Value at a certain date, we just need the total shares at X date
   // For CostBasis we need to know Total Shares * Price, commission paid for buys,
   // and the commission paid on sales up until X date
@@ -222,31 +232,19 @@ public class SmartStock implements Stock {
    * @throws IllegalArgumentException if onlyInts and the share amount is fractional,
    *        trying to sell negative shares or negative Fee, or more shares than currently owned.
 
-  give -> [LocalDate date, double amount, double commFee, boolean onlyInts]
 
-  try{
-      amntSell = Double.parseDouble(amount);
-    } catch(Exception e) {
-      throw new IllegalArgumentException("Cannot parse amount to sell. " +
-              "Please check input and try again.");
-    }
-
-    try{
-      commFee = Double.parseDouble(CF);
-    } catch(Exception e) {
-      throw new IllegalArgumentException("Cannot parse commission fee. " +
-              "Please check input and try again.");
-    }
-
-    LocalDate date;
-    try{
-      date = LocalDate.parse(d1);
-    } catch(Exception e) {
-      throw new IllegalArgumentException("Cannot parse date to sell at. " +
-              "Please check input and try again.");
-    }
    */
 
+
+
+  /**
+   * Constructor that takes in map arguments without parsing.
+   * @param ticker The stock name
+   * @param data the price data map
+   * @param myBuyDates the buy data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
   public SmartStock(String ticker, Map<LocalDate, Double> data,
                     Map<LocalDate, Pair<Double,Double>> myBuyDates,
                     boolean onlyInts) throws IllegalArgumentException {
@@ -260,6 +258,49 @@ public class SmartStock implements Stock {
     this.stockData = data;
     this.BuyDates = myBuyDates;
 
+
+    this.checkBuyDates(data, myBuyDates);
+    for(LocalDate key: this.BuyDates.keySet()) {
+
+      double curShares = this.BuyDates.get(key).a;
+
+      if(onlyInts && (curShares % 1) != 0) {
+        throw new IllegalArgumentException("Cannot have fractional shares. " +
+                "Please try again.");
+      }
+      shares += curShares;
+    }
+
+    this.shares = shares;
+
+    // This function gets the value at the current date
+  }
+
+  /**
+   * Constructor that takes in map arguments without parsing. This constructor also
+   * supplies a mapping for the stock sales transactions.
+   * We do not support selling of stock during Portfolio creation through the
+   * application (only after the initial stocks are added), so this is used for
+   * loading saved portfolios with sales transactions.
+   *
+   * @param ticker The stock name
+   * @param data the price data map
+   * @param myBuyDates the buy data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
+  public SmartStock(String ticker, Map<LocalDate, Double> data,
+                    Map<LocalDate, Pair<Double,Double>> myBuyDates,
+                    Map<LocalDate, Pair<Double,Double>> mySoldDates,
+                    boolean onlyInts) throws IllegalArgumentException {
+
+    this.SoldDates = mySoldDates;
+
+    double shares = 0;
+    this.ticker = ticker;
+
+    this.stockData = data;
+    this.BuyDates = myBuyDates;
 
     this.checkBuyDates(data, myBuyDates);
     for(LocalDate key: this.BuyDates.keySet()) {
@@ -468,6 +509,56 @@ public class SmartStock implements Stock {
     // This function gets the value at the current date
   }
 
+
+  /**
+   * Constructor that takes in map arguments without parsing for buy data.
+   * This constructor supplies a mapping for the stock sales transactions.
+   * The price data is provided as a string, generally to be used with the
+   * API.
+   * We do not support selling of stock during Portfolio creation through the
+   * application (only after the initial stocks are added), so this is used for
+   * loading saved portfolios with sales transactions.
+   *
+   * @param ticker The stock name
+   * @param data the price data map
+   * @param myBuyDates the buy data map
+   * @param onlyInts whether shares can only be integers
+   * @throws IllegalArgumentException fractional shares and onlyInts is true
+   */
+  public SmartStock(String ticker, String data,
+                    Map<LocalDate, Pair<Double,Double>> myBuyDates,
+                    Map<LocalDate, Pair<Double,Double>> mySoldDates,
+                    boolean onlyInts) throws IllegalArgumentException {
+
+    this.SoldDates = mySoldDates;
+
+    double shares = 0;
+    this.ticker = ticker;
+
+    if (data.equals("API")) {
+      this.stockData = DataHelpers.getStockData(ticker);
+    } else {
+      this.stockData = parseStock(data);
+    }
+    this.BuyDates = myBuyDates;
+
+    this.checkBuyDates(this.stockData, myBuyDates);
+    for(LocalDate key: this.BuyDates.keySet()) {
+
+      double curShares = this.BuyDates.get(key).a;
+
+      if(onlyInts && (curShares % 1) != 0) {
+        throw new IllegalArgumentException("Cannot have fractional shares. " +
+                "Please try again.");
+      }
+      shares += curShares;
+    }
+
+    this.shares = shares;
+
+    // This function gets the value at the current date
+  }
+
   private SmartStock(String ticker, double shares, Map<LocalDate, Double> data,
                      Map<LocalDate, Pair<Double,Double>> myBuyDates) {
     this.shares = shares;
@@ -502,6 +593,21 @@ public class SmartStock implements Stock {
     For the first stock we will just use the value outputted, then for each subsequent stock we
     will add the values to it.
     https://stackoverflow.com/questions/40158605/merge-two-maps-with-java-8
+
+
+     Pair<Double, Double> totShareComm = new Pair<>(0.0, 0.0);
+
+    for( LocalDate key: trimShareDates.keySet()) {
+      totShareComm = totShareComm.add(trimShareDates.get(key));
+    }
+
+    if(! trimSellDates.isEmpty()) {
+      for(LocalDate sellKey: trimSellDates.keySet()) {
+        totShareComm = totShareComm.addBMinusA(trimSellDates.get(sellKey));
+      }
+    }
+
+
    */
   public Map<LocalDate, Double> timeIntervalValues(String date1, String date2, char timeType) throws IllegalArgumentException {
     LocalDate d1;
@@ -527,16 +633,18 @@ public class SmartStock implements Stock {
     }
 
 
+
     Comparator<LocalDate> comparator = LocalDate::compareTo;
 
     SortedSet<LocalDate> priceKeys = new TreeSet<>(comparator);
     priceKeys.addAll(newPrices.keySet());
 
+    //TODO: Implemented selling here check if this works
+    SortedSet<LocalDate> buySellKeys = new TreeSet<>(comparator);
+    buySellKeys.addAll(this.BuyDates.keySet());
+    buySellKeys.addAll(this.SoldDates.keySet());
 
-    SortedSet<LocalDate> buyKeys = new TreeSet<>(comparator);
-    buyKeys.addAll(this.BuyDates.keySet());
-
-    Iterator<LocalDate> buyIt = buyKeys.iterator();
+    Iterator<LocalDate> buyIt = buySellKeys.iterator();
     LocalDate curBuyKey = buyIt.next();
 
     if(curBuyKey.isAfter(d2)){
@@ -551,10 +659,11 @@ public class SmartStock implements Stock {
       nextBuy = null;
     }
 
+    // The first buyKey should always be in buyDates since it is
+    // impossible to sell before buying. Otherwise, this correctly throws an error
     Pair<Double, Double> curBuy = BuyDates.get(curBuyKey);
 
     double curTotStock = curBuy.a;
-    double curTotComiss = curBuy.b;
 
 
     //TODO: WE DONT NEED CURTOT COMISS THIS SHOULD ONLY BE IN THE COST BASIS
@@ -567,6 +676,7 @@ public class SmartStock implements Stock {
     LocalDate firstDate = priceKeys.first();
     boolean finDate = false;
 
+    // looping our iterator to set it up
     while(!Objects.isNull(nextBuy) && !finDate) {
       if(!nextBuy.isAfter(firstDate)) {
         curBuyKey = nextBuy;
@@ -575,20 +685,21 @@ public class SmartStock implements Stock {
         } else {
           nextBuy = null;
         }
-        curBuy = BuyDates.get(curBuyKey);
-        curTotStock += curBuy.a;
-        curTotComiss += curBuy.b;
+        //curBuy = BuyDates.get(curBuyKey);
+        //curTotStock += curBuy.a;
       } else {
         finDate = true;
       }
     }
+
+    curTotStock = this.getShareCommm(firstDate.toString()).a;
 
 
     //Pair<Double, Double> curStocks = this.BuyDates.get(curBuyKey);
 
     // This is the map with the total value at each date that we will return.
     return getIntervalPriceVals(priceKeys, curBuyKey,
-            nextBuy, buyIt, curTotStock, curTotComiss, newPrices);
+            nextBuy, buyIt, curTotStock, newPrices);
 
   }
 
@@ -623,6 +734,7 @@ public class SmartStock implements Stock {
               " Please try again.");
     }
 
+    //TODO: ShareComm used here
     Pair<Double, Double> myComm = this.getShareCommm(date);
 
     // a = price at date and b = # of stocks at date
@@ -630,12 +742,12 @@ public class SmartStock implements Stock {
 
   }
 
+  //TODO: Getting Interval Price Values
   private Map<LocalDate, Double> getIntervalPriceVals(SortedSet<LocalDate> priceKeys,
                                                       LocalDate curBuyKey,
                                                       LocalDate nextBuy,
                                                       Iterator<LocalDate> buyIt,
                                                       double curTotStock,
-                                                      double curTotComiss,
                                                       Map<LocalDate, Double> newPrices
                                                       ) {
 
@@ -646,7 +758,8 @@ public class SmartStock implements Stock {
 
       // If our current date is after/equal to the current buy key
       // First check that we are before the next buy Key
-      // If not then ignore --> we only want values after/on the first valid buy date
+      // If not (after/on next buy Key) then ignore
+      //        --> we only want values after/on the first valid buy date
       // If true then check that we are before the next buyDate
       // If false then we update the buyDate, otherwise continue
       if(!key.isBefore(curBuyKey)) {
@@ -661,9 +774,13 @@ public class SmartStock implements Stock {
             nextBuy = null;
           }
 
-          curBuy = BuyDates.get(curBuyKey);
-          curTotStock += curBuy.a;
-          curTotComiss += curBuy.b;
+          if(BuyDates.containsKey(curBuyKey)){
+            curTotStock += BuyDates.get(curBuyKey).a;
+          }
+          if(SoldDates.containsKey(curBuyKey)){
+            curTotStock -= SoldDates.get(curBuyKey).a;
+          }
+
         }
 
         // once everything is updated we can continue
@@ -727,6 +844,7 @@ public class SmartStock implements Stock {
 
       //TODO: fix here
       double myData = stockData.get(myKey);
+      //TODO: ShareComm here make sure this works
       Pair <Double, Double> shareComm = this.getShareCommm(date);
       double curShares = shareComm.a;
       double costBasis = getCostBasis(date);
@@ -879,6 +997,13 @@ public class SmartStock implements Stock {
     return new SmartStock(this.ticker, totShares, this.stockData, myBuyDates);
   }
 
+  /**
+   * Add new shares to this stock.
+   * @param buyData transaction map for when the shares were bought
+   * @param onlyInts if true fractional shares are not allows
+   * @return a new stock with updated transactions
+   * @throws IllegalArgumentException If onlyInts and fractional shares supplied
+   */
   public SmartStock addShares(Map<LocalDate, Pair<Double, Double>> buyData,
                               boolean onlyInts) throws IllegalArgumentException {
 
@@ -890,19 +1015,42 @@ public class SmartStock implements Stock {
     } catch (Exception e) {
       throw e;
     }
+    // Fractional shares are checked for in constructor
+    return new SmartStock(this.ticker, this.stockData, myBuyDates, onlyInts);
+  }
 
-    double totShares = 0.0;
-    for(LocalDate key: myBuyDates.keySet()) {
-      double newShares = myBuyDates.get(key).a;
-      if(onlyInts && (newShares % 1) != 0) {
-        throw new IllegalArgumentException("Cannot have fractional shares. " +
-                "Please try again.");
-      }
-      totShares += newShares;
+  /**
+   * Add new shares to this stock.
+   * @param buyData transaction map for when the shares were bought.
+   * @param saleData transaction map for when the shares were sold.
+   * @param onlyInts if true fractional shares are not allowed.
+   * @return a new stock with updated transactions.
+   * @throws IllegalArgumentException If onlyInts and fractional shares supplied.
+   */
+  public SmartStock addShares(Map<LocalDate, Pair<Double, Double>> buyData,
+                              Map<LocalDate, Pair<Double, Double>> saleData,
+                              boolean onlyInts) throws IllegalArgumentException {
+
+    Map<LocalDate, Pair<Double,Double>> myBuyDates = new HashMap<>();
+    myBuyDates.putAll(this.BuyDates);
+
+    try {
+      myBuyDates.putAll(buyData);
+    } catch (Exception e) {
+      throw e;
+    }
+
+    Map<LocalDate, Pair<Double,Double>> mySellDates = new HashMap<>();
+    mySellDates.putAll(this.SoldDates);
+
+    try {
+      mySellDates.putAll(saleData);
+    } catch (Exception e) {
+      throw e;
     }
 
 
-    return new SmartStock(this.ticker, totShares, this.stockData, myBuyDates);
+    return new SmartStock(this.ticker, this.stockData, myBuyDates, saleData, onlyInts);
   }
 
   public Stock addShares(double numShares) throws IllegalArgumentException {
@@ -989,7 +1137,7 @@ public class SmartStock implements Stock {
     List<LocalDate> topDates = new ArrayList<LocalDate>(stockData.keySet());
     Collections.sort(topDates, Collections.reverseOrder());
     topDates = topDates.subList(0, min(50, topDates.size()));
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("Stock1-MM-dd");
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     for (int i = 0; i < topDates.size(); i++) {
       LocalDate key = topDates.get(i);
       String curPrice = String.valueOf(stockData.get(key));
@@ -1008,10 +1156,27 @@ public class SmartStock implements Stock {
     return outBuild.toString();
   }
 
-  public String buyToJSON() {
+  /**
+   * Converts the buy or sell transaction maps to a string format for use in
+   * saving the portfolio as a json file.
+   * @param buy If true we translate the buy map, otherwise the sell map.
+   * @return A JSON formattted string of the corresponding transaction map.
+   */
+  public String buySellToJSON(boolean buy) {
 
     StringBuilder outBuild = new StringBuilder();
-    List<LocalDate> topDates = new ArrayList<LocalDate>(this.BuyDates.keySet());
+
+
+    List<LocalDate> topDates;
+    Map<LocalDate, Pair<Double, Double>> curMap;
+    if(buy) {
+      topDates = new ArrayList<LocalDate>(this.BuyDates.keySet());
+      curMap = this.BuyDates;
+    } else {
+      topDates = new ArrayList<LocalDate>(this.SoldDates.keySet());
+      curMap = this.SoldDates;
+    }
+
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#");
     df.setMaximumFractionDigits(10);
@@ -1019,7 +1184,7 @@ public class SmartStock implements Stock {
 
     for (int i = 0; i < topDates.size(); i++) {
       LocalDate key = topDates.get(i);
-      Pair<Double, Double> curPair = this.BuyDates.get(key);
+      Pair<Double, Double> curPair = curMap.get(key);
       outBuild.append("          \"");
       outBuild.append(dtf.format(key)).append("\": [ \"");
       outBuild.append(df.format(curPair.a)).append("\", \"");
@@ -1036,6 +1201,13 @@ public class SmartStock implements Stock {
     return outBuild.toString();
   }
 
+  /**
+   *  Tells if this stock has sold anything in the past
+   * @return true if there were any sales transactions
+   */
+  public boolean hasSold() {
+    return this.SoldDates.size() > 0;
+  }
 
   /**
    * Method to get the stock data from the stocks price list.
@@ -1249,7 +1421,6 @@ public class SmartStock implements Stock {
     trimSellDates.keySet().removeIf(k -> k.isAfter(start));
     return trimSellDates;
   }
-
 }
 
 

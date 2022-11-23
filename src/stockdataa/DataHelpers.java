@@ -716,6 +716,26 @@ public class DataHelpers {
 
   public static String listPortfolios(String userName) throws FileNotFoundException {
     String portDir = getPortfolioDir(userName);
+
+    String portList;
+    try{
+      portList = listPortfoliosDirect(portDir);
+    } catch(Exception e) {
+      throw e;
+    }
+
+    return portList;
+  }
+
+  /**
+   * This lists all the portfolios directly from some path
+   *
+   * @param portDir the directory where portfolios are stored
+   * @return the list of portfolios.
+   * @throws FileNotFoundException when file is not found.
+   */
+
+  public static String listPortfoliosDirect(String portDir) throws FileNotFoundException {
     File portFolder = new File(portDir);
     File[] portList = portFolder.listFiles();
 
@@ -740,17 +760,16 @@ public class DataHelpers {
   }
 
   /**
-   * loads the portfolio.
-   * @param userName      name of the user.
+   * loads the portfolio directly from a given directory.
+   * @param portDir       directory
    * @param portfolioName name of the portfolio.
-   * @param
+   * @param portType 1 for simple, 2 for smart
    * @return the portfolio for the user.
    * @throws FileNotFoundException when portfolio is not found.
    */
-  public static StockPortfolio loadPortfolio(String userName, String portfolioName,
-                                             int portType)
+  public static StockPortfolio loadPortfolioDirect(String portDir, String portfolioName,
+                                                   int portType)
           throws FileNotFoundException, ParseException {
-    String portDir = getPortfolioDir(userName);
     File portFolder = new File(portDir);
     File[] portList = portFolder.listFiles();
 
@@ -782,12 +801,36 @@ public class DataHelpers {
   }
 
   /**
+   * loads the portfolio of a given user.
+   * @param userName      name of the user.
+   * @param portfolioName name of the portfolio.
+   * @param portType 1 for simple 2 for smart
+   * @return the portfolio for the user.
+   * @throws FileNotFoundException when portfolio is not found.
+   */
+  public static StockPortfolio loadPortfolio(String userName, String portfolioName,
+                                             int portType)
+          throws FileNotFoundException, ParseException {
+    String portDir = getPortfolioDir(userName);
+
+    StockPortfolio myPortfolio;
+    try{
+      myPortfolio = loadPortfolioDirect(portDir, portfolioName, portType);
+    } catch(Exception e) {
+      throw e;
+    }
+
+    return  myPortfolio;
+  }
+
+  /**
    * converts the portfolio file to a string.
    *
    * @param portDir directory where the portfolio is present.
    * @param portType type of portfolio 1 for simple
    * @return the string formatted portfolio.
    * @throws FileNotFoundException where portfolio is not found.
+   * @throws ParseException where issue parsing portfolio
    */
   public static StockPortfolio parsePortfolio(String portDir, int portType) throws
           FileNotFoundException, ParseException {
@@ -891,10 +934,12 @@ public class DataHelpers {
         while( !line2.contains("buyData")) {
           line2 = scan.nextLine();
         }
-        line2 = scan.nextLine();
+        scan.nextLine();
         line2 = scan.nextLine();
 
 
+        double totBought = 0;
+        double totSold = 0;
         while (!line2.contains("}")) {
           String[] datePrice = line2.split("\"");
           LocalDate myKey = LocalDate.parse(datePrice[1]);
@@ -902,17 +947,53 @@ public class DataHelpers {
           Double comm = Double.parseDouble(datePrice[5]);
           Pair<Double, Double> newPair = new Pair<Double, Double>(share, comm);
           buyData.put(myKey, newPair);
+          totBought += share;
           line2 = scan.nextLine();
+        }
+
+        boolean hasSell = false;
+        Map<LocalDate, Pair<Double, Double>> sellData = new HashMap<>();
+        if(line2.contains("},")) {
+          hasSell = true;
+          scan.nextLine();
+          line2 = scan.nextLine();
+
+          while (!line2.contains("}")) {
+            String[] soldPrice = line2.split("\"");
+            LocalDate myKey = LocalDate.parse(soldPrice[1]);
+            Double share = Double.parseDouble(soldPrice[3]);
+            Double comm = Double.parseDouble(soldPrice[5]);
+            totSold += share;
+            Pair<Double, Double> newPair = new Pair<Double, Double>(share, comm);
+            sellData.put(myKey, newPair);
+            line2 = scan.nextLine();
+          }
+
+        }
+
+        if(totBought < totSold) {
+          throw new ParseException("Your file has more shares sold than bought. "
+                  + "Adjust file input before attempting to load.", 0);
         }
         if(priceData.size() == 0) {
           try {
-            myPortfolio.addStock(ticker, "API", buyData, true);
+            if(hasSell) {
+              myPortfolio.addStock(ticker, "API", buyData, sellData, true);
+            } else {
+              myPortfolio.addStock(ticker, "API", buyData, true);
+            }
+
           } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e);
           }
         } else {
           try {
-            myPortfolio.addStock(ticker, priceData, buyData, true);
+            if(hasSell) {
+              myPortfolio.addStock(ticker, priceData, buyData, sellData, true);
+            } else {
+              myPortfolio.addStock(ticker, priceData, buyData, true);
+            }
+
           } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(e);
           }

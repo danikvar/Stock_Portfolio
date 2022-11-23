@@ -19,33 +19,30 @@ public class SmartController extends AbstractController {
 
     while (!quit) {
       //tell view to show options
-      System.out.println(stockdataa.DataHelpers.getUsers());
+      System.out.println(DataHelpers.getUsers());
       view.showOptions();
       user = in.nextLine();
 
       getUser(user);
 
-      if (stockdataa.DataHelpers.getUserList().contains(user)) {
+      if (DataHelpers.getUserList().contains(user)) {
         view.chooseOption();
         String option1 = in.nextLine();
         String inp = "yes";
         switch (option1) {
           case "C":
-            model = new stockdataa.SmartPortfolio();
+            model = new SmartPortfolio();
             inp = "yes";
             view.getportName();
             String portName = in.nextLine();
             currentPort= portName;
-            while(quit != true) {
+            while(inp.equals("yes")) {
               try{
                 inp = addabs(inp, portName, user, model, "smart");
-                break;
               } catch (Exception e) {
-                System.out.println("Found this exception adding Stock:");
-                System.out.println(e.toString());
-                System.out.println("Type add to try again or 'quit' to quit.");
-                String response = in.nextLine();
-                if(response.equals("quit")){
+                view.AddStockError(e);
+                inp = in.nextLine();
+                if(inp.equals("quit")){
                   quit = true;
                   break;
                 }
@@ -54,7 +51,7 @@ public class SmartController extends AbstractController {
 
             break;
           case "D":
-            System.out.println(stockdataa.DataHelpers.listPortfolios(user));
+            System.out.println(DataHelpers.listPortfolios(user));
             view.showOptions1();
             String name = in.nextLine();
             currentPort = name;
@@ -72,27 +69,37 @@ public class SmartController extends AbstractController {
         }
 
         // Once a porfolio is loaded/displayed we go here
-        view.showSmartopt();
+        view.showSmartopt("A", "B", "C", "D", "E");
         String opt = in.nextLine();
-        while(!Objects.equals(opt, "Finish")) {
+        while(!opt.equals( "Finish")) {
           //System.out.println("Current Option is:");
           //System.out.println(opt);
           switch (opt) {
             case "A":
               //abstract add
               //String portName = in.nextLine();
-              currentPort = currentPort.substring(0, currentPort.lastIndexOf('.'));
-              inp = addabs(inp, currentPort, user, model, "smart");
-              System.out.println("Choose one of the following options" +
-                      " or type 'Finish' to finish");
-              view.showSmartopt();
+              if(currentPort.contains(".")){
+                currentPort = currentPort.substring(0, currentPort.lastIndexOf('.'));
+              }
+              inp = "yes";
+              while(inp == "yes") {
+                try{
+                  inp = addabs(inp, currentPort, user, model, "smart");
+                } catch (Exception e) {
+                  view.AddStockError(e);
+                  inp = in.nextLine();
+                  if(inp.equals("quit")){
+                    break;
+                  }
+                }
+              }
+
+              view.showSmartopt("A", "B", "C", "D", "E");
               opt = in.nextLine();
               break;
             case "B":
               displayPort(model);
-              System.out.println("Choose one of the following options" +
-                      " or type 'Finish' to finish");
-              view.showSmartopt();
+              view.showSmartopt("A", "B", "C", "D", "E");
               opt = in.nextLine();
               break;
             case "C":
@@ -106,9 +113,7 @@ public class SmartController extends AbstractController {
               } catch (Exception e) {
                 System.out.println(e);
               }
-              System.out.println("Choose one of the following options or type" +
-                      " 'Finish' to finish");
-              view.showSmartopt();
+              view.showSmartopt("A", "B", "C", "D", "E");
               opt = in.nextLine();
               break;
             case "D":
@@ -119,9 +124,21 @@ public class SmartController extends AbstractController {
               } catch (Exception e) {
                 System.out.println(e);
               }
-              System.out.println("Choose one of the following options" +
-                      " or type 'Finish' to finish");
-              view.showSmartopt();
+              view.showSmartopt("A", "B", "C", "D", "E");
+              opt = in.nextLine();
+              break;
+
+            case "E":
+              try {
+                this.sellStock();
+                System.out.println("Not yet implemented in controller");
+                // TODO finish sales implementation in controller
+                // TODO create parser and saver for sold stocks!
+                // here read in ticker, date to sell, commission, and shares.
+              } catch (Exception e) {
+                System.out.println(e);
+              }
+              view.showSmartopt("A", "B", "C", "D", "E");
               opt = in.nextLine();
               break;
             default:
@@ -138,5 +155,36 @@ public class SmartController extends AbstractController {
         break;
       }
     }
+  }
+
+  /**
+   * Gathers all necessary details to sell stock then
+   * performs the transaction.
+   */
+  private void sellStock() {
+    view.addStockdetails();
+    String ticker = in.nextLine();
+    view.addStockdetails2();
+    String shares = in.nextLine();
+    view.addCommission();
+    String comm = in.nextLine();
+    view.addDate();
+    String date = in.nextLine();
+    while(true) {
+      try {
+        ((SmartPortfolio) model).sellStock(ticker, shares, comm, date, true);
+        break;
+      } catch(Exception e) {
+        System.out.println("Error selling Stock!");
+        System.out.println(e);
+        System.out.println("If you would like to try again, please type 'Y', "
+                + "otherwise enter anything else.");
+        String again = in.nextLine();
+        if(!again.equals("Y")) {
+          break;
+        }
+      }
+    }
+
   }
 }
