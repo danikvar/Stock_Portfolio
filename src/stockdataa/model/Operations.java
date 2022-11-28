@@ -1,12 +1,34 @@
-package stockdataa;
+package stockdataa.model;
 
-/**
- * Stock portfolio interface that is for implementing save and add stock in a portfolio.
- */
-public interface StockPortfolio {
+public interface Operations {
 
-  //TODO: Define
+  void sellStock(String ticker, String shares,
+                 String CF, String dateStr, boolean onlyInts)
+          throws IllegalArgumentException;
+
+  String getUser();
+
+  String getPort();
+
+  String buyStock(String ticker, String shares, boolean onlyInts);
+
+  String getCostBasis(String date);
+
+  String loadPort(String portName);
+
+  double[] getData(String date);
+
+  double getShares();
+
+  String getTicker();
+
+
+  String savePortfolio();
+
+  String sharesToJSON();
+
   int size();
+
 
   //TODO: Define
   double[] getTotalValues(String date);
@@ -52,4 +74,18 @@ public interface StockPortfolio {
    * @throws IllegalArgumentException when date string provided are invalid.
    */
   String portfolioPerformance(String date1, String date2) throws IllegalArgumentException;
+
+  /**
+   * Set the username for the current operations object.
+   * @param userName the current user for loading/saving
+   */
+  void setUser(String userName);
+
+  /**
+   * Set the directory for the current user's portfolios in the operation.
+   * @param filePath the portfolio directory for the current user.
+   */
+  void setPath(String filePath);
+
+  String getPath();
 }

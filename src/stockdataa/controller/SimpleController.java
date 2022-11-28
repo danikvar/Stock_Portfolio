@@ -1,12 +1,18 @@
-package stockdataa;
+package stockdataa.controller;
 
 import java.io.InputStream;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.Objects;
-import java.util.Scanner;
 
-public class SimpleController extends AbstractController{
+import stockdataa.DataHelpers;
+import stockdataa.model.SmartPortfolio;
+import stockdataa.view.ButtonOnlyView.ButtonOnly;
+import stockdataa.view.TextInterface;
+import stockdataa.controller.AbstractController;
+import stockdataa.model.Portfolio;
+
+public class SimpleController extends AbstractController {
   public SimpleController(Portfolio model, InputStream in, TextInterface view) {
     super(model,in,view);
 
@@ -32,7 +38,7 @@ public class SimpleController extends AbstractController{
       switch (option1) {
         // create a new portfolio
         case "C":
-          model = new stockdataa.Portfolio();
+          model = new Portfolio();
           inp = "yes";
           view.getportName();
           String portName = in.nextLine();

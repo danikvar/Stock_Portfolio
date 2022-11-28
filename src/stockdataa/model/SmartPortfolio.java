@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import stockdataa.DataHelpers;
+import stockdataa.Pair;
 
 import static stockdataa.DataHelpers.getTickers;
 import static stockdataa.DataHelpers.padLeft;
@@ -352,9 +355,15 @@ public class SmartPortfolio implements StockPortfolio {
     double costBasis = this.getCostBasis(date);
 
     StringBuilder output = new StringBuilder();
-    output.append("Your total cost basis on ");
-    output.append(date);
-    output.append(" is: ");
+    if(date.contains("current")) {
+      output.append("Your current total cost basis is: ");
+    } else {
+      output.append("Your total cost basis on ");
+      output.append(date);
+      output.append(" is: ");
+    }
+
+
     output.append(String.valueOf(costBasis));
     return output.toString();
 
@@ -786,6 +795,23 @@ public class SmartPortfolio implements StockPortfolio {
     fullName.append(fileName).append(".json");
 
     try (PrintWriter out = new PrintWriter(fullName.toString())) {
+      out.println(this.portToJSON());
+    } catch (FileNotFoundException e) {
+      System.out.println("Your file has encountered an error while saving."
+              + "Please check portfolio directory.");
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * This saves the current portfolio to the given path.
+   *
+   * @param path the full path  to save the portfolio
+   * @throws RuntimeException when input is not valid.
+   */
+  public void saveDirect(String path) throws RuntimeException {
+
+    try (PrintWriter out = new PrintWriter(path)) {
       out.println(this.portToJSON());
     } catch (FileNotFoundException e) {
       System.out.println("Your file has encountered an error while saving."

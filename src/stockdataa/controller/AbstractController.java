@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.controller;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -7,10 +7,26 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-abstract class AbstractController implements Controller {
+
+import stockdataa.DataHelpers;
+import stockdataa.model.Operations;
+import stockdataa.model.SmartPortfolio;
+import stockdataa.model.StockPortfolio;
+import stockdataa.view.TextInterface;
+import stockdataa.view.ButtonOnlyView.ButtonOnly;
+
+abstract class AbstractController implements IController {
   protected Scanner in;
-  protected stockdataa.TextInterface view;
-  protected stockdataa.StockPortfolio model;
+  protected ButtonOnly buttonview;
+  protected stockdataa.model.StockPortfolio model;
+  protected TextInterface view;
+  protected Operations opModel;
+
+  public AbstractController(StockPortfolio model, InputStream in, ButtonOnly view) {
+    this.model = model;
+    this.buttonview = view;
+    this.in = new Scanner(in);
+  }
 
   public AbstractController(StockPortfolio model, InputStream in, TextInterface view) {
     this.model = model;
@@ -19,6 +35,17 @@ abstract class AbstractController implements Controller {
   }
 
 
+  public AbstractController(SmartPortfolio model, ButtonOnly view) {
+    this.model = model;
+    this.buttonview = view;
+
+  }
+
+  public AbstractController(Operations opModel, ButtonOnly view) {
+    this.opModel = opModel;
+    this.buttonview = view;
+
+  }
 
   /**
    * Gets username from the user.

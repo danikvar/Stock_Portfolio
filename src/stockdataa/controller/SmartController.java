@@ -1,18 +1,36 @@
-package stockdataa;
+package stockdataa.controller;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.util.Objects;
-import java.util.Scanner;
+
+import stockdataa.DataHelpers;
+import stockdataa.model.Operations;
+import stockdataa.model.OperationsImpl;
+import stockdataa.model.SmartPortfolio;
+import stockdataa.view.ButtonOnlyView.ButtonOnly;
+import stockdataa.view.TextInterface;
 
 public class SmartController extends AbstractController {
+
+  public SmartController(SmartPortfolio model, InputStream in, ButtonOnly view) {
+    super(model, in, view);
+  }
+
   public SmartController(SmartPortfolio model, InputStream in, TextInterface view) {
     super(model, in, view);
   }
 
+  /*
+  public SmartController(SmartPortfolio model, ButtonOnly b){
+    super(model,b);
+  }
+   */
+  public SmartController(Operations m, ButtonOnly v) {
+    super(m, v);
+  }
+
   public void controller() throws FileNotFoundException {
-    String input;
+    //String input;
     String user;
     String currentPort = "";
     boolean quit = false;
@@ -187,4 +205,13 @@ public class SmartController extends AbstractController {
     }
 
   }
+
+  /**
+   * Method that use to run the program.
+   */
+  public void execute() {
+    // TODO Auto-generated method stub
+    System.out.println();
+  }
+
 }

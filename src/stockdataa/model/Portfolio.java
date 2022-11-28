@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.model;
 
 
 import java.io.FileNotFoundException;
@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import stockdataa.DataHelpers;
 
 import static stockdataa.DataHelpers.getTickers;
 import static stockdataa.DataHelpers.padLeft;
@@ -25,7 +27,7 @@ public class Portfolio implements StockPortfolio {
    * Portfolio constructor that initializes the portfolio with new list.
    */
   public Portfolio() {
-    this.stockList = new HashMap<String, stockdataa.Stock1>();
+    this.stockList = new HashMap<String, Stock1>();
     this.stockTickers = getTickers();
   }
 
@@ -65,11 +67,11 @@ public class Portfolio implements StockPortfolio {
               + "Please check the ticker and try again.");
     }
 
-    stockdataa.Stock1 in_1;
+    Stock1 in_1;
     if (!stockList.containsKey(stock)) {
-      in_1 = new stockdataa.Stock1(stock, shares, data);
+      in_1 = new Stock1(stock, shares, data);
     } else {
-      stockdataa.Stock1 myStock = stockList.get(stock);
+      Stock1 myStock = stockList.get(stock);
       in_1 = myStock.addShares(shares);
     }
 
@@ -95,11 +97,11 @@ public class Portfolio implements StockPortfolio {
               + "Please check the ticker and try again.");
     }
 
-    stockdataa.Stock1 in_1;
+    Stock1 in_1;
     if (!stockList.containsKey(stock)) {
-      in_1 = new stockdataa.Stock1(stock, shares, priceData);
+      in_1 = new Stock1(stock, shares, priceData);
     } else {
-      stockdataa.Stock1 myStock = stockList.get(stock);
+      Stock1 myStock = stockList.get(stock);
       in_1 = myStock.addShares(shares);
     }
 
@@ -128,7 +130,7 @@ public class Portfolio implements StockPortfolio {
         //System.out.println("KEY:");
         //System.out.println(myKey);
 
-        stockdataa.Stock1 myStock = stockList.get(myKey);
+        Stock1 myStock = stockList.get(myKey);
 
         double price = myStock.getData(date);
         double totVal = price * myStock.getShares();
@@ -154,7 +156,7 @@ public class Portfolio implements StockPortfolio {
 
       for (String myKey : stockList.keySet()) {
 
-        stockdataa.Stock1 myStock = stockList.get(myKey);
+        Stock1 myStock = stockList.get(myKey);
 
         myVal += myStock.getShares();
       }
@@ -190,7 +192,7 @@ public class Portfolio implements StockPortfolio {
     outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
 
     for (String stockName : stockList.keySet()) {
-      stockdataa.Stock1 myStock = stockList.get(stockName);
+      Stock1 myStock = stockList.get(stockName);
       outBuild.append(myStock.printDataAt(date) + "\n");
     }
 

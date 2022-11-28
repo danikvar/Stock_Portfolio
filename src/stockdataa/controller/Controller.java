@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.controller;
 
 import java.io.FileNotFoundException;
 

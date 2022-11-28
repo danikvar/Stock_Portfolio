@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.view;
 
 import java.io.PrintStream;
 

@@ -26,6 +26,11 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import stockdataa.model.Portfolio;
+import stockdataa.model.SmartPortfolio;
+import stockdataa.model.SmartStock;
+import stockdataa.model.Stock1;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -1294,6 +1299,7 @@ public class PortfolioTest {
     Assert.assertEquals(valueAt22API[1], valueAt22NewAPI[1], 0.000001);
     Assert.assertEquals(myPortAPI.getCostBasis("2022-03-19"), newPortAPI.getCostBasis("2022-03-19"), 0.000001);
     Assert.assertEquals(myPortAPI.getCostBasis("2022-03-22"), newPortAPI.getCostBasis("2022-03-22"), 0.000001);
+    System.out.println(newPortAPI.printPortfolioAt("current"));
   }
   @Test
   public void parseStockTest() {

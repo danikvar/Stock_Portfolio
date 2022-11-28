@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Array;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -22,6 +23,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
+
+import stockdataa.model.Portfolio;
+import stockdataa.model.SmartPortfolio;
+import stockdataa.model.StockPortfolio;
 
 /**
  * The data helpers class that handles the api data to get tickers and other information.
@@ -727,6 +732,29 @@ public class DataHelpers {
     return portList;
   }
 
+
+  /**
+   * This lists all the portfolios associated with a given user, but returns it as a list
+   * instead of a string.
+   *
+   * @param userName name of user.
+   * @return the list of portfolios.
+   * @throws FileNotFoundException when file is not found.
+   */
+
+  public static ArrayList<String> listPortfoliosList(String userName) throws FileNotFoundException {
+    String portDir = getPortfolioDir(userName);
+
+    ArrayList<String> portList;
+    try{
+      portList = listPortfoliosDirectList(portDir);
+    } catch(Exception e) {
+      throw e;
+    }
+
+    return portList;
+  }
+
   /**
    * This lists all the portfolios directly from some path
    *
@@ -757,6 +785,35 @@ public class DataHelpers {
       }
     }
     return myPorts.toString();
+  }
+
+  /**
+   * This lists all the portfolios directly from some path, but formatted as an
+   * ArrayList/
+   *
+   * @param portDir the directory where portfolios are stored
+   * @return the list of portfolios.
+   * @throws FileNotFoundException when file is not found.
+   */
+
+  public static ArrayList<String> listPortfoliosDirectList(String portDir)
+          throws FileNotFoundException {
+    File portFolder = new File(portDir);
+    File[] portList = portFolder.listFiles();
+
+    ArrayList<String> myPorts = new ArrayList<String>();
+
+    // Checking to see if we already have a folder for the user
+    // Otherwise we must create a new one
+
+    if (portList.length > 0) {
+      for (int i = 0; i < portList.length; i++) {
+
+        //System.out.println(listOfFiles[i].getPath());
+        myPorts.add(portList[i].getName());
+      }
+    }
+    return myPorts;
   }
 
   /**

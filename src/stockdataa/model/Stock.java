@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.model;
 
 /**
  * Interface stock that performs operations of a stock.

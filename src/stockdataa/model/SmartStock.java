@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.model;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -14,6 +14,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import stockdataa.DataHelpers;
+import stockdataa.Pair;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

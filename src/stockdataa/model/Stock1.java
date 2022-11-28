@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.model;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import stockdataa.DataHelpers;
 
 import static stockdataa.DataHelpers.padLeft;
 import static stockdataa.DataHelpers.padRight;

@@ -1,4 +1,4 @@
-package stockdataa;
+package stockdataa.view;
 
 /**
  * Interface that implemented by TectGUI to get user inputs for the view.
