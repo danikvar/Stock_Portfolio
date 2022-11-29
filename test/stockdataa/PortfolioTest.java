@@ -87,6 +87,75 @@ public class PortfolioTest {
 
   }
 
+  /**
+   * Tests dollar cost averaging
+   */
+  @Test
+  public void DCATest(){
+
+    SmartPortfolio myPort;
+    try {
+        myPort = (SmartPortfolio) DataHelpers.loadPortfolio("DanUser",
+              "DCATest.json", 2);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
+
+    Assert.assertEquals(20, myPort.getNumStocks("2022-11-01"), 0.001);
+    Assert.assertTrue(myPort.getNumStocks("2022-11-28") > 100);
+    System.out.println(myPort.printPortfolioAt("current") );
+    System.out.println(myPort.printPortfolioAt("2022-11-01") );
+
+    myPort.setDLCostAverage("3", "2022-11-25", "",
+            "138.2", "5",
+            "(IBM, 1.0)");
+     Assert.assertTrue(myPort.getNumStocks("2022-11-29") > 107);
+    System.out.println(myPort.printPortfolioAt("current"));
+
+    // Trying to add invalid date
+
+    try{
+      myPort.setDLCostAverage("3", "2022-123-25", "",
+              "138.2", "5",
+              "(IBM, 1.0)");
+      Assert.fail();
+    } catch(Exception e) {
+      System.out.println("pass");
+    }
+
+
+    try{
+      myPort.setDLCostAverage("3", "2022-11-25", "2022-11-24",
+              "138.2", "5",
+              "(IBM, 1.0)");
+      Assert.fail();
+    } catch(Exception e) {
+      System.out.println("pass");
+    }
+
+    try{
+      myPort.setDLCostAverage("3", "2022-12-25", "",
+              "138.2", "5",
+              "(IBM, 1.5)");
+      Assert.fail();
+    } catch(Exception e) {
+      System.out.println("pass");
+    }
+
+
+    try{
+      myPort.setDLCostAverage("3", "2022-12-25", "",
+              "-2", "5",
+              "(IBM, 1.5)");
+      Assert.fail();
+    } catch(Exception e) {
+      System.out.println("pass");
+    }
+
+  }
+
   @Test
   public void addBigRegStock() {
 
@@ -1091,71 +1160,6 @@ public class PortfolioTest {
     }
   }
 
-  /*@Test
-  public Map<LocalDate, Double> parseStock(String data) throws IllegalArgumentException {
-
-    if (!data.matches("[0-9-,.); (]+")) {
-      throw new IllegalArgumentException("Unexpected character was found in stock data. "
-              + "Please try again.");
-    }
-
-    Map<LocalDate, Double> stockDateData = new HashMap<LocalDate, Double>();
-    String[] dateInfo = data.split(";");
-
-    for (int i = 0; i < dateInfo.length; i++) {
-
-      System.out.println(dateInfo[i]);
-      String m2 = dateInfo[i].replaceAll("[() ]", "");
-
-      String[] info2 = m2.split(",");
-
-      // This will throw an error if the date was entered wrong so ok here
-      LocalDate myKey = LocalDate.parse(info2[0]);
-      // This will throw an error if the # was entered wrong so we should be good here.
-      stockDateData.put(myKey, Double.parseDouble(info2[1]));
-    }
-
-    return stockDateData;
-  }*/
-
-  /*@Test
-  public void dateParsing() {
-    String line = "(2022-10-15,55.5);(2022-10-14,44.4);(2022-08-15,33.3);(2022-07-15,22.2)";
-
-    Map<LocalDate, Double> myMap = parseStock(line);
-
-    for (LocalDate key : myMap.keySet()) {
-      System.out.println("okay?");
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
-      System.out.println("*************************************************");
-      System.out.println(myMap.containsKey(key));
-    }
-
-    //System.out.println(x.length());
-  } */
-
-  @Test
-  public void loadPortTest() {
-
-    String userName = "Test_User";
-    String PortfolioName = "DanTest.json";
-    SmartPortfolio myPort;
-    try {
-      myPort = (SmartPortfolio) DataHelpers.loadPortfolio(userName, PortfolioName, 2);
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    } catch (ParseException e) {
-      throw new RuntimeException(e);
-    }
-
-    System.out.println(myPort.toString());
-    System.out.println(myPort.portfolioPerformance("2021-11-11",
-            "2022-11-18"));
-    String a = "**************************************";
-    System.out.println(a.length());
-    //System.out.println(test.length());
-  }
-
   @Test
   public void StockSaleTest() {
   //TODO: Implement selling in the portfolio not in the stock
@@ -1300,11 +1304,15 @@ public class PortfolioTest {
     Assert.assertEquals(myPortAPI.getCostBasis("2022-03-19"), newPortAPI.getCostBasis("2022-03-19"), 0.000001);
     Assert.assertEquals(myPortAPI.getCostBasis("2022-03-22"), newPortAPI.getCostBasis("2022-03-22"), 0.000001);
     System.out.println(newPortAPI.printPortfolioAt("current"));
+
+
   }
+
+
   @Test
   public void parseStockTest() {
-    String buy = "(2020-01-01,10,10)";
-    SmartStock test = new SmartStock("GOOG", "API", buy, true);
+    String buy = "(2020-01-10,10,10)";
+    SmartStock test = new SmartStock("IBM", "API", buy, true);
     Map<LocalDate, Pair<Double,Double>> mydates = test.getBuyDates();
     System.out.println(mydates.keySet().toString());
     Map<LocalDate, Double> stockdata = test.getStockData();
@@ -1314,7 +1322,8 @@ public class PortfolioTest {
     SortedSet<LocalDate> keys = new TreeSet<>(comparator);
     keys.addAll(stockdata.keySet());
 
-    DataHelpers.getStockData("GOOG");
+    Map<LocalDate, Double> myMap = DataHelpers.getStockData("IBM");
+    System.out.println(Collections.max(myMap.keySet()));
     /*
     for(LocalDate key: keys){
       System.out.println(key.toString());

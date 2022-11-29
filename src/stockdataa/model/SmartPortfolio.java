@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -29,13 +30,40 @@ public class SmartPortfolio implements StockPortfolio {
   private Map<String, SmartStock> stockList;
   private Set<String> stockTickers;
 
+  // The amount to invest for DCAverage
+  // Always 0 on creation of new stock
+  private double dolCostVal;
+
+  // Shows the last date DC Averaging was performed and
+  // every X days to perform it. A new portfolio will just
+  // have creation date and 0 to show no average needed.
+  private int investDays;
+  private double DCAComm;
+  private LocalDate lastInvestDate;
+
+  // Will be initialized to null so that DC averaging continues
+  private LocalDate finDate;
+
+  // Will be initialized to null
+  private LocalDate startDate;
+
+
+
   /**
    * Portfolio constructor that initializes the portfolio with new list.
    */
   public SmartPortfolio() {
     this.stockList = new HashMap<String, SmartStock>();
     this.stockTickers = getTickers();
+    this.dolCostVal = 0.0;
+    this.lastInvestDate = null;
+    this.investDays = 0;
+    this.finDate = null;
+    this.startDate = null;
+    this.DCAComm = 0.0;
   }
+
+
 
   /**
    * USED FOR TESTING
@@ -45,8 +73,424 @@ public class SmartPortfolio implements StockPortfolio {
   public SmartPortfolio(Map<String, SmartStock> myList) {
     this.stockList = myList;
     this.stockTickers = getTickers();
+    this.dolCostVal = 0.0;
+    this.lastInvestDate = null;
+    this.investDays = 0;
+    this.finDate = null;
+    this.startDate = null;
+    this.DCAComm = 0.0;
   }
 
+
+  public void setLastInvestDate(String date) throws IllegalArgumentException {
+
+    LocalDate investDate;
+    try{
+      investDate = LocalDate.parse(date);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Could not parse last investment date");
+    }
+    this.lastInvestDate = investDate;
+  }
+  /**
+   *  Setting all Dollar Cost Average variables from user input.
+   *  Sets and checks all inputs then passes to the correct averaging function.
+   * @param daysStr
+   * @param startDate
+   * @param endDate
+   * @param amountStr
+   * @param CommStr
+   * @param propMapStr
+   * @throws IllegalArgumentException If any input cannot be parsed or invalid values.
+   */
+  public void setDLCostAverage(String daysStr, String startDate,
+                               String endDate, String amountStr,
+                               String CommStr, String propMapStr) throws IllegalArgumentException {
+
+    double[] numVals = this.preCheckDCAStrings(daysStr, amountStr, CommStr);
+    int days = (int) numVals[0];
+    double amount = numVals[1];
+    double CF = numVals[2];
+    this.lastInvestDate = null;
+
+    Map<String,Double> propMap = this.parsePropMap(propMapStr);
+
+    if(days == 0) {
+      this.DCAOnce(amount, propMap, CF);
+      return;
+    }
+
+    // If days is not 0 then we must have a start date
+    LocalDate start;
+    try{
+      start = LocalDate.parse(startDate);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Your start date could not be parsed.");
+    }
+
+    LocalDate checkStart = LocalDate.now().minusDays(days + 1);
+    if(start.isBefore(checkStart)) {
+      throw new IllegalArgumentException("Cannot start DCA more than 1 full timespan in the past");
+    }
+
+    if(endDate.isEmpty()) {
+      this.setUnlimitedAverage(amount, propMap, CF, days, start);
+
+    } else {
+      LocalDate end;
+      try{
+        end = LocalDate.parse(endDate);
+      } catch(Exception e) {
+        throw new IllegalArgumentException("Your end date could not be parsed.");
+      }
+
+      // If this is not loading a file (the user is trying to set a new strategy)
+      // then end dates before the current date are not allowed.
+      if(end.isBefore(LocalDate.now())) {
+        throw new IllegalArgumentException("Cannot have buy strategy ending in the past");
+      }
+
+      if(end.isBefore(start)) {
+        throw new IllegalArgumentException("Cannot have buy strategy ending before start date.");
+      }
+
+      this.setLimitedAverage(amount, propMap, CF, days, start, end);
+      // TODO: Create unlimited average and limited average that only set the variables
+      //  then a function checkDCA() that checks the date on the portfolio and performs the action
+
+      //TODO: Ensure that startDate >= localDate.now and that EndDate > StartDate here
+
+    }
+
+    this.checkDCA();
+  }
+
+
+  /**
+   * Checks all the number strings to avoid duplicate code.
+   * @param daysStr The timeframe
+   * @param amountStr the amount to invest
+   * @param CommStr the Comm Fee
+   * @return a double array with all 3 values
+   */
+  private double[] preCheckDCAStrings(String daysStr, String amountStr,
+                                  String CommStr) throws IllegalArgumentException {
+    double days;
+    double amount;
+    double CF;
+
+    try{
+      days = Double.parseDouble(daysStr);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Number of days must be a positive integer integer.");
+    }
+
+    try{
+      amount = Double.parseDouble(amountStr);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Amount invested must be a positive double.");
+    }
+
+    try{
+      CF = Double.parseDouble(CommStr);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Commission fee must be a double.");
+    }
+
+    if(CF < 0){
+      throw new IllegalArgumentException("Commission cannot be negative");
+    }
+
+    if(amount < 0 || days < 0) {
+      throw new IllegalArgumentException("Cannot have a negative time span or investment "
+              + " < $0.");
+    }
+
+    return new double[]{days, amount, CF};
+
+  }
+
+  /**
+   *  Setting all Dollar Cost Average variables from loaded file input.
+   *  Sets and checks all inputs then passes to the correct averaging function.
+   * @param daysStr
+   * @param startDate
+   * @param endDate
+   * @param amountStr
+   * @param CommStr
+   * @param propMap
+   * @throws IllegalArgumentException
+   */
+  public void setDLCostAverage(String daysStr, String startDate,
+                               String endDate, String amountStr,
+                               String CommStr, Map<String,Double> propMap)
+          throws IllegalArgumentException {
+
+    double[] numVals = this.preCheckDCAStrings(daysStr, amountStr, CommStr);
+    int days = (int) numVals[0];
+    double amount = numVals[1];
+    double CF = numVals[2];
+
+    if(days == 0) {
+      this.DCAOnce(amount, propMap, CF);
+      return;
+    }
+
+    // If days is not 0 then we must have a start date
+    LocalDate start;
+    try{
+      start = LocalDate.parse(startDate);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Your start date could not be parsed.");
+    }
+
+    //System.out.println(endDate);
+    if(endDate.isEmpty()) {
+      this.setUnlimitedAverage(amount, propMap, CF, days, start);
+
+    } else {
+      LocalDate end;
+      try{
+        end = LocalDate.parse(endDate);
+      } catch(Exception e) {
+        throw new IllegalArgumentException("Your end date could not be parsed.");
+      }
+
+      if(end.isBefore(start)) {
+        throw new IllegalArgumentException("Cannot have buy strategy ending before start date.");
+      }
+
+      this.setLimitedAverage(amount, propMap, CF, days, start, end);
+      // TODO: Create unlimited average and limited average that only set the variables
+      //  then a function checkDCA() that checks the date on the portfolio and performs the action
+
+      //TODO: Ensure that startDate >= localDate.now and that EndDate > StartDate here
+
+    }
+
+    this.checkDCA();
+  }
+
+  private void checkDCA() {
+
+    // Check that we have a start date and are past it then we look at performing DCA
+    LocalDate curDate = LocalDate.now();
+
+    if(!Objects.isNull(this.startDate) && !this.startDate.isAfter(curDate)) {
+
+      // If we have not made an initial investment do it on the start date
+      if(Objects.isNull(this.lastInvestDate)) {
+        this.doDCA(this.startDate);
+        this.lastInvestDate = this.startDate;
+      } else {
+        // If we have an ending date
+        LocalDate nextDate = this.lastInvestDate.plusDays(this.investDays);
+        if(!Objects.isNull(this.finDate)) {
+
+          // If the last investment + span is after the end reset all variables
+          if(nextDate.isAfter(this.finDate)) {
+            this.startDate = null;
+            this.lastInvestDate = null;
+            this.wipeProp();
+          } else if(! LocalDate.now().isBefore(nextDate)) {
+            this.doDCA(nextDate);
+            this.lastInvestDate = nextDate;
+          }
+          // To avoid having no prices for the current date we only buy in the past.
+        } else if(LocalDate.now().isAfter(nextDate)){
+          this.doDCA(nextDate);
+          this.lastInvestDate = nextDate;
+        }
+      }
+    }
+  }
+
+  private void wipeProp() {
+    for(String key: stockList.keySet()) {
+      SmartStock myStock = stockList.get(key);
+      myStock.setProp(0.0);
+      stockList.put(key, myStock);
+    }
+  }
+
+  /**
+   * Set all DCA variables with no end date
+   *
+   * @param amount Amount to invest
+   * @param propMap Map of tickers to proportions
+   * @param CF the Commission Fee
+   * @param start the start date for DCA
+   * @throws IllegalArgumentException setting the proportion throws an error
+   */
+  private void setUnlimitedAverage(double amount, Map<String, Double> propMap,
+                                   double CF, int days,
+                                   LocalDate start) throws IllegalArgumentException {
+    this.DCAComm = CF;
+    this.startDate = start;
+    this.dolCostVal = amount;
+    this.investDays = days;
+    this.finDate = null;
+    for(String key: propMap.keySet()) {
+      SmartStock myStock = this.stockList.get(key);
+      myStock.setProp(propMap.get(key));
+      this.stockList.put(key, myStock);
+    }
+
+  }
+
+  /**
+   * Set all DCA variables with an end date
+   *
+   * @param amount Amount to invest
+   * @param propMap Map of tickers to proportions
+   * @param CF the Commission Fee
+   * @param days The time span
+   * @param start the start date for DCA
+   * @param end the last date for DCA
+   * @throws IllegalArgumentException setting the proportion throws an error
+   */
+  private void setLimitedAverage(double amount, Map<String, Double> propMap,
+                                 double CF, int days, LocalDate start,
+                                 LocalDate end) throws IllegalArgumentException {
+    this.DCAComm = CF;
+    this.startDate = start;
+    this.dolCostVal = amount;
+    this.finDate = end;
+    this.investDays = days;
+
+    for(String key: propMap.keySet()) {
+      SmartStock myStock = this.stockList.get(key);
+      myStock.setProp(propMap.get(key));
+      this.stockList.put(key, myStock);
+    }
+
+  }
+
+  /**
+   *
+   * @param amount
+   * @param propMap
+   * @param CF
+   */
+  private void DCAOnce(double amount, Map<String, Double> propMap, double CF) {
+
+    this.dolCostVal = 0.0;
+    this.lastInvestDate = null;
+    this.investDays = 0;
+    this.finDate = null;
+    this.startDate = null;
+    this.DCAComm = 0.0;
+
+    for(String key: propMap.keySet()) {
+      SmartStock myStock = this.stockList.get(key);
+      double price = myStock.getPrice(LocalDate.now());
+      double spent = amount * propMap.get(key);
+      double shares = spent/price;
+      shares = DataHelpers.round(shares);
+      Pair<Double, Double> newAdd = new Pair<>(shares, CF);
+      Map<LocalDate, Pair<Double, Double>> newMap = new HashMap<>();
+      newMap.put(LocalDate.now(),newAdd);
+      SmartStock bought = myStock.addShares(newMap, false);
+      this.stockList.put(key, bought);
+    }
+  }
+
+  /**
+   *
+   * @param date
+   */
+  private void doDCA(LocalDate date) {
+
+    for(String key: this.stockList.keySet()) {
+      SmartStock myStock = this.stockList.get(key);
+      double myProp = myStock.getProp();
+      if(myProp > 0) {
+        double price = myStock.getPrice(LocalDate.now());
+        double spent = this.dolCostVal * myProp;
+        double shares = spent/price;
+        shares = DataHelpers.round(shares);
+        Pair<Double, Double> newAdd = new Pair<>(shares, this.DCAComm);
+        Map<LocalDate, Pair<Double, Double>> newMap = new HashMap<>();
+        newMap.put(date,newAdd);
+        SmartStock bought = myStock.addShares(newMap, false);
+        this.stockList.put(key, bought);
+      }
+    }
+  }
+
+  /**
+   * Parses the propertion map provided and throws error for improper input
+   * @param propMapStr
+   * @return
+   * @throws IllegalArgumentException
+   */
+
+  private Map<String, Double> parsePropMap(String propMapStr) throws IllegalArgumentException {
+
+    Map<String,Double> propMap = new HashMap<String,Double>();
+    double totProp = 0;
+    String[] propsArr = propMapStr.split(";");
+
+    for (int i = 0; i < propsArr.length; i++) {
+
+      String prop2 = propsArr[i].replaceAll("[() ]", "");
+
+      String[] propStock = prop2.split(",");
+
+      String stock = propStock[0];
+
+      if(!this.stockList.containsKey(stock)) {
+        String error = new StringBuilder().append("Unable to find a stock ticker provided [")
+                .append(stock)
+                .append("] in your portfolio. Please check input.").toString();
+        throw new IllegalArgumentException(error);
+      }
+
+      double prop;
+
+      try{
+        prop = Double.parseDouble(propStock[1]);
+      } catch(Exception E) {
+        String error = new StringBuilder().append("Unable to parse double provided [")
+                .append(propStock[1])
+                .append("] for ticker [")
+                .append(stock)
+                .append("]. Please check input.").toString();
+        throw new IllegalArgumentException(error);
+      }
+
+      if(prop < 0.0 || prop > 1.0 ) {
+        throw new IllegalArgumentException("Proportion must be >= 0 and <= 1.");
+      }
+
+      totProp += prop;
+      if(totProp > 1.00) {
+        throw new IllegalArgumentException("Sum of proportions invested cannot be > 1");
+      }
+
+      propMap.put(stock, prop);
+
+    }
+
+    if(totProp != 1.0) {
+      throw new IllegalArgumentException("Total proportion must sum to 1.");
+    }
+
+    return propMap;
+  }
+
+  /**
+   *  Set the weight for a given stock
+   * @param ticker the ticker for the stock
+   * @param prop the weight of the stock
+   * @throws IllegalArgumentException if the weight is improper.
+   */
+  public void setProp(String ticker, double prop) throws IllegalArgumentException {
+
+    SmartStock myStock = this.stockList.get(ticker);
+    myStock.setProp(prop);
+    this.stockList.put(ticker, myStock);
+  }
 
   /**
    * I changed this method signature to be void since it should just change the object.
@@ -559,8 +1003,8 @@ public class SmartPortfolio implements StockPortfolio {
    * @param date YYYY-MM-DD string of date to fetch shares at
    * @return the number of shares in portfolio.
    */
-  public int getNumStocks(String date) {
-    int myVal = 0;
+  public double getNumStocks(String date) {
+    double myVal = 0;
     if (stockList.size() > 0) {
 
       for (String myKey : stockList.keySet()) {
@@ -568,7 +1012,7 @@ public class SmartPortfolio implements StockPortfolio {
         SmartStock myStock = stockList.get(myKey);
         Pair<Double, Double> myShares = myStock.getShareCommm(date);
 
-        myVal += myShares.a;
+        myVal += DataHelpers.round(myShares.a);
       }
     }
     return myVal;
@@ -657,13 +1101,13 @@ public class SmartPortfolio implements StockPortfolio {
    * @param myData date and price data.
    * @return a string array of portfolio padded correctly.
    */
-  private String[] getPortPadding(int shares, DecimalFormat myDF,
+  private String[] getPortPadding(double shares, DecimalFormat myDF,
                                   double[] myData, double costBasis) {
 
     //|    TOTAL SHARES    |    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |);
     int[] padAmount = new int[4];
 
-    padAmount[0] = Math.max(0, 18 - String.valueOf(shares).length());
+    padAmount[0] = Math.max(0, 18 - myDF.format(shares).length());
     padAmount[1] = Math.max(0, 16 - myDF.format(costBasis).length());
     padAmount[2] = Math.max(0, 17 - myDF.format(myData[0]).length());
     padAmount[3] = Math.max(0, 17 - myDF.format(myData[1]).length());
@@ -685,7 +1129,7 @@ public class SmartPortfolio implements StockPortfolio {
 
     String[] output = new String[4];
 
-    output[0] = padRight(padLeft(String.valueOf(shares), leftPad[0]), rightPad[0]);
+    output[0] = padRight(padLeft(myDF.format(shares), leftPad[0]), rightPad[0]);
     output[1] = padRight(padLeft(myDF.format(costBasis), leftPad[1]), rightPad[1]);
     output[2] = padRight(padLeft(myDF.format(myData[0]), leftPad[2]), rightPad[2]);
     output[3] = padRight(padLeft(myDF.format(myData[1]), leftPad[3]), rightPad[3]);
@@ -714,6 +1158,31 @@ public class SmartPortfolio implements StockPortfolio {
   public String portToJSON() {
     StringBuilder outBuild = new StringBuilder().append("{ \n");
     outBuild.append("  \"SmartPortfolio\": {\n");
+    outBuild.append("    \"dolCostVal\": \"").append(this.dolCostVal).append("\",\n");
+    outBuild.append("    \"investDays\": \"").append(this.investDays).append("\",\n");
+    outBuild.append("    \"DCAComm\": \"").append(this.DCAComm).append("\",\n");
+
+    String fDate;
+    String sDate;
+    String lInvDate;
+    if(Objects.isNull(this.finDate)) {
+      fDate = "null";
+    } else {
+      fDate = finDate.toString();
+    }
+    if(Objects.isNull(this.startDate)) {
+      sDate = "null";
+    } else {
+      sDate = startDate.toString();
+    }
+    if(Objects.isNull(this.lastInvestDate)) {
+      lInvDate = "null";
+    } else {
+      lInvDate = lastInvestDate.toString();
+    }
+    outBuild.append("    \"lastInvestDate\": \"").append(lInvDate).append("\",\n");
+    outBuild.append("    \"finDate\": \"").append(fDate).append("\",\n");
+    outBuild.append("    \"startDate\": \"").append(sDate).append("\",\n");
 
     Iterator<String> iterator = stockList.keySet().iterator();
     int cnt = 0;
@@ -724,7 +1193,13 @@ public class SmartPortfolio implements StockPortfolio {
       String stockName = iterator.next();
       SmartStock myStock = stockList.get(stockName);
       outBuild.append("      \"ticker\": \"" + stockName + "\",\n");
+
+      double myProp = myStock.getProp();
+      outBuild.append("      \"prop\":  \"").append(myProp).append( "\",\n");
+
       outBuild.append("      \"priceData\": [\n");
+
+
       if(myStock.getDataSize() > 100) {
         outBuild.append("          \"API\"\n"
                 + "      ],\n");

@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Array;
@@ -26,6 +28,7 @@ import java.util.Set;
 
 import stockdataa.model.Portfolio;
 import stockdataa.model.SmartPortfolio;
+import stockdataa.model.SmartStock;
 import stockdataa.model.StockPortfolio;
 
 /**
@@ -952,17 +955,49 @@ public class DataHelpers {
     Scanner scan = new Scanner(portFile);
     //System.out.println(scan.nextLine());
     String line;
+    String dolCostVal = "0.0";
+    String investDays = "0.0";
+    String DCAComm = "0.0";
+    String lastInvestDate = "";
+    String finDate = "";
+    String startDate = "";
+    Map<String, Double> propMap = new HashMap<String, Double>();
 
     SmartPortfolio myPortfolio = new SmartPortfolio();
     //Pattern btwnQuotes = Pattern.compile("\".*\\\\\\\"(.*)\\\\\\\".*\"");
-    // TODO: CHECK THIS
+    // TODO: IF THE START DATE IS EMPTY BUT THEY ARE TRYING TO DO DCA what logic?
     while (scan.hasNextLine()) {
       line = scan.nextLine();
+
+      if(line.contains("dolCostVal")) {
+        dolCostVal = line.split("\"")[3];
+      }
+      if(line.contains("investDays")) {
+        investDays = line.split("\"")[3];
+      }
+      if(line.contains("lastInvestDate") && !line.contains("null")) {
+        lastInvestDate = line.split("\"")[3];
+      }
+      if(line.contains("DCAComm")) {
+        DCAComm = line.split("\"")[3];
+      }
+      if(line.contains("finDate") && !line.contains("null")) {
+        finDate = line.split("\"")[3];
+      }
+      if(line.contains("startDate") && !line.contains("null")) {
+        startDate = line.split("\"")[3];
+      }
+
+
+
       if (line.contains("Stock")) {
 
         String line2 = scan.nextLine();
         String ticker = line2.split("\"")[3];
         line2 = scan.nextLine();
+        String propStr = line2.split("\"")[3];
+        line2 = scan.nextLine();
+
         if(!line2.contains("priceData")) {
           throw new ParseException("The PriceData must be the next line after the ticker", 1);
         }
@@ -1056,9 +1091,23 @@ public class DataHelpers {
           }
         }
 
+        double prop = Double.parseDouble(propStr);
+        myPortfolio.setProp(ticker, prop);
+        propMap.put(ticker, prop);
+
       }
     }
 
+    if(!startDate.isEmpty()) {
+      // If there was an investment before we set it.
+      if(!lastInvestDate.isEmpty()) {
+        myPortfolio.setLastInvestDate(lastInvestDate);
+      }
+
+      // Now set up all DCA variables and check if we need to do DCA
+      myPortfolio.setDLCostAverage(investDays, startDate, finDate, dolCostVal,
+              DCAComm, propMap);
+    }
 
     return myPortfolio;
   }
@@ -1087,5 +1136,17 @@ public class DataHelpers {
     } else {
       throw new IllegalArgumentException("Type " + x.getClass() + " is not supported by this method");
     }
+  }
+
+
+  /**
+   * Rounds a double to two decimal places
+   * @param value the double to round
+   * @return rounded double
+   */
+  public static double round(double value) {
+    BigDecimal bd = BigDecimal.valueOf(value);
+    bd = bd.setScale(2, RoundingMode.HALF_UP);
+    return bd.doubleValue();
   }
 }

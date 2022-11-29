@@ -51,13 +51,7 @@ public class SmartStock implements Stock {
   //   ValueMap KeySet = Set of dates that the shares sold on the Key Date were bought on
   //   ValuePair = pair of total shares sold[s] and commission fee [b] on the key date.
 
-
-  // Not needed unless we plan to track
-  //private Map<LocalDate, List<LocalDate>> SoldInv;
-  // ^ This is basically an inverse of the previous map
-  // The key here is a buyDate from which shares were sold
-  // The value here is a list of dates which those shares were
-  //     sold on. --> used for easier selling and removal
+  private double prop;
 
   /**
    * Constructor that gets each stock.
@@ -73,6 +67,7 @@ public class SmartStock implements Stock {
   public SmartStock(String ticker, String data,
                     String myBuyDates, boolean onlyInts) throws IllegalArgumentException {
 
+    this.prop = 0.0;
     this.SoldDates = new HashMap<LocalDate, Pair<Double,Double>>();
     //this.SoldInv = new HashMap<LocalDate, List<LocalDate>>();
 
@@ -85,7 +80,6 @@ public class SmartStock implements Stock {
     } else {
       myStockData = parseStock(data);
     }
-
 
     //TODO: PARSE BUY DATES
     // COMSHARES SHOULD BE IN FORMAT:
@@ -111,6 +105,55 @@ public class SmartStock implements Stock {
     this.shares = shares;
 
     // This function gets the value at the current date
+  }
+
+  /**
+   *  Gets the proportion of DCA for this stock
+   * @return the DCA weight for this stock
+   */
+  public double getProp() {
+    return this.prop;
+  }
+
+  /**
+   *
+   * @param newProp
+   * @throws IllegalArgumentException
+   */
+  public void setProp(double newProp) throws IllegalArgumentException {
+
+    if(newProp < 0 || newProp > 1) {
+      throw new IllegalArgumentException("Weight must be between [0,1]");
+    } else {
+      this.prop = newProp;
+    }
+  }
+
+
+  /**
+   * Gets the price at a certain date.
+   * @param date the date to get the price at
+   * @return
+   */
+  //TODO: Check that the date works in the morning for
+  // LocalDate.now()
+  public double getPrice(LocalDate date) throws IllegalArgumentException {
+
+    try{
+      if(date.isEqual(LocalDate.now()) &&  !this.stockData.containsKey(date)) {
+        return this.stockData.get(date.minusDays(1));
+      }
+      return this.stockData.get(date);
+    } catch(Exception e) {
+      String error = new StringBuilder()
+              .append("Could not find price at date [")
+              .append(date.toString())
+              .append("]. If you used the current date then there were no")
+              .append("prices posted yet and the previous day had no closing price available.")
+              .toString();
+      throw new IllegalArgumentException(error);
+    }
+
   }
 
   /***
@@ -252,6 +295,7 @@ public class SmartStock implements Stock {
                     Map<LocalDate, Pair<Double,Double>> myBuyDates,
                     boolean onlyInts) throws IllegalArgumentException {
 
+    this.prop = 0.0;
     this.SoldDates = new HashMap<LocalDate, Pair<Double,Double>>();
     //this.SoldInv = new HashMap<LocalDate, List<LocalDate>>();
 
@@ -298,6 +342,7 @@ public class SmartStock implements Stock {
                     boolean onlyInts) throws IllegalArgumentException {
 
     this.SoldDates = mySoldDates;
+    this.prop = 0.0;
 
     double shares = 0;
     this.ticker = ticker;
@@ -482,7 +527,7 @@ public class SmartStock implements Stock {
                     boolean onlyInts) {
 
     this.SoldDates = new HashMap<LocalDate, Pair<Double,Double>>();
-    //this.SoldInv = new HashMap<LocalDate, List<LocalDate>>();
+    this.prop = 0.0;
 
     this.ticker = ticker;
 
@@ -534,6 +579,7 @@ public class SmartStock implements Stock {
                     boolean onlyInts) throws IllegalArgumentException {
 
     this.SoldDates = mySoldDates;
+    this.prop = 0.0;
 
     double shares = 0;
     this.ticker = ticker;
@@ -564,6 +610,7 @@ public class SmartStock implements Stock {
 
   private SmartStock(String ticker, double shares, Map<LocalDate, Double> data,
                      Map<LocalDate, Pair<Double,Double>> myBuyDates) {
+    this.prop = 0.0;
     this.shares = shares;
     this.ticker = ticker;
     this.stockData = data;
