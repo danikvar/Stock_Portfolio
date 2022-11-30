@@ -5,14 +5,14 @@ import java.io.InputStream;
 
 import stockdataa.DataHelpers;
 import stockdataa.model.Operations;
-import stockdataa.model.OperationsImpl;
 import stockdataa.model.SmartPortfolio;
-import stockdataa.view.ButtonOnlyView.ButtonOnly;
+import stockdataa.view.ButtonsView.Buttons;
 import stockdataa.view.TextInterface;
+
 
 public class SmartController extends AbstractController {
 
-  public SmartController(SmartPortfolio model, InputStream in, ButtonOnly view) {
+  public SmartController(SmartPortfolio model, InputStream in, Buttons view) {
     super(model, in, view);
   }
 
@@ -25,7 +25,7 @@ public class SmartController extends AbstractController {
     super(model,b);
   }
    */
-  public SmartController(Operations m, ButtonOnly v) {
+  public SmartController(Operations m, Buttons v) {
     super(m, v);
   }
 

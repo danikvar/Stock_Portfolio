@@ -13,16 +13,16 @@ import stockdataa.model.Operations;
 import stockdataa.model.SmartPortfolio;
 import stockdataa.model.StockPortfolio;
 import stockdataa.view.TextInterface;
-import stockdataa.view.ButtonOnlyView.ButtonOnly;
+import stockdataa.view.ButtonsView.Buttons;
 
 abstract class AbstractController implements IController {
   protected Scanner in;
-  protected ButtonOnly buttonview;
+  protected Buttons buttonview;
   protected stockdataa.model.StockPortfolio model;
   protected TextInterface view;
   protected Operations opModel;
 
-  public AbstractController(StockPortfolio model, InputStream in, ButtonOnly view) {
+  public AbstractController(StockPortfolio model, InputStream in, Buttons view) {
     this.model = model;
     this.buttonview = view;
     this.in = new Scanner(in);
@@ -35,13 +35,13 @@ abstract class AbstractController implements IController {
   }
 
 
-  public AbstractController(SmartPortfolio model, ButtonOnly view) {
+  public AbstractController(SmartPortfolio model, Buttons view) {
     this.model = model;
     this.buttonview = view;
 
   }
 
-  public AbstractController(Operations opModel, ButtonOnly view) {
+  public AbstractController(Operations opModel, Buttons view) {
     this.opModel = opModel;
     this.buttonview = view;
 

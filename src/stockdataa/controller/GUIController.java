@@ -1,9 +1,10 @@
 package stockdataa.controller;
 
+import org.w3c.dom.Text;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -12,241 +13,329 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+
+
 
 import stockdataa.DataHelpers;
-
-//import stockdataa.model.getprice.GetPrice;
-//import stockdataa.model.getprice.MockGetPrice;
-//import stockdataa.model.stock.IStock;
-//import stockdataa.model.stock.Stock;
-//import stockdataa.model.tradeoperation.TradeOperation;
-
-//import stockdataa.model.SmartPortfolio;
+import stockdataa.Pair;
 import stockdataa.model.OperationsImpl;
-import stockdataa.model.SmartPortfolio;
-import stockdataa.view.ButtonOnlyView.ButtonOnly;
-import stockdataa.view.ButtonOnlyView.CheckCost;
-import stockdataa.view.ButtonOnlyView.CheckValue;
-import stockdataa.view.ButtonOnlyView.ChooseAWayToBuyStock;
-import stockdataa.view.ButtonOnlyView.GetPortfolio;
-import stockdataa.view.ButtonOnlyView.MainView;
-import stockdataa.view.ButtonOnlyView.ShowAllPortfolios;
-import stockdataa.view.TextFieldView.sellStock;
-import stockdataa.view.TextFieldView.BuyStockView;
-import stockdataa.view.TextFieldView.CheckCostByDateView;
-import stockdataa.view.TextFieldView.CheckCostView;
-import stockdataa.view.TextFieldView.CheckValueByDateView;
-import stockdataa.view.TextFieldView.CheckValueView;
-import stockdataa.view.TextFieldView.createUser;
-
-import stockdataa.view.TextFieldView.ReadPortfolio;
-import stockdataa.view.TextFieldView.SavePortfolio;
-
-import stockdataa.view.TextFieldView.ShowAllUsers;
-import stockdataa.view.TextFieldView.WithTextField;
+import stockdataa.view.ButtonsAndTextsView.BuyStock;
+import stockdataa.view.ButtonsAndTextsView.CheckCB;
+import stockdataa.view.ButtonsAndTextsView.CheckCBD;
+import stockdataa.view.ButtonsAndTextsView.CheckVal;
+import stockdataa.view.ButtonsAndTextsView.CheckValByD;
+import stockdataa.view.ButtonsAndTextsView.CreateUser;
+import stockdataa.view.ButtonsAndTextsView.DollarCostAveraging;
+import stockdataa.view.ButtonsAndTextsView.PortPerformance;
+import stockdataa.view.ButtonsAndTextsView.PortfolioPerformance;
+import stockdataa.view.ButtonsAndTextsView.Reading;
+import stockdataa.view.ButtonsAndTextsView.Saving;
+import stockdataa.view.ButtonsAndTextsView.SellStock;
+import stockdataa.view.ButtonsAndTextsView.ShowAllUsers;
+import stockdataa.view.ButtonsAndTextsView.Texts;
+import stockdataa.view.ButtonsView.Buttons;
+import stockdataa.view.ButtonsView.BuyMain;
+import stockdataa.view.ButtonsView.CheckCost;
+import stockdataa.view.ButtonsView.CheckValue;
+import stockdataa.view.ButtonsView.DisplayAllPorts;
+import stockdataa.view.ButtonsView.Home;
 
 /**
- * This is a Trade controller control a trade program with a GUI. It contains a execute method to
- * run the program.
+ * This class represents the assignment of buttons and the actions performed for GUI.
  */
 public class GUIController extends SmartController implements ActionListener {
-  //private TradeOperation<Stock> model;
-  private ButtonOnly mainView;
-  private ButtonOnly showPortfolioView;
 
-  private ButtonOnly checkCostBoth;
-  private ButtonOnly checkValueBoth;
-  private ButtonOnly getPortfolio;
+  private Buttons homeView;
+  private Buttons showAllPortsV;
+  private Buttons checkCostMain;
+  private Buttons checkValueMain;
+  private Buttons buyStockSellStock;
+  private Texts createUser;
+  private Texts buyStock;
+  private Texts sellStock;
+  private Texts checkCB;
+  private Texts checkCBD;
+  private Texts checkV;
+  private Texts checkVD;
 
-  private ButtonOnly buyStockChooseAWay;
-  private WithTextField createView;
+  private Texts dollarCost;
 
-  private WithTextField buyStock;
-  private WithTextField sellStock;
-  private WithTextField checkCost;
-  private WithTextField checkCostByDate;
-  private WithTextField checkValue;
-  private WithTextField checkValueByDate;
+  private Saving saving;
+  private Texts reading;
 
-  private SavePortfolio savePortfolio;
-  private WithTextField readPortfolio;
+  private Texts showusers;
 
-  private WithTextField showusers;
+  private Texts plot;
+
+  private Text plotGraph;
   private String str;
-  private Map<String, Runnable> actionMap;
+  private Map<String, Runnable> buttonMap;
 
- 
-   public GUIController(OperationsImpl m, ButtonOnly v) {
+  /**
+   * Constructor for GUI to pass model, view.
+   *
+   * @param m is the model of smart portfolio.
+   * @param v is the view passed to the controller.
+   */
+  public GUIController(OperationsImpl m, Buttons v) {
     super(m, v);
-    this.mainView = v;
-    mainView.addActionListener(this);
+    this.homeView = v;
+    homeView.addActionListener(this);
     str = "";
   }
 
 
+  private Map<String, Runnable> buttonAssign() {
+    Map<String, Runnable> buttonMap = new HashMap<>();
 
 
-  private Map<String, Runnable> initializeMap() {
-    Map<String, Runnable> actionMap = new HashMap<>();
-
-    // Create or Load a user here.
-    actionMap.put("createUser", () -> {
-      createView = new createUser("Create User");
-      createView.addActionListener(this);
-      ((JFrame) createView).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+    buttonMap.put("createUser", () -> {
+      createUser = new CreateUser("Create User");
+      createUser.addActionListener(this);
+      ((JFrame) createUser).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    actionMap.put("showAllPortfolio", () -> {
+    buttonMap.put("dollarCost", () -> {
+      dollarCost = new DollarCostAveraging("Dollar Cost Averaging");
+      dollarCost.addActionListener(this);
+      ((JFrame) dollarCost).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
+    });
+
+    buttonMap.put("plotGraph", () -> {
+      plot = new PortfolioPerformance("Portfolio Performance");
+      plot.addActionListener(this);
+      ((JFrame) plot).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
+    });
+
+
+    buttonMap.put("displayPorts", () -> {
 
       List<String> list;
-      try{
-        list = DataHelpers.listPortfoliosList(this.opModel.getUser()); //model.; // initialize a list to get our portfolio list.
+      try {
+        list = DataHelpers.listPortfoliosList(this.opModel.getUser());
       } catch (Exception e) {
-        //System.out.println(e.getMessage());
+
         list = new ArrayList<>();
-        //throw new IllegalArgumentException(e.toString());
+
       }
 
-      showPortfolioView = new ShowAllPortfolios("show portfolios", list);
-      showPortfolioView.addActionListener(this);
-      ((JFrame) showPortfolioView).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+      showAllPortsV = new DisplayAllPorts("Show all Portfolios", list);
+      showAllPortsV.addActionListener(this);
+      ((JFrame) showAllPortsV).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    actionMap.put("showAllUsers", () -> {
-      List<String> list =  DataHelpers.getUserList();//model.getPortfolioList(); // initialize a list to get our user list.
-      showusers = new ShowAllUsers("show users", list);
+    buttonMap.put("showAllUsers", () -> {
+      List<String> list = DataHelpers.getUserList();
+      showusers = new ShowAllUsers("Show all users or Choose a User", list);
       showusers.addActionListener(this);
-      ((JFrame) showusers).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+      ((JFrame) showusers).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
 
-    actionMap.put("getPortfolio", () -> {
-      getPortfolio = new GetPortfolio("Get Portfolio");
-      getPortfolio.addActionListener(this);
-      ((JFrame) getPortfolio).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+    buttonMap.put("buyStockSellStock", () -> {
+      buyStockSellStock = new BuyMain("Choose To Buy/Sell");
+      buyStockSellStock.addActionListener(this);
+      ((JFrame) buyStockSellStock).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    
-
-    actionMap.put("buyStockChooseAWay", () -> {
-      buyStockChooseAWay = new ChooseAWayToBuyStock("Choose To Buy/Sell");
-      buyStockChooseAWay.addActionListener(this);
-      ((JFrame) buyStockChooseAWay).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
-    });
-
-    actionMap.put("buy stocks", () -> {
-      buyStock = new BuyStockView("Buy");
+    buttonMap.put("buy stocks", () -> {
+      buyStock = new BuyStock("Buy");
       buyStock.addActionListener(this);
-      ((JFrame) buyStock).setLocation(((JFrame) this.buyStockChooseAWay).getLocation());
-      ((JFrame) this.buyStockChooseAWay).dispose();
+      ((JFrame) buyStock).setLocation(((JFrame) this.buyStockSellStock).getLocation());
+      ((JFrame) this.buyStockSellStock).dispose();
     });
 
-    actionMap.put("sell stocks", () -> {
-      sellStock = new sellStock("Buy");
+    buttonMap.put("sell stocks", () -> {
+      sellStock = new SellStock("Buy");
       sellStock.addActionListener(this);
-      ((JFrame) sellStock).setLocation(((JFrame) this.buyStockChooseAWay).getLocation());
-      ((JFrame) this.buyStockChooseAWay).dispose();
+      ((JFrame) sellStock).setLocation(((JFrame) this.buyStockSellStock).getLocation());
+      ((JFrame) this.buyStockSellStock).dispose();
     });
 
 
-    actionMap.put("checkCost", () -> {
-      checkCostBoth = new CheckCost("Check Cost");
-      checkCostBoth.addActionListener(this);
-      ((JFrame) checkCostBoth).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+    buttonMap.put("checkCB", () -> {
+      checkCostMain = new CheckCost("Check Cost");
+      checkCostMain.addActionListener(this);
+      ((JFrame) checkCostMain).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    actionMap.put("check cost check cost basis", () -> {
-      checkCost = new CheckCostView("Check Cost Basis");
-      checkCost.addActionListener(this);
-      ((JFrame) checkCost).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.checkCostBoth).dispose();
+    buttonMap.put("check cost check cost basis", () -> {
+      checkCB = new CheckCB("Check Cost Basis");
+      checkCB.addActionListener(this);
+      ((JFrame) checkCB).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.checkCostMain).dispose();
     });
 
-    actionMap.put("check cost check cost basis by date", () -> {
-      checkCostByDate = new CheckCostByDateView("Check Cost Basis");
-      checkCostByDate.addActionListener(this);
-      ((JFrame) checkCostByDate).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.checkCostBoth).dispose();
+    buttonMap.put("check cost check cost basis by date", () -> {
+      checkCBD = new CheckCBD("Check Cost Basis");
+      checkCBD.addActionListener(this);
+      ((JFrame) checkCBD).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.checkCostMain).dispose();
     });
 
-    actionMap.put("checkValue", () -> {
-      checkValueBoth = new CheckValue("Check Value");
-      checkValueBoth.addActionListener(this);
-      ((JFrame) checkValueBoth).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+    buttonMap.put("checkV", () -> {
+      checkValueMain = new CheckValue("Check Value");
+      checkValueMain.addActionListener(this);
+      ((JFrame) checkValueMain).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    actionMap.put("check value check total value", () -> {
-      checkValue = new CheckValueView("Check Total Value");
-      checkValue.addActionListener(this);
-      ((JFrame) checkValue).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.checkValueBoth).dispose();
+    buttonMap.put("check value check total value", () -> {
+      checkV = new CheckVal("Check Total Value");
+      checkV.addActionListener(this);
+      ((JFrame) checkV).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.checkValueMain).dispose();
     });
 
-    actionMap.put("check value check total value by date", () -> {
-      checkValueByDate = new CheckValueByDateView("Check Total Value");
-      checkValueByDate.addActionListener(this);
-      ((JFrame) checkValueByDate).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.checkValueBoth).dispose();
+    buttonMap.put("check value check total value by date", () -> {
+      checkVD = new CheckValByD("Check Total Value");
+      checkVD.addActionListener(this);
+      ((JFrame) checkVD).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.checkValueMain).dispose();
     });
 
 
-
-
-
-    actionMap.put("savePortfolioToFile", () -> {
+    buttonMap.put("savePortfolioToFile", () -> {
       String portDir = this.opModel.getPath();
-      savePortfolio = new SavePortfolio("Save Portfolio",portDir);
-      savePortfolio.addActionListener(this);
-      ((JFrame) savePortfolio).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+      saving = new Saving("Save Portfolio", portDir);
+      saving.addActionListener(this);
+      saving.setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    actionMap.put("readPortfolioFromFile", () -> {
-      readPortfolio = new ReadPortfolio("Read Portfolio");
-      readPortfolio.addActionListener(this);
-      ((JFrame) readPortfolio).setLocation(((JFrame) this.mainView).getLocation());
-      ((JFrame) this.mainView).dispose();
+    buttonMap.put("readOrCreate", () -> {
+      reading = new Reading("Load or Create a new Portfolio");
+      reading.addActionListener(this);
+      ((JFrame) reading).setLocation(((JFrame) this.homeView).getLocation());
+      ((JFrame) this.homeView).dispose();
     });
 
-    actionMap.put("quit", () -> {
+    buttonMap.put("quit", () -> {
       System.exit(0);
     });
 
-    actionMap.put("create", () -> {
-      String userPath = createView.getInput();
+    buttonMap.put("create", () -> {
+      String userPath = createUser.getInput();
 
       if (userPath.length() == 0) {
-        createView.setHintMess("empty user name");
+        createUser.outMess("Please enter a valid username");
         return;
       }
       String[] userNameAndPath = userPath.split("\n");
       String userName = userNameAndPath[0];
       String filePath = userNameAndPath[1];
       try {
-    	    Path checkUserPath = Paths.get(filePath);
-    	    DataHelpers.createUser(userName, filePath);
-        createView.setHintMess("User " + userName + " created.");
-        createView.clearField();
-      }
-      catch (IllegalArgumentException e) {
-        createView.setHintMess(e.getMessage());
+        Path checkUserPath = Paths.get(filePath);
+        DataHelpers.createUser(userName, filePath);
+        createUser.outMess("User " + userName + " created.");
+        createUser.clean();
+      } catch (IllegalArgumentException e) {
+        createUser.outMess(e.getMessage());
       }
     });
 
-    actionMap.put("select user", () -> {
+    buttonMap.put("inv proceed", () -> {
+      String allInp = dollarCost.getInput();
+      String allInpL[] = allInp.split("\n");
+      String days = allInpL[0];
+      String sdate = allInpL[1];
+      String edate = allInpL[2];
+      String prop = allInpL[3];
+      String comm = allInpL[4];
+      String amount = allInpL[5];
+
+      if (!days.matches("^\\d+$")) {
+        dollarCost.outMess("Enter valid number of days to proceed");
+
+      }
+
+      if (!sdate.matches("^\\d{4}-\\d{2}-\\d{2}$") || sdate == "") {
+        dollarCost.outMess("Enter valid date to proceed");
+
+      }
+
+      if (!edate.matches("^\\d{4}-\\d{2}-\\d{2}$") || edate.isEmpty()) {
+        dollarCost.outMess("Enter valid end date to proceed or leave it blank.");
+
+      }
+
+      if (!comm.matches("^\\d+$") || comm == "") {
+        dollarCost.outMess("Enter valid commission fee");
+
+      }
+
+      if (!amount.matches("^\\d+$") || amount == "") {
+        dollarCost.outMess("Enter valid amount");
+
+      }
+
+      try{
+
+        String message = opModel.setDCA(days, sdate, edate, amount, comm, prop);
+        dollarCost.outMess(message);
+
+      } catch(Exception e) {
+
+        dollarCost.outMess(e.getMessage());
+      }
+
+    });
+
+    buttonMap.put("plotting", () -> {
+      String plotInp = plot.getInput();
+      int index = plotInp.indexOf("\n");
+      String sDate = plotInp.substring(0, index);
+
+
+      if (!sDate.matches("^\\d{4}-\\d{2}-\\d{2}$") || sDate.length() == 0) {
+        plot.outMess("Enter a valid start Date to proceed");
+        return;
+      }
+
+      plotInp = plotInp.substring(index + 1);
+      index = plotInp.indexOf("\n");
+      String eDate = plotInp.substring(0, index);
+
+
+
+      if (!eDate.matches("^\\d{4}-\\d{2}-\\d{2}$") || eDate.length() == 0) {
+        plot.outMess("Enter a valid end Date to proceed");
+        return;
+      }
+      try
+      {
+        Map<LocalDate, Double> data = opModel.getPortPerfData(sDate, eDate);
+        Pair<Double, Double> myAst = opModel.getMinMax(data);
+        PortPerformance graph = new PortPerformance("Portfolio Performance", data,
+                myAst.a.intValue(), myAst.b.intValue());
+        graph.setAlwaysOnTop(true);
+        graph.pack();
+        graph.setSize(600, 400);
+        graph.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+        graph.setVisible(true);
+
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+
+
+    });
+
+
+    buttonMap.put("select user", () -> {
       String userName = showusers.getInput();
 
 
-      if (! DataHelpers.getUserList().contains(userName)) {
-        showusers.setHintMess("Can only load existing users. Please check your input.");
+      if (!DataHelpers.getUserList().contains(userName)) {
+        showusers.outMess("Can only load existing users. Please check your input.");
         return;
       }
 
@@ -255,332 +344,337 @@ public class GUIController extends SmartController implements ActionListener {
         this.opModel.setUser(userName);
         this.opModel.setPath(filePath);
 
-        showusers.setHintMess("User " + this.opModel.getUser() + " loaded.");
-        showusers.clearField();
-      }
-      catch (IllegalArgumentException e) {
-        showusers.setHintMess(e.getMessage());
+        showusers.outMess("User " + this.opModel.getUser() + " loaded.");
+        showusers.clean();
+      } catch (IllegalArgumentException e) {
+        showusers.outMess(e.getMessage());
       } catch (FileNotFoundException e) {
         throw new RuntimeException(e);
       }
     });
 
 
-
-//    actionMap.put("get portfolio detail check", () -> {
-//      String portfolioName = getPortfolioDetailView.getInput();
-//      if (portfolioName.length() == 0) {
-//        getPortfolioDetailView.setHintMess("Empty portfolio name");
-//        return;
-//      }
-//      try {
-//        List<IStock> list = null; //model.getPortfolioState(portfolioName);
-//        showGetPortfolioDetail = new ShowGetPortfolioDetail("Show Detail of Portfolio",
-//            list, portfolioName);
-//      }
-//      catch (IllegalArgumentException e) {
-//        showGetPortfolioDetail = new ShowGetPortfolioDetail("Show Detail of Portfolio",
-//            null, portfolioName);
-//      }
-//      showGetPortfolioDetail.addActionListener(this);
-//      ((JFrame) showGetPortfolioDetail).setLocation(((JFrame) this.getPortfolioDetailView).getLocation());
-//      ((JFrame) this.getPortfolioDetailView).dispose();
-//    });
-
-
-
-    actionMap.put("buy", () -> {
-      String message;
+    buttonMap.put("buy", () -> {
+      String outToUser;
       String string = buyStock.getInput();
       int index = string.indexOf("\n");
-      String stockSymbol = string.substring(0, index);
-      if (stockSymbol.length() == 0) {
-        buyStock.setHintMess("No stock symbol entered");
+      String ticker = string.substring(0, index);
+      if (ticker.length() == 0) {
+        buyStock.outMess("Enter a stock ticker symbol to proceed");
         return;
       }
       string = string.substring(index + 1);
       index = string.indexOf("\n");
       String volume = string.substring(0, index);
       if (volume.length() == 0) {
-        buyStock.setHintMess("Enter a valid transaction");
+        buyStock.outMess("Enter a valid volume of stocks");
         return;
       }
-      if(opModel.getPort().isEmpty()){
-        message = "Must select a portfolio before buying stock!";
+      if (opModel.getPort().isEmpty()) {
+        outToUser = "Must select a portfolio before buying stock!";
       } else {
 
         try {
-          message = opModel.buyStock(stockSymbol, volume, true);
+          outToUser = opModel.buyStock(ticker, volume, true);
 
-        }
-        catch (IllegalArgumentException e) {
-          message = e.getMessage();
+        } catch (IllegalArgumentException e) {
+          outToUser = e.getMessage();
         }
       }
 
-      buyStock.clearField();
-      buyStock.setHintMess(message);
+      buyStock.clean();
+      buyStock.outMess(outToUser);
     });
 
-    actionMap.put("check cost view check", () -> {
-      String message;
+    buttonMap.put("check cb", () -> {
+      String outToUser;
       try {
-        message = opModel.getCostBasis("current");
-        //message = "Total cost basis of " + portfolioName + " by now is $" + cost;
+        outToUser = opModel.getCostBasis("current");
+        //outToUser = "Total cost basis of " + portfolioName + " by now is $" + cost;
+      } catch (IllegalArgumentException e) {
+        outToUser = e.getMessage();
       }
-      catch (IllegalArgumentException e) {
-        message = e.getMessage();
-      }
-      checkCost.setHintMess(message);
-      //checkCost.setHintMess(message);
+      checkCB.outMess(outToUser);
+      //checkCB.outMess(outToUser);
     });
 
-    actionMap.put("check cost by date view check", () -> {
+    buttonMap.put("check cbd", () -> {
 
-      String dateString = checkCostByDate.getInput();
+      String dateInp = checkCBD.getInput();
       try {
-        LocalDate.parse(dateString);
-      }
-      catch (Exception e) {
-        checkCostByDate.setHintMess("Enter a valid date");
+        LocalDate.parse(dateInp);
+      } catch (Exception e) {
+        checkCBD.outMess("Please enter a valid date");
         return;
       }
-      String message;
+      String outToUser;
       try {
-        message = opModel.getCostBasis(dateString);
-        //message = "Total cost basis of " + portfolioName + " by now is $" + cost;
+        outToUser = opModel.getCostBasis(dateInp);
+      } catch (IllegalArgumentException e) {
+        outToUser = e.getMessage();
       }
-      catch (IllegalArgumentException e) {
-        message = e.getMessage();
-      }
-      checkCostByDate.clearField();
-      checkCostByDate.setHintMess(message);
+      checkCBD.clean();
+      checkCBD.outMess(outToUser);
 
-      //checkCostByDate.setHintMess(message);
+
     });
 
-    actionMap.put("check value by date view check", () -> {
+    buttonMap.put("check val", () -> {
 
-      String message;
-      if(opModel.getPort().isEmpty()){
-        checkValueByDate.setHintMess("First select a portfolio from the portfolios tab.");
+      String outToUser;
+      if (opModel.getPort().isEmpty()) {
+        checkVD.outMess("First select a portfolio from the portfolios tab.");
         return;
       }
-      String date = checkValueByDate.getInput();
+      String date = checkVD.getInput();
       if (date.length() == 0) {
-        checkValueByDate.setHintMess("Enter valid date in yyyy-mm-dd format or 'current'");
+        checkVD.outMess("Enter valid date in yyyy-mm-dd format or 'current'");
         return;
       }
 
       try {
-        message = opModel.printPortfolioAt(date);
-        //message = "Total value of portfolio " + portfolioName + " by now is $" + value;
+        outToUser = opModel.printPortfolioAt(date);
+
+      } catch (IllegalArgumentException e) {
+        outToUser = e.getMessage();
       }
-      catch (IllegalArgumentException e) {
-        message = e.getMessage();
-      }
-      checkValueByDate.clearField();
-      checkValueByDate.setHintMess(message);
+      checkVD.clean();
+      checkVD.outMess(outToUser);
     });
 
-    actionMap.put("check value view check", () -> {
-      String message;
-      if(opModel.getPort().isEmpty()){
-        checkValue.setHintMess("First select a portfolio from the portfolios tab.");
+    buttonMap.put("check valBD", () -> {
+      String outToUser;
+      if (opModel.getPort().isEmpty()) {
+        checkV.outMess("First select a portfolio from the portfolios tab.");
         return;
       }
 
       try {
-        message = opModel.printPortfolioAt("current");
-        //message = "Total value of portfolio " + portfolioName + " by now is $" + value;
+        outToUser = opModel.printPortfolioAt("current");
+
+      } catch (IllegalArgumentException e) {
+        outToUser = e.getMessage();
       }
-      catch (IllegalArgumentException e) {
-        message = e.getMessage();
-      }
-      checkValue.clearField();
-      checkValue.setHintMess(message);
+      checkV.clean();
+      checkV.outMess(outToUser);
 
     });
 
 
-
-
-
-
-
-    actionMap.put("save portfolio save", () -> {
-      String input = savePortfolio.getInput();
-      String message;
+    buttonMap.put("save", () -> {
+      String input = saving.getInput();
+      String outToUser;
       if (input.length() != 0) {
         this.opModel.setPath(input);
       }
-      message = this.opModel.savePortfolio();
-      savePortfolio.setHintMess(message);
+      outToUser = this.opModel.saving();
+      saving.outMess(outToUser);
     });
 
     //
-    actionMap.put("read portfolio read", () -> {
-      String fileName = readPortfolio.getInput();
-      String message;
+    buttonMap.put("read", () -> {
+      String fileName = reading.getInput();
+      String outToUser;
       if (fileName.length() == 0) {
-        message = "Enter valid portfolio name";
-        readPortfolio.setHintMess(message);
+        outToUser = "Enter valid portfolio name";
+        reading.outMess(outToUser);
         return;
       }
       try {
-        message = this.opModel.loadPort(fileName);
-      }
-      catch (Exception e) {
-        message = e.getMessage();
+        outToUser = this.opModel.loadPort(fileName);
+      } catch (Exception e) {
+        outToUser = e.getMessage();
       }
 
-      readPortfolio.setHintMess(message);
+      reading.outMess(outToUser);
     });
 
-    actionMap.put("buy stock money sell", () -> {
+    buttonMap.put("buy stock money sell", () -> {
       String string = sellStock.getInput();
       int index = string.indexOf("\n");
-      String stockSymbol = string.substring(0, index);
-      if (stockSymbol.length() == 0) {
-        sellStock.setHintMess("Enter valid stock symbol");
+      String ticker = string.substring(0, index);
+      if (ticker.length() == 0) {
+        sellStock.outMess("Enter valid stock symbol");
         return;
       }
       string = string.substring(index + 1);
       index = string.indexOf("\n");
       String shares = string.substring(0, index);
       if (shares.length() == 0 || !shares.matches("(([1-9][\\d]*|[0])\\.[\\d]*)|([1-9][\\d]*)"
-          + "")) {
-        sellStock.setHintMess("Invalid input");
+              + "")) {
+        sellStock.outMess("Invalid input");
         return;
       }
       string = string.substring(index + 1);
       index = string.indexOf("\n");
-      String dateString = string.substring(0, index);
+      String dateInp = string.substring(0, index);
 
       String commFee = string.substring(index + 1, string.length() - 1);
 
-      String message = "";
-      if(opModel.getPort().isEmpty()){
-        message = "Must select a portfolio before buying stock!";
+      String outToUser = "";
+      if (opModel.getPort().isEmpty()) {
+        outToUser = "Must select a portfolio before buying stock!";
       } else {
 
         try {
-          opModel.sellStock(stockSymbol, shares, commFee, dateString, true);
-          message = "Sold " + Integer.parseInt(shares) + " shares of " + stockSymbol
+          opModel.sellStock(ticker, shares, commFee, dateInp, true);
+          outToUser = "Sold " + Integer.parseInt(shares) + " shares of " + ticker
                   + " from portfolio "
-                  + opModel.getPort() + " on " + dateString + "\n";
+                  + opModel.getPort() + " on " + dateInp + "\n";
 
 
-        }
-        catch (IllegalArgumentException e) {
-          message = e.getMessage();
+        } catch (IllegalArgumentException e) {
+          outToUser = e.getMessage();
         }
       }
 
-      sellStock.clearField();
-      sellStock.setHintMess(message);
+      sellStock.clean();
+      sellStock.outMess(outToUser);
     });
 
 
-
-    actionMap.put("create portfolio home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.createView).getLocation());
-      ((JFrame) this.createView).dispose();
+    buttonMap.put("create portfolio home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.createUser).getLocation());
+      ((JFrame) this.createUser).dispose();
     });
 
-    actionMap.put("show all portfolios home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.showusers).getLocation());
+    buttonMap.put("show all portfolios home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.showAllPortsV).getLocation());
+      ((JFrame) this.showAllPortsV).dispose();
+    });
+
+    buttonMap.put("show all users home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.showusers).getLocation());
       ((JFrame) this.showusers).dispose();
     });
 
-
-
-
-
-
-
-
-    actionMap.put("buy stock home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.buyStock).getLocation());
+    buttonMap.put("buy stock home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.buyStock).getLocation());
       ((JFrame) this.buyStock).dispose();
     });
 
-    actionMap.put("check cost view home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.checkCost).getLocation());
-      ((JFrame) this.checkCost).dispose();
+    buttonMap.put("check cost view home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.checkCB).getLocation());
+      ((JFrame) this.checkCB).dispose();
     });
 
-    actionMap.put("check cost by date view home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.checkCostByDate).getLocation());
-      ((JFrame) this.checkCostByDate).dispose();
+    buttonMap.put("check cost by date view home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.checkCBD).getLocation());
+      ((JFrame) this.checkCBD).dispose();
     });
 
-    actionMap.put("show all users home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.showusers).getLocation());
-      ((JFrame) this.checkCostByDate).dispose();
+    buttonMap.put("show all users home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.showusers).getLocation());
+      ((JFrame) this.showusers).dispose();
     });
 
-    actionMap.put("check value view home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.checkValue).getLocation());
-      ((JFrame) this.checkValue).dispose();
+    buttonMap.put("check val home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.checkValueMain).getLocation());
+      ((JFrame) this.checkValueMain).dispose();
     });
 
-    actionMap.put("check value by date view home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.checkValueByDate).getLocation());
-      ((JFrame) this.checkValueByDate).dispose();
+    buttonMap.put("buy main home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.buyStockSellStock).getLocation());
+      ((JFrame) this.buyStockSellStock).dispose();
+    });
+
+    buttonMap.put("check cost home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.checkCostMain).getLocation());
+      ((JFrame) this.checkCostMain).dispose();
+    });
+
+    buttonMap.put("dc home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.dollarCost).getLocation());
+      ((JFrame) this.dollarCost).dispose();
+    });
+
+    buttonMap.put("pp home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.plot).getLocation());
+      ((JFrame) this.plot).dispose();
     });
 
 
 
-    actionMap.put("save portfolio home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.savePortfolio).getLocation());
-      ((JFrame) this.savePortfolio).dispose();
+
+    buttonMap.put("check value view home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.checkV).getLocation());
+      ((JFrame) this.checkV).dispose();
     });
 
-    actionMap.put("read portfolio home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.readPortfolio).getLocation());
-      ((JFrame) this.readPortfolio).dispose();
+    buttonMap.put("check value by date view home", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.checkVD).getLocation());
+      ((JFrame) this.checkVD).dispose();
     });
 
-    actionMap.put("buy stock money home", () -> {
-      mainView = new MainView("Home");
-      mainView.addActionListener(this);
-      ((JFrame) mainView).setLocation(((JFrame) this.sellStock).getLocation());
+
+    buttonMap.put("save M", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(this.saving.getLocation());
+      this.saving.dispose();
+    });
+
+    buttonMap.put("read M", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.reading).getLocation());
+      ((JFrame) this.reading).dispose();
+    });
+
+    buttonMap.put("buy stock Main H", () -> {
+      homeView = new Home("Home");
+      homeView.addActionListener(this);
+      ((JFrame) homeView).setLocation(((JFrame) this.sellStock).getLocation());
       ((JFrame) this.sellStock).dispose();
     });
 
-    return actionMap;
+    return buttonMap;
   }
 
- 
+  /**
+   * This method is used to execute the buttons for GUI.
+   */
   @Override
   public void execute() {
-    actionMap = initializeMap();
+    buttonMap = buttonAssign();
   }
 
+  /**
+   * This is the main run for GUI.
+   *
+   * @param e the event to be processed.
+   */
   @Override
-  public void actionPerformed (ActionEvent e) {
+  public void actionPerformed(ActionEvent e) {
     this.str = e.getActionCommand();
-    actionMap.get(str).run();
+    buttonMap.get(str).run();
   }
 }

@@ -1,6 +1,15 @@
 package stockdataa.model;
 
+import java.time.LocalDate;
+import java.util.Map;
+
+import stockdataa.Pair;
+
 public interface Operations {
+
+  String setDCA(String daysStr, String startDate,
+                String endDate, String amountStr,
+                String CommStr, String propMapStr) throws IllegalArgumentException;
 
   void sellStock(String ticker, String shares,
                  String CF, String dateStr, boolean onlyInts)
@@ -23,7 +32,7 @@ public interface Operations {
   String getTicker();
 
 
-  String savePortfolio();
+  String saving();
 
   String sharesToJSON();
 
@@ -87,5 +96,25 @@ public interface Operations {
    */
   void setPath(String filePath);
 
+  /**
+   *  Gets the current path to save the model stored in the object.
+   * @return The save path.
+   */
   String getPath();
+
+  /**
+   * Returns a map of dates for a performance graph (x-values) and the corresponding
+   * value of the portfolio on that date (y-values) to use in plotting performance.
+   * @param sDate The start date to show performance
+   * @param eDate The end date to show performance
+   * @return a map of dates (x) to the corresponding portfolio value (y)
+   */
+  Map<LocalDate, Double> getPortPerfData(String sDate, String eDate);
+
+  /**
+   * Returns a pair of min and max values for plotting
+   * @param data A map of x,y values for the plot
+   * @return the range for the y-axis
+   */
+  Pair<Double, Double> getMinMax(Map<LocalDate, Double> data);
 }

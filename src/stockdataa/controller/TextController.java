@@ -1,18 +1,13 @@
 package stockdataa.controller;
 
 
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
 
-import stockdataa.controller.IController;
-import stockdataa.model.StockPortfolio;
 import stockdataa.model.StockPortfolio;
 import stockdataa.view.TextInterface;
-import stockdataa.view.ButtonOnlyView.ButtonOnly;
-import stockdataa.controller.SimpleController;
-import stockdataa.controller.SmartController;
+import stockdataa.view.ButtonsView.Buttons;
 import stockdataa.model.SmartPortfolio;
 
 /**
@@ -25,7 +20,7 @@ public class TextController implements IController {
   private TextInterface view;
   private StockPortfolio model;
 
-  private ButtonOnly buttonview;
+  private Buttons buttonview;
 
   /**
    * TextCOntroller constructor that creates an object for the model,view and controller.
@@ -41,7 +36,7 @@ public class TextController implements IController {
 
   }
 
-  public TextController(StockPortfolio model, InputStream in, ButtonOnly view) {
+  public TextController(StockPortfolio model, InputStream in, Buttons view) {
     this.model = model;
     this.buttonview =  view;
     this.in = new Scanner(in);

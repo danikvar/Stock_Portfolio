@@ -3,6 +3,7 @@ package stockdataa.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -115,17 +116,17 @@ public class SmartPortfolio implements StockPortfolio {
 
     Map<String,Double> propMap = this.parsePropMap(propMapStr);
 
-    if(days == 0) {
-      this.DCAOnce(amount, propMap, CF);
-      return;
-    }
-
     // If days is not 0 then we must have a start date
     LocalDate start;
     try{
       start = LocalDate.parse(startDate);
     } catch(Exception e) {
       throw new IllegalArgumentException("Your start date could not be parsed.");
+    }
+
+    if(days == 0) {
+      this.DCAOnce(amount, propMap, CF, start);
+      return;
     }
 
     LocalDate checkStart = LocalDate.now().minusDays(days + 1);
@@ -231,17 +232,19 @@ public class SmartPortfolio implements StockPortfolio {
     double amount = numVals[1];
     double CF = numVals[2];
 
-    if(days == 0) {
-      this.DCAOnce(amount, propMap, CF);
-      return;
-    }
 
-    // If days is not 0 then we must have a start date
+
+    // We must always have a start date
     LocalDate start;
     try{
       start = LocalDate.parse(startDate);
     } catch(Exception e) {
       throw new IllegalArgumentException("Your start date could not be parsed.");
+    }
+
+    if(days == 0) {
+      this.DCAOnce(amount, propMap, CF, start);
+      return;
     }
 
     //System.out.println(endDate);
@@ -372,7 +375,7 @@ public class SmartPortfolio implements StockPortfolio {
    * @param propMap
    * @param CF
    */
-  private void DCAOnce(double amount, Map<String, Double> propMap, double CF) {
+  private void DCAOnce(double amount, Map<String, Double> propMap, double CF, LocalDate date) {
 
     this.dolCostVal = 0.0;
     this.lastInvestDate = null;
@@ -383,13 +386,13 @@ public class SmartPortfolio implements StockPortfolio {
 
     for(String key: propMap.keySet()) {
       SmartStock myStock = this.stockList.get(key);
-      double price = myStock.getPrice(LocalDate.now());
+      double price = myStock.getPrice(date);
       double spent = amount * propMap.get(key);
       double shares = spent/price;
       shares = DataHelpers.round(shares);
       Pair<Double, Double> newAdd = new Pair<>(shares, CF);
       Map<LocalDate, Pair<Double, Double>> newMap = new HashMap<>();
-      newMap.put(LocalDate.now(),newAdd);
+      newMap.put(date,newAdd);
       SmartStock bought = myStock.addShares(newMap, false);
       this.stockList.put(key, bought);
     }
@@ -741,7 +744,7 @@ public class SmartPortfolio implements StockPortfolio {
    */
   @Override
   public double[] getTotalValues(String date) {
-    double[] myVal = new double[]{0.0, 0.0};
+    BigDecimal[] myVal = new BigDecimal[]{BigDecimal.valueOf(0.0), BigDecimal.valueOf(0.0)};
 
     if (stockList.size() > 0) {
 
@@ -752,15 +755,17 @@ public class SmartPortfolio implements StockPortfolio {
 
         Pair<Double, Double> priceShares = myStock.getValue(date);
 
-        double totVal = priceShares.a * priceShares.b;
+        double totVal = BigDecimal.valueOf(priceShares.a)
+                .multiply(BigDecimal.valueOf(priceShares.b)).doubleValue();
 
-        myVal[0] += priceShares.a;
-        myVal[1] += totVal;
+        myVal[0] = myVal[0].add(BigDecimal.valueOf(priceShares.a));
+        myVal[1] = myVal[1].add(BigDecimal.valueOf(totVal));
 
       }
     }
 
-    return myVal;
+    double[] finVal = new double[]{myVal[0].doubleValue(), myVal[1].doubleValue()};
+    return finVal;
   }
 
   /**
@@ -786,7 +791,7 @@ public class SmartPortfolio implements StockPortfolio {
       }
     }
 
-    return costBasis;
+    return DataHelpers.round(costBasis);
   }
 
   /**
@@ -911,7 +916,13 @@ public class SmartPortfolio implements StockPortfolio {
 
   //Here the pair returns the dividing value for the aserisk at a
   // and the relative value at b
-  private Pair<Double, Double> numAsterisk(Map<LocalDate, Double> totVals) {
+
+  /**
+   *
+   * @param totVals
+   * @return
+   */
+  public Pair<Double, Double> numAsterisk(Map<LocalDate, Double> totVals) {
 
     double minVal = Collections.min(totVals.values());
     double maxVal = Collections.max(totVals.values());
@@ -1296,6 +1307,60 @@ public class SmartPortfolio implements StockPortfolio {
   }
 
 
+  /**
+   * This gets the mapping of portfolio performance over a set time frame.
+   * @param date1 the performance start date in YYYY-MM-DD format
+   * @param date2 the performance end date in YYYY-MM-DD format
+   * @throws IllegalArgumentException when date string provided are invalid.
+   */
+
+  public Map<LocalDate, Double> performanceMapping(String date1, String date2) {
+
+    LocalDate d1;
+    LocalDate d2;
+    try{
+      d1 = LocalDate.parse(date1);
+      d2 = LocalDate.parse(date2);
+    } catch(Exception e) {
+      throw new IllegalArgumentException("Your date strings could not be parsed. " +
+              "Please check your inputs and try again");
+    }
+
+    Pair<Character, Integer> myPair = DataHelpers.createTimeInterval(d1, d2);
+    char timeType = myPair.a;
+    int timeSplit = myPair.b;
+    //Map<LocalDate, Double> map = stock.timeIntervalValues
+    Map<LocalDate, Double> totVals = new HashMap<>();
+
+    for(String key: this.stockList.keySet()) {
+      SmartStock curStock = stockList.get(key);
+      Map<LocalDate, Double> stockVals = curStock.timeIntervalValues(date1, date2,timeType);
+      stockVals.forEach((k, v) -> totVals.merge(k, v, Double::sum));
+      //System.out.println(totVals.size());
+    }
+
+    if(timeSplit == 1) {
+      return totVals;
+    } else {
+
+      int counter = 0;
+
+      SortedSet<LocalDate> myKeys = new TreeSet<>(LocalDate::compareTo);
+      myKeys.addAll(totVals.keySet());
+      Map<LocalDate, Double> finVals = new HashMap<>();
+
+      for(LocalDate dKey: myKeys) {
+        counter ++;
+        if(counter == timeSplit) {
+          finVals.put(dKey, totVals.get(dKey));
+          counter = 0;
+        }
+      }
+
+      return finVals;
+    }
+
+  }
 
 }
 

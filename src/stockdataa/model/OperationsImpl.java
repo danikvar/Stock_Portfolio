@@ -3,8 +3,14 @@ package stockdataa.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Map;
+
+import javax.xml.crypto.Data;
 
 import stockdataa.DataHelpers;
+import stockdataa.Pair;
 
 public class OperationsImpl implements Operations{
 
@@ -20,6 +26,52 @@ public class OperationsImpl implements Operations{
     this.model = new SmartPortfolio();
   }
 
+  /**
+   *  Sets the Dollar Cost Averaging operation on the current portfolio and
+   *  outputs a message string informing about the transaction status.
+   *
+   * @param daysStr The time span for each next operation.
+   * @param startDate The date to start the operation
+   * @param endDate The end date for the operation (can be blank)
+   * @param amountStr The amount ($) to invest each time
+   * @param CommStr The commission fee for each transaction
+   * @param propMapStr The weights/proportions of each stock investment
+   * @return A string notifying about the success of the operation
+   * @throws IllegalArgumentException for any incorrectly inputted data that cannot be
+   *     parsed, improper weight values, or misaligned dates.
+   */
+  @Override
+  public String setDCA(String daysStr, String startDate,
+                       String endDate, String amountStr,
+                       String CommStr, String propMapStr) throws IllegalArgumentException {
+    this.model.setDLCostAverage(daysStr, startDate, endDate, amountStr, CommStr, propMapStr);
+
+    boolean oneTime = Double.parseDouble(daysStr) == 0.0;
+    StringBuilder output = new StringBuilder()
+            .append("Successfully performed Dollar Cost Averaging for portfolio [")
+            .append(this.currentPort)
+            .append("] by User [")
+            .append(this.user).append("] ");
+    if(oneTime) {
+      output.append(" one time");
+    } else {
+      output.append(" every [")
+              .append(daysStr)
+              .append("] days");
+    }
+    output.append(" starting on [")
+            .append(startDate);
+
+    if(endDate.isEmpty()) {
+      output.append("] with no end date.");
+    } else {
+      output.append("] and ending on [")
+              .append(endDate)
+              .append("].");
+    }
+
+    return output.toString();
+  }
   @Override
   public void sellStock(String ticker, String shares,
                         String CF, String dateStr, boolean onlyInts)
@@ -142,7 +194,7 @@ public class OperationsImpl implements Operations{
    * @return String status message of saving.
    */
   @Override
-  public String savePortfolio() {
+  public String saving() {
     if(this.saveDir.isEmpty()) {
       return "Please create or load a model before saving.";
     }
@@ -266,5 +318,18 @@ public class OperationsImpl implements Operations{
   @Override
   public String getPath() {
     return this.saveDir;
+  }
+
+  @Override
+  public Map<LocalDate, Double> getPortPerfData(String sDate, String eDate) {
+    return model.performanceMapping(sDate, eDate);
+  }
+
+  @Override
+  public Pair<Double, Double> getMinMax(Map<LocalDate, Double> data) {
+    Pair<Double, Double> ast1 = model.numAsterisk(data);
+    double minVal = DataHelpers.round(ast1.b);
+    double maxVal = DataHelpers.round(ast1.a + Collections.max(data.values()));
+    return new Pair<Double, Double>(minVal, maxVal);
   }
 }

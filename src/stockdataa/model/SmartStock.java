@@ -1,5 +1,6 @@
 package stockdataa.model;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -929,7 +930,7 @@ public class SmartStock implements Stock {
     //outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
     int[] padAmount = new int[5];
 
-    double totVal = myData * shares;
+    double totVal = BigDecimal.valueOf(myData).multiply(BigDecimal.valueOf(shares)).doubleValue();
 
     padAmount[0] = Math.max(0, 10 - ticker.length());
     padAmount[1] = Math.max(0, 18 - myDF.format(shares).length());
@@ -1447,7 +1448,7 @@ public class SmartStock implements Stock {
         costBasis += trimSellDates.get(sellKey).b;
       }
     }
-    return costBasis;
+    return DataHelpers.round(costBasis);
 
   }
 

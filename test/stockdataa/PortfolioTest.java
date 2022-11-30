@@ -156,6 +156,47 @@ public class PortfolioTest {
 
   }
 
+
+  /**
+   * Tests dollar cost averaging by loading new portfolio with no DCA.
+   */
+  @Test
+  public void DCATest2(){
+
+    SmartPortfolio myPort;
+    SmartPortfolio myPort2;
+    try {
+      myPort = (SmartPortfolio) DataHelpers.loadPortfolio("DanUser",
+              "DCATest3.json", 2);
+      myPort2 = (SmartPortfolio) DataHelpers.loadPortfolio("DanUser",
+              "DCATest3.json", 2);
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
+
+    myPort.setDLCostAverage("0", "2022-11-22", "", "500",
+            "250", "(GOOG,0.1);(IBM,0.9)");
+
+    // Cost Basis should go up by 1000 since we spent 500 and commission of 250 twice
+    // Value should only go up by 500
+    System.out.println(myPort.printPortfolioAt("2022-11-18") );
+    System.out.println(myPort.printPortfolioAt("2022-11-22") );
+    System.out.println(myPort.printPortfolioAt("2022-11-23") );
+
+    double costBasisPre = myPort.getCostBasis("2022-11-21") ;
+    double costBasisPost = myPort.getCostBasis("2022-11-22");
+    Assert.assertEquals(costBasisPre + 1000, costBasisPost, 0.1);
+
+    double valuePre = myPort2.getTotalValues("2022-11-22")[1];
+    double valuePost = myPort.getTotalValues("2022-11-22")[1];
+    Assert.assertEquals(valuePre + 500, valuePost, 0.1);
+    
+
+  }
+
+
   @Test
   public void addBigRegStock() {
 

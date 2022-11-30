@@ -6,10 +6,7 @@ import java.text.ParseException;
 import java.util.Objects;
 
 import stockdataa.DataHelpers;
-import stockdataa.model.SmartPortfolio;
-import stockdataa.view.ButtonOnlyView.ButtonOnly;
 import stockdataa.view.TextInterface;
-import stockdataa.controller.AbstractController;
 import stockdataa.model.Portfolio;
 
 public class SimpleController extends AbstractController {
