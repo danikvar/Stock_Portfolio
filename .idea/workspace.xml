@@ -6,29 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Added Dollar Cost Averaging">
-      <change afterPath="$PROJECT_DIR$/.idea/checkstyle-idea.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jcommon_1_0_23.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jfreechart_1_0_19.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Resources/jcommon-1.0.23.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Resources/jfreechart-1.0.19.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+    <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Added GUI, plotting perforamnce, and DCA hooked up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HW_4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/HW_4.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/AbstractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/AbstractController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/GUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/GUIController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/SimpleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/SimpleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/SmartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/SmartController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/TextController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/Operations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/Operations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/OperationsImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/OperationsImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/SmartPortfolio.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/SmartStock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/PortPerformance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/PortPerformance.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,27 +42,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
-    "last_opened_file_path": "C:/Users/danik/OneDrive/Desktop/Northeastern_Grad/CS_5010_Prog_Design/Code/HW_4/Resources/jfreechart-1.0.19.jar",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.editor"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/danik/OneDrive/Desktop/Northeastern_Grad/CS_5010_Prog_Design/Code/HW_4/Resources/jfreechart-1.0.19.jar&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="stockData" />
@@ -239,7 +220,8 @@
       <workItem from="1669678430397" duration="1358000" />
       <workItem from="1669687814425" duration="26680000" />
       <workItem from="1669771690503" duration="810000" />
-      <workItem from="1669778617924" duration="12201000" />
+      <workItem from="1669778617924" duration="12252000" />
+      <workItem from="1669826386758" duration="200000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
       <created>1669069182724</created>
@@ -283,7 +265,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669759204072</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added GUI, plotting perforamnce, and DCA hooked up">
+      <created>1669825961164</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1669825961164</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -310,7 +299,8 @@
     <MESSAGE value="Controller fully functions. Still need to do some cleanup and tweaking, but selling implemented completely." />
     <MESSAGE value="Linked the Model to the GUI and added a model worker class. Still need to add and link the 2 new model functions." />
     <MESSAGE value="Added Dollar Cost Averaging" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Dollar Cost Averaging" />
+    <MESSAGE value="Added GUI, plotting perforamnce, and DCA hooked up" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added GUI, plotting perforamnce, and DCA hooked up" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

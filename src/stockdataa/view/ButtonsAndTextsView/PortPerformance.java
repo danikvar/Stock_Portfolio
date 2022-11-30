@@ -6,6 +6,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
@@ -45,6 +46,8 @@ public class PortPerformance extends JFrame implements Texts  {
     NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 
     rangeAxis.setRange(minVal, maxVal);
+    plot.setRangeAxis(rangeAxis);
+    chart.plotChanged(new PlotChangeEvent(plot));
     ChartPanel panel = new ChartPanel(chart);
 
 
