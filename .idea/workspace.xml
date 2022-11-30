@@ -8,8 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Added GUI, plotting perforamnce, and DCA hooked up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/PortPerformance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/PortPerformance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/view/ButtonsAndTextsView/PortPerformance.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/view/ButtonsAndTextsView/PortPerformance.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,7 +220,7 @@
       <workItem from="1669687814425" duration="26680000" />
       <workItem from="1669771690503" duration="810000" />
       <workItem from="1669778617924" duration="12252000" />
-      <workItem from="1669826386758" duration="200000" />
+      <workItem from="1669826386758" duration="967000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
       <created>1669069182724</created>
@@ -272,7 +271,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669825961164</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added GUI, plotting perforamnce, and DCA hooked up">
+      <created>1669826748275</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1669826748275</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
