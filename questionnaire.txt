@@ -1,0 +1,89 @@
+Code status questionnaire:
+
+Please complete this questionnaire by selecting the appropriate answer for each question. Then include this file in the code that you send to your customers.
+
+Load an inflexible portfolio from file: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: Y/[N]
+
+Save an inflexible portfolio to file: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: Y/[N]
+
+Load a flexible portfolio from file: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Save a flexible portfolio to file: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Add stocks to an inflexible portfolio at the time of creation: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: Y/[N]
+
+Add stocks to a flexible portfolio at the time of creation: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Buy stocks on specific date and add to flexible portfolio after creation: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Sell stocks on specific data from flexible portfolio: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+
+Determine composition of inflexible portfolio: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: Y/[N]
+
+Determine composition of a flexible portfolio at a specific date: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Determine value of an inflexible portfolio at a specific date: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: Y/[N]
+
+Determine value of a flexible portfolio at a specific date: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Support for AlphaVantage API: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Support for all ticker symbols reported by AlphaVantage API: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Commission fees for each transaction: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Commission fees decided by user: [Y]/N
+
+Plot portfolio performance over time: [Y]/N
+Working through text UI: [Y]/N
+Working through GUI: [Y]/N
+
+Support investing money in several stocks according to specified weights: [Y]/N
+Working through GUI: [Y]/N
+
+Add dollar-cost averaging strategy to an existing portfolio: [Y]/N
+Working through GUI: [Y]/N
+
+Create portfolio with dollar-cost averaging strategy: [Y]/N
+Working through GUI: [Y]/N
+
+Class diagram included with code: [Y]/N
+
+DESIGN-README included with code: [Y]/N
+
+SETUP_README included with code: [Y]/N
+
+Program:
+
+Program runs by running main? [Y]/N

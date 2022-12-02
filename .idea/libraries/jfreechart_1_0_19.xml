@@ -2,8 +2,10 @@
   <library name="jfreechart-1.0.19">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/Resources/jfreechart-1.0.19.jar!/" />
+      <root url="file://$PROJECT_DIR$/Jar_run/Resources" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/Jar_run/Resources" recursive="false" />
   </library>
 </component>

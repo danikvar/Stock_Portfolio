@@ -4,34 +4,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import stockdataa.model.Portfolio;
 import stockdataa.model.SmartPortfolio;
 import stockdataa.model.SmartStock;
 import stockdataa.model.Stock1;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
@@ -61,15 +49,15 @@ public class PortfolioTest {
     this.dgen2 = new Random(105);
   }
 
+  /**
+   * Test tickers download.
+   */
   @Test
   public void getTickers() {
-    Set<String> APIOutput = DataHelpers.getAPITickers();
+    Set<String> apiOutput = DataHelpers.getAPITickers();
     for (int i = 0; i < 30; i++) {
       try {
         DataHelpers.getAPITickers();
-        if (i > 10) {
-          fail();
-        }
       } catch (RuntimeException e) {
         System.out.println("Test Passed");
       }
@@ -77,9 +65,8 @@ public class PortfolioTest {
     }
     try {
       Set<String> localOutput = DataHelpers.loadLocalTickers();
-      Assert.assertTrue(APIOutput.size() == localOutput.size());
-      Assert.assertTrue(APIOutput.containsAll(localOutput));
-      Assert.assertTrue(localOutput.containsAll(APIOutput));
+      Assert.assertTrue(apiOutput.containsAll(localOutput));
+      Assert.assertTrue(localOutput.containsAll(apiOutput));
     } catch (FileNotFoundException e) {
       fail();
     }
@@ -88,14 +75,15 @@ public class PortfolioTest {
   }
 
   /**
-   * Tests dollar cost averaging
+   * Tests dollar cost averaging.
    */
   @Test
-  public void DCATest(){
+  public void DCATest() {
 
     SmartPortfolio myPort;
+
     try {
-        myPort = (SmartPortfolio) DataHelpers.loadPortfolio("DanUser",
+      myPort = (SmartPortfolio) DataHelpers.loadPortfolio("DanUser",
               "DCATest.json", 2);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
@@ -105,52 +93,52 @@ public class PortfolioTest {
 
     Assert.assertEquals(20, myPort.getNumStocks("2022-11-01"), 0.001);
     Assert.assertTrue(myPort.getNumStocks("2022-11-28") > 100);
-    System.out.println(myPort.printPortfolioAt("current") );
-    System.out.println(myPort.printPortfolioAt("2022-11-01") );
+    System.out.println(myPort.printPortfolioAt("current"));
+    System.out.println(myPort.printPortfolioAt("2022-11-01"));
 
     myPort.setDLCostAverage("3", "2022-11-25", "",
             "138.2", "5",
             "(IBM, 1.0)");
-     Assert.assertTrue(myPort.getNumStocks("2022-11-29") > 107);
+    Assert.assertTrue(myPort.getNumStocks("2022-11-29") > 107);
     System.out.println(myPort.printPortfolioAt("current"));
 
     // Trying to add invalid date
 
-    try{
+    try {
       myPort.setDLCostAverage("3", "2022-123-25", "",
               "138.2", "5",
               "(IBM, 1.0)");
       Assert.fail();
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.out.println("pass");
     }
 
 
-    try{
+    try {
       myPort.setDLCostAverage("3", "2022-11-25", "2022-11-24",
               "138.2", "5",
               "(IBM, 1.0)");
       Assert.fail();
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.out.println("pass");
     }
 
-    try{
+    try {
       myPort.setDLCostAverage("3", "2022-12-25", "",
               "138.2", "5",
               "(IBM, 1.5)");
       Assert.fail();
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.out.println("pass");
     }
 
 
-    try{
+    try {
       myPort.setDLCostAverage("3", "2022-12-25", "",
               "-2", "5",
               "(IBM, 1.5)");
       Assert.fail();
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.out.println("pass");
     }
 
@@ -161,7 +149,7 @@ public class PortfolioTest {
    * Tests dollar cost averaging by loading new portfolio with no DCA.
    */
   @Test
-  public void DCATest2(){
+  public void DCATest2() {
 
     SmartPortfolio myPort;
     SmartPortfolio myPort2;
@@ -170,9 +158,7 @@ public class PortfolioTest {
               "DCATest3.json", 2);
       myPort2 = (SmartPortfolio) DataHelpers.loadPortfolio("DanUser",
               "DCATest3.json", 2);
-    } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
-    } catch (ParseException e) {
+    } catch (FileNotFoundException | ParseException e) {
       throw new RuntimeException(e);
     }
 
@@ -181,21 +167,68 @@ public class PortfolioTest {
 
     // Cost Basis should go up by 1000 since we spent 500 and commission of 250 twice
     // Value should only go up by 500
-    System.out.println(myPort.printPortfolioAt("2022-11-18") );
-    System.out.println(myPort.printPortfolioAt("2022-11-22") );
-    System.out.println(myPort.printPortfolioAt("2022-11-23") );
+    System.out.println(myPort.printPortfolioAt("2022-11-18"));
+    System.out.println(myPort.printPortfolioAt("2022-11-22"));
+    System.out.println(myPort.printPortfolioAt("2022-11-23"));
 
-    double costBasisPre = myPort.getCostBasis("2022-11-21") ;
+    double costBasisPre = myPort.getCostBasis("2022-11-21");
     double costBasisPost = myPort.getCostBasis("2022-11-22");
     Assert.assertEquals(costBasisPre + 1000, costBasisPost, 0.1);
 
     double valuePre = myPort2.getTotalValues("2022-11-22")[1];
     double valuePost = myPort.getTotalValues("2022-11-22")[1];
     Assert.assertEquals(valuePre + 500, valuePost, 0.1);
-    
+
 
   }
 
+
+  /**
+   * Tests dollar cost averaging by creating new portfolio with no DCA.
+   */
+  @Test
+  public void DCATest3() {
+
+    SmartPortfolio myPort = new SmartPortfolio();
+    SmartPortfolio myPort2 = new SmartPortfolio();
+
+
+    try {
+      myPort2.setDLCostAverage("0", "2022-10-20", "", "500",
+              "250", "(GOOG,0.1);(IBM,0.9)");
+    } catch (Exception e) {
+      Assert.fail();
+    }
+
+
+    SmartPortfolio myPort3 = new SmartPortfolio();
+    myPort3.addStock("AAPL", "API", "(2022-09-22,10,10)", true);
+
+    myPort.addStock("AAPL", "API", "(2022-09-22,10,10)", true);
+    myPort.setDLCostAverage("0", "2022-10-20", "", "500",
+            "250", "(AAPL,0.5);(IBM,0.5)");
+
+
+    // Cost Basis should go up by 1000 since we spent 500 and commission of 250 twice
+    // Value should only go up by 500
+    System.out.println(myPort.printPortfolioAt("2022-10-18"));
+    System.out.println(myPort.printPortfolioAt("2022-11-01"));
+
+
+    double costBasisPre = myPort.getCostBasis("2022-10-18");
+    double costBasisPost = myPort.getCostBasis("2022-11-22");
+    Assert.assertEquals(costBasisPre + 1000, costBasisPost, 0.5);
+
+
+    double valuePre = myPort3.getTotalValues("2022-11-22")[1];
+    double valuePost = myPort.getTotalValues("2022-11-22")[1];
+    Assert.assertEquals(valuePre + 552, valuePost, 0.1);
+
+  }
+
+  /**
+   * Tests the inflexible portfolio stock operations.
+   */
 
   @Test
   public void addBigRegStock() {
@@ -253,7 +286,7 @@ public class PortfolioTest {
         m1 = "1";
       } else {
         if (m11 < 10) {
-          m1 = "0" + String.valueOf(m11);
+          m1 = "0" + m11;
         } else {
           m1 = String.valueOf(m11);
         }
@@ -266,37 +299,37 @@ public class PortfolioTest {
         m2 = "1";
       } else {
         if (m12 < 10) {
-          m2 = "0" + String.valueOf(m11);
+          m2 = "0" + m11;
         } else {
           m2 = String.valueOf(m11);
         }
       }
 
-      String smallDate = "1" + String.valueOf(1) + String.valueOf(num2)
-              + String.valueOf(num3) + "-" + m1 + "-" + String.valueOf(1) + String.valueOf(num4);
+      String smallDate = "1" + 1 + num2
+              + num3 + "-" + m1 + "-" + 1 + num4;
 
-      String bigDate = "2" + String.valueOf(num4) + String.valueOf(num2)
-              + String.valueOf(num1) + "-" + m2 + "-" + String.valueOf(1) + String.valueOf(num3);
+      String bigDate = "2" + num4 + num2
+              + num1 + "-" + m2 + "-" + 1 + num3;
 
 
-      String myData = "(" + smallDate + "," + String.valueOf(price2) + ");("
-              + "(" + bigDate + "," + String.valueOf(price3) + ");("
-              + "(1000-01-01," + String.valueOf(price1) + ")";
+      String myData = "(" + smallDate + "," + price2 + ");("
+              + "(" + bigDate + "," + price3 + ");("
+              + "(1000-01-01," + price1 + ")";
 
-      String wrongData1 = "(" + smallDate + String.valueOf(alphabet.charAt(num5))
-              + "," + String.valueOf(price2) + ");("
-              + "(" + bigDate + "," + String.valueOf(price3) + ");("
-              + "(1000-01-01," + String.valueOf(price1) + ")";
+      String wrongData1 = "(" + smallDate + alphabet.charAt(num5)
+              + "," + price2 + ");("
+              + "(" + bigDate + "," + price3 + ");("
+              + "(1000-01-01," + price1 + ")";
 
       String wrongData2 = "(" + smallDate + ")"
-              + "," + String.valueOf(price2) + ");("
-              + "(" + bigDate + "," + String.valueOf(price3) + ");("
-              + "(1000-01-01," + String.valueOf(price1) + ")";
+              + "," + price2 + ");("
+              + "(" + bigDate + "," + price3 + ");("
+              + "(1000-01-01," + price1 + ")";
 
       String wrongData3 = "(" + smallDate + ","
-              + "," + String.valueOf(price2) + ");("
-              + "(" + bigDate + "," + String.valueOf(price3) + ");("
-              + "(1000-01-01," + String.valueOf(price1) + ")";
+              + "," + price2 + ");("
+              + "(" + bigDate + "," + price3 + ");("
+              + "(1000-01-01," + price1 + ")";
 
       Stock1 wrongStock = new Stock1(myTicker, num2, wrongData2);
       Assert.assertEquals(price2, wrongStock.getData(smallDate), 0.0000001);
@@ -336,7 +369,9 @@ public class PortfolioTest {
 
   }
 
-
+  /**
+   * Tests flexible portfolio stock operations.
+   */
   @Test
   public void addBigSmartStock() {
 
@@ -389,7 +424,7 @@ public class PortfolioTest {
       double price3 = p2[i];
       double price4 = p3[i];
       double rDub = p4[i];
-      double share1 = (double) shareArr[i];
+      double share1 = shareArr[i];
 
       StringBuilder priceData = new StringBuilder();
       priceData.append("(2020-01-15,");
@@ -412,7 +447,8 @@ public class PortfolioTest {
       LocalDate myDate2 = LocalDate.parse("2020-05-01");
       LocalDate myDate3 = LocalDate.parse("2021-12-01");
 
-      HashMap<LocalDate, Pair<Double, Double>> myBuyDates = new HashMap<LocalDate, Pair<Double, Double>>();
+      HashMap<LocalDate, Pair<Double, Double>> myBuyDates =
+              new HashMap<LocalDate, Pair<Double, Double>>();
 
 
       myBuyDates.put(myDate, myPair);
@@ -435,31 +471,29 @@ public class PortfolioTest {
       buyString.append(")");
 
 
-      StringBuilder wrongData3 = new StringBuilder();
-      wrongData3.append("(2020-01-15,,");
-      wrongData3.append(price1);
-      wrongData3.append(");(2020-05-01,");
-      wrongData3.append(price2);
-      wrongData3.append(");(2021-12-01,");
-      wrongData3.append(price3);
-      wrongData3.append(");(2020-05-05,");
-      wrongData3.append(price4);
-      wrongData3.append(")");
+      String wrongData3 = "(2020-01-15,," +
+              price1 +
+              ");(2020-05-01," +
+              price2 +
+              ");(2021-12-01," +
+              price3 +
+              ");(2020-05-05," +
+              price4 +
+              ")";
 
-      StringBuilder wrongData1 = new StringBuilder();
-      wrongData1.append("(2020-01-15,");
-      wrongData1.append(price1);
-      wrongData1.append(");(2020-05-01,");
-      wrongData1.append(price2);
-      wrongData1.append(");((2021-12-01,");
-      wrongData1.append(price3);
-      wrongData1.append(");(2020-05-05,");
-      wrongData1.append(price4);
-      wrongData1.append(")");
+      String wrongData1 = "(2020-01-15," +
+              price1 +
+              ");(2020-05-01," +
+              price2 +
+              ");((2021-12-01," +
+              price3 +
+              ");(2020-05-05," +
+              price4 +
+              ")";
 
       StringBuilder wrongData2 = new StringBuilder();
-      wrongData2.append("(2020-01-15" +
-              String.valueOf(alphabet.charAt(num5)) + ",");
+      wrongData2.append("(2020-01-15"
+              + alphabet.charAt(num5) + ",");
       wrongData2.append(price1);
       wrongData2.append(");(2020-05-01,");
       wrongData2.append(price2);
@@ -470,9 +504,9 @@ public class PortfolioTest {
       wrongData2.append(")");
 
 
-      SmartStock wrongStock = new SmartStock(myTicker, wrongData1.toString(), myBuyDates, true);
+      SmartStock wrongStock = new SmartStock(myTicker, wrongData1, myBuyDates, true);
       Assert.assertEquals(price4, wrongStock.getData(fetchDate), 0.0000001);
-      wrongStock = new SmartStock(myTicker, wrongData3.toString(), myBuyDates, true);
+      wrongStock = new SmartStock(myTicker, wrongData3, myBuyDates, true);
       Assert.assertEquals(price4, wrongStock.getData(fetchDate), 0.0000001);
 
       try {
@@ -509,16 +543,10 @@ public class PortfolioTest {
 
   }
 
-  @Test
-  public void myTest() {
 
-    LocalDate o1 = LocalDate.parse("2022-12-31");
-    LocalDate o2 = LocalDate.parse("2022-01-31");
-    System.out.println(o1.isBefore(o2));
-
-
-  }
-
+  /**
+   * Tests adding API stock.
+   */
   @Test
   public void addAPIStock() {
 
@@ -531,7 +559,6 @@ public class PortfolioTest {
 
     Assert.assertEquals(3, myPort.getNumStocks());
     Assert.assertEquals(1, myPort.size());
-    ;
 
 
     myPort.addStock("GOOG", "API", "2", true);
@@ -547,11 +574,14 @@ public class PortfolioTest {
     myPort.addStock("TGR-WS", "API", "2", true);
     Assert.assertEquals(8, myPort.getNumStocks());
     Assert.assertEquals(3, myPort.size());
-    System.out.println(myPort.toString());
+    System.out.println(myPort);
 
   }
 
 
+  /**
+   * Tests flexible portfolio print output.
+   */
   @Test
   public void printTests() {
 
@@ -575,21 +605,18 @@ public class PortfolioTest {
     buyString.append(1.0);
     buyString.append(")");
 
-    StringBuilder buyString2 = new StringBuilder();
-    buyString2.append("(2020-05-15,");
-    buyString2.append(10.0);
-    buyString2.append(",");
-    buyString2.append(1.0);
-    buyString2.append(")");
+    String buyString2 = "(2020-05-15," +
+            10.0 +
+            "," +
+            1.0 +
+            ")";
 
     myPort.addStock("GOOG", "API", buyString.toString(), true);
 
     Assert.assertEquals(30, myPort.getNumStocks("current"));
     Assert.assertEquals(1, myPort.size());
-    ;
 
-
-    myPort.addStock("GOOG", "API", buyString2.toString(), true);
+    myPort.addStock("GOOG", "API", buyString2, true);
     Assert.assertEquals(40, myPort.getNumStocks());
     Assert.assertEquals(1, myPort.size());
 
@@ -621,38 +648,10 @@ public class PortfolioTest {
 
   }
 
-  @Test
-  public void stockDataGetter() {
-    //LocalDate d1 = LocalDate.parse("2020-05-01");
-    //LocalDate d2 = LocalDate.parse("2020-05-02");
-    //System.out.println(d2.isAfter(d1));
-    //System.out.println(d1.isAfter(d2));
-    //System.out.println(d2.isEqual(d1));
 
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    System.out.println(dtf.format(LocalDate.parse("2020-12-31")));
-    LocalDate d1 = null;
-    LocalDate d2 = null;
-    LocalDate[] myDate = {d1, d2};
-    System.out.println(Objects.isNull(myDate[0]));
-
-    Map<LocalDate, Double> myMap = DataHelpers.getStockData("NVDA", "2020-05-15", "2022-11-08", 'M', "2019-05-01");
-
-
-    System.out.println(myMap.size());
-    System.out.println(myMap.keySet().toString());
-
-    Comparator<LocalDate> comparator = LocalDate::compareTo;
-
-    SortedSet<LocalDate> keys = new TreeSet<>(comparator);
-    keys.addAll(myMap.keySet());
-
-    for (LocalDate key : keys) {
-      System.out.println("KEY: " + dtf.format(key)
-              + " || PRICE: " + String.valueOf(myMap.get(key)));
-    }
-  }
-
+  /**
+   * Tests time interval creation for performance graph.
+   */
   @Test
   public void createTimeInterval() {
 
@@ -665,9 +664,9 @@ public class PortfolioTest {
 
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    Map<LocalDate, Double> myMap = DataHelpers.getStockData("NVDA", "2020-05-15", "2022-11-08", 'M', "2019-05-01");
+    Map<LocalDate, Double> myMap = DataHelpers.getStockData("NVDA", "2020-05-15",
+            "2022-11-08", 'M', "2019-05-01");
 
-    //########################################################################################################
 
     //bar chart has at least 5 lines but no more than 30 lines.
     //no more than 50 asterisks on each line
@@ -677,20 +676,6 @@ public class PortfolioTest {
     // get the total size of the time frame
     long days = ChronoUnit.DAYS.between(d1, d2);
 
-    // 6 months = 182.5
-    // 1 month ~ 30
-
-    // if days < 5 THROW ERROR
-    // if days  < 30 use daily
-    // if days >= 30 && days < 90 use daily x 3
-    // if days >= 90 && days < 183 use weekly
-    // if days >= 183 && days < 420 use weekly x 3
-    // if days > 420 && days < 800 use monthly
-    // if days >= 800 && days < 1800 use monthly x 3
-    // if days >= 1800 && days < 3650 use monthly x 6 (half year)
-    // if days >= 3650 && days < 9125 use yearly
-    // if days >= 9125 && days < 9125*2 use yearly x 2
-    // if days >= 9125*2  use yearly x 3
 
     if (days < 5) {
       System.out.println("ERROR");
@@ -738,52 +723,24 @@ public class PortfolioTest {
     }
 
     //System.out.println(d1.getYear());
-    System.out.println("01-01-" + String.valueOf(d1.getYear()));
+    System.out.println("01-01-" + d1.getYear());
 
-    System.out.println("DWMY?: " + Character.toString(dayWeekMonth));
-    System.out.println("NUM SPLITS: " + String.valueOf(numSplits));
+    System.out.println("DWMY?: " + dayWeekMonth);
+    System.out.println("NUM SPLITS: " + numSplits);
 
-    System.out.println("DAYS BETWEEN DATES: " + String.valueOf(days));
+    System.out.println("DAYS BETWEEN DATES: " + days);
 
-    System.out.println("TIME FRAME FOR 30 BARS: " + String.valueOf(days / 29));
-    System.out.println("DAYS BETWEEN DATES: " + String.valueOf(days / 5));
+    System.out.println("TIME FRAME FOR 30 BARS: " + days / 29);
+    System.out.println("DAYS BETWEEN DATES: " + days / 5);
 
-
-    //System.out.println(myMap.size());
-    //System.out.println(myMap.keySet().toString());
-
-    Comparator<LocalDate> comparator = LocalDate::compareTo;
-
-    SortedSet<LocalDate> keys = new TreeSet<>(comparator);
-    keys.addAll(myMap.keySet());
 
     Pair<Character, Integer> myPair = DataHelpers.createTimeInterval(d1, d2);
-    System.out.println(Character.toString(myPair.a));
-    System.out.println(String.valueOf(myPair.b));
+    Assert.assertEquals("M", Character.toString(myPair.a));
+    Assert.assertEquals(1, myPair.b.intValue());
 
   }
 
   // placed inline for the demonstration, but doesn't have to be a lambda expression
-
-  @Test
-  public void tickerTest() {
-    //System.out.println(DataHelpers.isAlphaNumeric("4324_dfgfdg_345dsfgs"));
-    Set<String> allStocks2 = DataHelpers.getTickers();
-    Set<String> allStocks = new HashSet<String>();
-    try {
-      File nameFile = new File("Tickers.txt");
-      Scanner scan = new Scanner(nameFile);
-      String line;
-      while (scan.hasNextLine()) {
-        line = scan.nextLine();
-        allStocks.add(line);
-      }
-    } catch (FileNotFoundException e) {
-
-    }
-    System.out.println(allStocks2.equals(allStocks));
-    System.out.println(allStocks.toString());
-  }
 
   /**
    * Test that our Pair() class adds another pair of doubles correctly.
@@ -799,42 +756,6 @@ public class PortfolioTest {
   }
 
   @Test
-  public void ScanFile() throws FileNotFoundException {
-    File portFile = new File("C:\\Users\\danik\\OneDrive\\Desktop\\PortTestDir\\port1.json");
-    Scanner scan = new Scanner(portFile);
-    //System.out.println(scan.nextLine());
-    String line;
-
-    Portfolio myPortfolio = new Portfolio();
-    //Pattern btwnQuotes = Pattern.compile("\".*\\\\\\\"(.*)\\\\\\\".*\"");
-    line = scan.nextLine();
-
-    boolean check = false;
-    while (!check && scan.hasNextLine()) {
-      System.out.println("START LINE:");
-      System.out.println(line);
-      if (line.contains("Stock")) {
-        check = true;
-        String line2 = scan.nextLine();
-        System.out.println("NEXT LINE:");
-        System.out.println(line2);
-        String ticker = line2.split("\"")[3];
-        line2 = scan.nextLine();
-        System.out.println("NEXT NEXT LINE:");
-        System.out.println(line2);
-        String shares = line2.split("\"")[3];
-        System.out.println("SHARES LINE:");
-        System.out.println(shares);
-        scan.nextLine();
-        line2 = scan.nextLine();
-      } else {
-        line = scan.nextLine();
-      }
-    }
-
-  }
-
-  @Test
   public void printStock() {
     Pair<Double, Double> myPair = new Pair<Double, Double>(10.0, 1.0);
     Pair<Double, Double> myPair2 = new Pair<Double, Double>(20.0, 2.0);
@@ -845,7 +766,8 @@ public class PortfolioTest {
     LocalDate myDate2 = LocalDate.parse("2020-05-01");
     LocalDate myDate3 = LocalDate.parse("2021-12-01");
 
-    HashMap<LocalDate, Pair<Double, Double>> myBuyDates = new HashMap<LocalDate, Pair<Double, Double>>();
+    HashMap<LocalDate, Pair<Double, Double>> myBuyDates =
+            new HashMap<LocalDate, Pair<Double, Double>>();
 
 
     myBuyDates.put(myDate, myPair);
@@ -857,19 +779,18 @@ public class PortfolioTest {
     double mycostBasis = (10.0 * 5.0 + 1.0) + (20.0 * 10.0 + 2.0);
     double myShares = 10.0 + 20.0;
     double myComm = 1.0 + 2.0;
-    double myValue = (myShares) * 1.0;
+    double myValue = (myShares);
 
     SmartStock myStock = new SmartStock("GOOG", prices, myBuyDates, true);
 
-    StringBuilder outBuild = new StringBuilder();
-    outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
-    outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
+    String outBuild = "|   TICKER   |    DATE    |    TOTAL SHARES    |" +
+            "    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" +
+            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n";
 
 
     String fetchDate = "2020-05-05";
-    System.out.println(outBuild.toString());
+    System.out.println(outBuild);
     System.out.println(myStock.printDataAt(fetchDate));
 
     Pair<Double, Double> myStockValue = myStock.getValue(fetchDate);
@@ -899,6 +820,9 @@ public class PortfolioTest {
     Assert.assertEquals(0, costB2, 0.000001);
   }
 
+  /**
+   * Tests parsing of buy date strings.
+   */
   @Test
   public void parseBuyDates() {
     Pair<Double, Double> myPair = new Pair<Double, Double>(10.0, 1.0);
@@ -910,7 +834,8 @@ public class PortfolioTest {
     LocalDate myDate2 = LocalDate.parse("2020-05-01");
     LocalDate myDate3 = LocalDate.parse("2021-12-01");
 
-    HashMap<LocalDate, Pair<Double, Double>> myBuyDates = new HashMap<LocalDate, Pair<Double, Double>>();
+    HashMap<LocalDate, Pair<Double, Double>> myBuyDates =
+            new HashMap<LocalDate, Pair<Double, Double>>();
 
 
     myBuyDates.put(myDate, myPair);
@@ -929,7 +854,7 @@ public class PortfolioTest {
 
     trimShareDates.keySet().removeIf(k -> k.isBefore(start));
 
-    System.out.println(trimShareDates.keySet().toString());
+    System.out.println(trimShareDates.keySet());
 
 
     Pair<Double, Double> totShareComm = new Pair<>(0.0, 0.0);
@@ -940,312 +865,15 @@ public class PortfolioTest {
     Assert.assertEquals(50.0, totShareComm.a, 0.00001);
     Assert.assertEquals(10.0, totShareComm.b, 0.00001);
 
-    String bdString = "(2020-01-15,10.0,1.0);(2020-05-01,20.0,2.0);(2021-12-01,20.0,7.0)";
-
-  }
-
-  @Test
-  public void buyIteratorTest() {
-
-    // We need to return a value of 0 if the date bought at was later than
-
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    Map<LocalDate, Double> newPrices = DataHelpers.getStockData("NVDA", "2020-05-15", "2022-11-08", 'M', "2019-05-01");
-    String date1 = "2020-05-15";
-    String date2 = "2022-12-08";
-
-    LocalDate d1;
-    LocalDate d2;
-
-    try {
-      d1 = LocalDate.parse(date1);
-      d2 = LocalDate.parse(date2);
-    } catch (Exception e) {
-      throw new IllegalArgumentException("Your date strings could not be parsed. " +
-              "Please check your inputs and try again");
-    }
-
-
-    Pair<Integer, Double> myPair = new Pair<Integer, Double>(10, 1.0);
-    Pair<Integer, Double> myPair2 = new Pair<Integer, Double>(20, 2.0);
-
-    Pair<Integer, Double> myPair3 = new Pair<Integer, Double>(20, 7.0);
-
-    LocalDate myDate = LocalDate.parse("2020-01-15");
-    LocalDate myDate2 = LocalDate.parse("2020-05-01");
-    LocalDate myDate3 = LocalDate.parse("2021-12-01");
-
-    HashMap<LocalDate, Pair<Integer, Double>> myBuyDates = new HashMap<LocalDate, Pair<Integer, Double>>();
-
-
-    myBuyDates.put(myDate, myPair);
-    myBuyDates.put(myDate2, myPair2);
-    myBuyDates.put(myDate3, myPair3);
-
-    HashMap<LocalDate, Pair<Integer, Double>> BuyDates = myBuyDates;
-    LocalDate minDate = Collections.min(BuyDates.keySet());
-
-
-    // SET UP ***********************************************************
-
-
-    Comparator<LocalDate> comparator = LocalDate::compareTo;
-
-    SortedSet<LocalDate> priceKeys = new TreeSet<>(comparator);
-    priceKeys.addAll(newPrices.keySet());
-    System.out.println("FIRST PRICE DATE: " + priceKeys.first().toString());
-    SortedSet<LocalDate> buyKeys = new TreeSet<>(comparator);
-    buyKeys.addAll(BuyDates.keySet());
-    System.out.println("FIRST BUY DATE: " + buyKeys.first().toString());
-    Iterator<LocalDate> buyIt = buyKeys.iterator();
-    LocalDate curBuyKey = buyIt.next();
-
-    System.out.println("ALL BUY KEYS: " +
-            buyKeys.toString());
-
-    System.out.println("CURRENT BUY KEY: " +
-            curBuyKey.toString());
-
-
-    LocalDate nextBuy;
-    if (buyIt.hasNext()) {
-      nextBuy = buyIt.next();
-    } else {
-      nextBuy = null;
-    }
-
-    Pair<Integer, Double> curBuy = BuyDates.get(curBuyKey);
-    int curTotStock = curBuy.a;
-    double curTotComiss = curBuy.b;
-    Double totVal = 0.0;
-
-    LocalDate firstDate = priceKeys.first();
-
-    System.out.println("CURRENT COMMISSION: " +
-            String.valueOf(curTotComiss));
-
-    System.out.println("CURRENT SHARES: " +
-            String.valueOf(curTotStock));
-
-
-    System.out.println("FIRST DATE: " + firstDate.toString());
-    boolean finDate = false;
-
-    System.out.println("NEXT BUY KEY: " +
-            nextBuy.toString());
-
-
-    System.out.println("Is nextBuy after the earliest date?");
-    System.out.println(nextBuy.isAfter(firstDate));
-
-    while (!Objects.isNull(nextBuy) && !finDate) {
-      if (!nextBuy.isAfter(firstDate)) {
-        curBuyKey = nextBuy;
-        nextBuy = buyIt.next();
-        curBuy = BuyDates.get(curBuyKey);
-        curTotStock += curBuy.a;
-        curTotComiss += curBuy.b;
-      } else {
-        finDate = true;
-      }
-    }
-
-    System.out.println("CURRENT BUY KEY 2: " +
-            curBuyKey.toString());
-
-    System.out.println("NEXT BUY KEY 2: " +
-            nextBuy.toString());
-
-    System.out.println("CURRENT COMMISSION: " +
-            String.valueOf(curTotComiss));
-
-    System.out.println("CURRENT SHARES: " +
-            String.valueOf(curTotStock));
-
-    // This is the map with the total value at each date that we will return.
-    Map<LocalDate, Double> allVals = new HashMap<LocalDate, Double>();
-
-    int i = 0;
-    for (LocalDate key : priceKeys) {
-
-      // If our current date is after/equal to the current buy key
-      // First check that we are before the next buy Key
-      // If not before then ignore --> we only want values after/on the first valid buy date
-      // If true then check that we are before the next buyDate
-      // If false then we update the buyDate, otherwise continue
-      if (!key.isBefore(curBuyKey)) {
-        // If we have a next key check that we are not on or after it
-        // If we are not before then update the shares and commission fee
-        if (!Objects.isNull(nextBuy) && !key.isBefore(nextBuy)) {
-          curBuyKey = nextBuy;
-
-          if (buyIt.hasNext()) {
-            nextBuy = buyIt.next();
-          } else {
-            nextBuy = null;
-          }
-
-          curBuy = BuyDates.get(curBuyKey);
-          curTotStock += curBuy.a;
-          curTotComiss += curBuy.b;
-        }
-
-        // once everything is updated we can continue
-        double curPrice = newPrices.get(key);
-        double curValue = (curPrice * curTotStock) - curTotComiss;
-        allVals.put(key, curValue);
-
-        if (i == 0) {
-          i++;
-          System.out.println("EXPECTED: " +
-                  "30 SHARES & 3.0 DOLLARS");
-          System.out.println("ACTUAL SHARES: " +
-                  String.valueOf(curTotStock));
-          System.out.println("ACTUAL COMM: " +
-                  String.valueOf(curTotComiss));
-
-          System.out.println("THE CURRENT DATE IS: " +
-                  key.toString());
-          System.out.println("THE PRICE AT THE FIRST DATE IS: "
-                  + String.valueOf(newPrices.get(key)));
-          System.out.println("2 THE PRICE AT THE FIRST DATE IS: "
-                  + String.valueOf(curPrice));
-
-          System.out.println("THE TOTAL VALUE AT THE FIRST DATE IS: "
-                  + String.valueOf(curValue));
-
-        }
-
-      }
-
-    }
-
-    SortedSet<LocalDate> valKeys = new TreeSet<>(comparator.reversed());
-    valKeys.addAll(allVals.keySet());
-    //System.out.println("VAL KEY SIZE: " + String.valueOf(allVals.size()));
-    //System.out.println("VAL KEYS: " + valKeys.toString());
-    //System.out.println("PRICE KEYS: " + priceKeys.toString());
-
-    LocalDate lastValKey = valKeys.first();
-    LocalDate firstValKey = valKeys.last();
-
-    System.out.println("THE FIRST DATE IS: " + firstValKey.toString());
-    System.out.println("THE FIRST NUM SHARES  + COMISSION IS: " +
-            "30 SHARES & 3.0 DOLLARS");
-    System.out.println("THE PRICE AT THE FIRST DATE IS: "
-            + String.valueOf(newPrices.get(firstValKey)));
-
-    System.out.println("THE TOTAL VALUE AT THE FIRST DATE IS: "
-            + String.valueOf(allVals.get(firstValKey)));
-    // else if(current key is after or before the current buy key return nothing)
-
-
-    System.out.println("THE LAST DATE IS: " + lastValKey.toString());
-    System.out.println("THE LAST NUM SHARES  + COMISSION IS: " +
-            "50 SHARES & 10.0 DOLLARS");
-    System.out.println("THE PRICE AT THE LAST DATE IS: "
-            + String.valueOf(newPrices.get(lastValKey)));
-
-    System.out.println("THE TOTAL VALUE AT THE LAST DATE IS: "
-            + String.valueOf(allVals.get(lastValKey)));
-
-  }
-
-  @Test
-  public void stockStringTest() {
-    Stock1 myStock = new Stock1("GOOG", 12, "API");
-
-    Stock1 myStock2 = new Stock1("NVDA", 23, "API");
-    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" +
-            "~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-    outBuild.append("| TICKER |    DATE    |    SHARES     |");
-    outBuild.append("     OPEN PRICE     |    SHARE VALUE    |\n");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-
-    System.out.println(outBuild.toString());
-    assertEquals("|  GOOG  | 2022-11-01 |      12       |       95.59        |   " +
-            "   1147.08      |", myStock.printDataAt("current"));
-
-  }
-
-  @Test
-  public void ScannerTest() {
-    String content = "{\n  \"GOOG\":5,\n  \"NVDA\":1 \n}";
-    System.out.println(content);
-    Scanner sc = new Scanner(content);
-    while (sc.hasNext()) {
-      String myLine = sc.next();
-
-      boolean startEnd = myLine.contains(new StringBuilder("{"))
-              || myLine.contains(new StringBuilder("}"));
-      if (!startEnd) {
-
-        System.out.println("SCANNER 1");
-        Pattern p = Pattern.compile("\"([^\"]*)\"");
-        Matcher m = p.matcher(myLine);
-        m.find();
-        System.out.println(m.group(1));
-
-        System.out.println("SCANNER 2342");
-
-        int num = Integer.parseInt(myLine.replaceAll("[^0-9]", ""));
-        System.out.println(num);
-        System.out.println("\n");
-        System.out.printf(myLine);
-        System.out.println("\n");
-      }
-
-    }
-  }
-
-  @Test
-  public void StockSaleTest() {
-  //TODO: Implement selling in the portfolio not in the stock
-    // TODO: Add selling to controller.
-    // TODO: Test performance graph with sold stock
-    String buy = "(2022-01-15,2,1);(2022-01-18,2,1)";
-    String price = "(2022-01-15,1); "
-            + "(2022-01-16,1);"
-            + "(2022-01-17,1);"
-            + "(2022-01-18,1);"
-            + "(2022-01-19,1);"
-            + "(2022-01-20,1);"
-            + "(2022-01-21,1);"
-            + "(2022-01-22,1);"
-            + "(2022-01-23,1);"
-            + "(2022-01-24,1);"
-            + "(2022-01-25,1);"
-            + "(2022-01-26,1);"
-            + "(2022-01-27,1);";
-    SmartStock myStock = new SmartStock("NVDA",price,buy, true);
-
-    StringBuilder outBuild = new StringBuilder().append("~~~~~~~~~~~~~~~~~~~~~~~" +
-            "~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-
-    //| TICKER |    DATE    |    TOTAL SHARES     |    COST BASIS    |     CLOSE PRICE     |    TOTAL VALUE    |
-    outBuild.append("|   TICKER   |    DATE    |    TOTAL SHARES    |");
-    outBuild.append("    COST BASIS    |    CLOSE PRICE    |    TOTAL VALUE    |\n");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    outBuild.append("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \n");
-
-
-    System.out.println(outBuild.toString());
-    System.out.println(myStock.printDataAt("2022-01-16"));
-    System.out.println(myStock.printDataAt("2022-01-19"));
-
-    LocalDate saleDate = LocalDate.parse("2022-01-20");
-    String stockSale = myStock.sellStock(saleDate,3,1,true);
-    System.out.println(stockSale);
-
-    System.out.println(myStock.printDataAt("2022-01-22"));
-
   }
 
 
+  /**
+   * Tests the selling of stocks in a portfolio.
+   *
+   * @throws FileNotFoundException If we could not find the file to load.
+   * @throws ParseException        If methods cannot parse the string values.
+   */
   @Test
   public void PortfolioSaleTest() throws FileNotFoundException, ParseException {
     //TODO: Implement selling in the portfolio not in the stock
@@ -1265,8 +893,8 @@ public class PortfolioTest {
             + "(2022-01-25,1);"
             + "(2022-01-26,1);"
             + "(2022-01-27,1);";
-    SmartStock myStock = new SmartStock("NVDA",price,buy, true);
-    SmartStock myStock2 = new SmartStock("IBM",price,buy, true);
+    SmartStock myStock = new SmartStock("NVDA", price, buy, true);
+    SmartStock myStock2 = new SmartStock("IBM", price, buy, true);
     Map<String, SmartStock> myList = new HashMap<String, SmartStock>();
     myList.put("NVDA", myStock);
     myList.put("IBM", myStock2);
@@ -1287,7 +915,7 @@ public class PortfolioTest {
 
 
     String saleDate = "2022-01-20";
-    myPort.sellStock("IBM","3","3", saleDate, true);
+    myPort.sellStock("IBM", "3", "3", saleDate, true);
 
     System.out.println(myPort.printPortfolioAt("2022-01-22"));
 
@@ -1297,7 +925,7 @@ public class PortfolioTest {
 
 
     // loading and saving test
-    myPort.save("SellPortTest","DanUser");
+    myPort.save("SellPortTest", "DanUser");
     SmartPortfolio newPort = (SmartPortfolio) DataHelpers.loadPortfolio(
             "DanUser", "SellPortTest.json", 2);
 
@@ -1305,11 +933,12 @@ public class PortfolioTest {
     System.out.println(newPort.printPortfolioAt("2022-01-22"));
 
     Assert.assertEquals(valueAt22[1], valueAt22New[1], 0.000001);
-    Assert.assertEquals(myPort.getCostBasis("2022-01-22"), newPort.getCostBasis("2022-01-22"), 0.000001);
+    Assert.assertEquals(myPort.getCostBasis("2022-01-22"),
+            newPort.getCostBasis("2022-01-22"), 0.000001);
 
     String buy2 = "(2022-03-16,2,1);(2022-03-18,2,1)";
-    SmartStock myStock3 = new SmartStock("NVDA","API",buy2, true);
-    SmartStock myStock4 = new SmartStock("IBM","API",buy2, true);
+    SmartStock myStock3 = new SmartStock("NVDA", "API", buy2, true);
+    SmartStock myStock4 = new SmartStock("IBM", "API", buy2, true);
     Map<String, SmartStock> myList2 = new HashMap<String, SmartStock>();
     myList2.put("NVDA", myStock3);
     myList2.put("IBM", myStock4);
@@ -1317,14 +946,15 @@ public class PortfolioTest {
     SmartPortfolio myPortAPI = new SmartPortfolio(myList2);
 
     try {
-      myPortAPI.sellStock("IBM","3","3", saleDate, true);
+      myPortAPI.sellStock("IBM", "3", "3", saleDate, true);
       Assert.fail();
-    } catch(Exception e) {
+    } catch (Exception e) {
       System.out.println("pass");
+      System.out.println(e.getMessage());
     }
 
 
-    myPortAPI.sellStock("IBM","3","3", "2022-03-20", true);
+    myPortAPI.sellStock("IBM", "3", "3", "2022-03-20", true);
 
     System.out.println(myPortAPI.printPortfolioAt("2022-03-18"));
     double[] valueAt22API = myPortAPI.getTotalValues("2022-03-22");
@@ -1334,7 +964,7 @@ public class PortfolioTest {
 
 
     // loading and saving test
-    myPortAPI.save("SellPortTestAPI","DanUser");
+    myPortAPI.save("SellPortTestAPI", "DanUser");
     SmartPortfolio newPortAPI = (SmartPortfolio) DataHelpers.loadPortfolio(
             "DanUser", "SellPortTestAPI.json", 2);
 
@@ -1342,38 +972,14 @@ public class PortfolioTest {
     System.out.println(newPortAPI.printPortfolioAt("2022-03-22"));
 
     Assert.assertEquals(valueAt22API[1], valueAt22NewAPI[1], 0.000001);
-    Assert.assertEquals(myPortAPI.getCostBasis("2022-03-19"), newPortAPI.getCostBasis("2022-03-19"), 0.000001);
-    Assert.assertEquals(myPortAPI.getCostBasis("2022-03-22"), newPortAPI.getCostBasis("2022-03-22"), 0.000001);
+    Assert.assertEquals(myPortAPI.getCostBasis("2022-03-19"),
+            newPortAPI.getCostBasis("2022-03-19"), 0.000001);
+    Assert.assertEquals(myPortAPI.getCostBasis("2022-03-22"),
+            newPortAPI.getCostBasis("2022-03-22"), 0.000001);
     System.out.println(newPortAPI.printPortfolioAt("current"));
 
 
   }
 
 
-  @Test
-  public void parseStockTest() {
-    String buy = "(2020-01-10,10,10)";
-    SmartStock test = new SmartStock("IBM", "API", buy, true);
-    Map<LocalDate, Pair<Double,Double>> mydates = test.getBuyDates();
-    System.out.println(mydates.keySet().toString());
-    Map<LocalDate, Double> stockdata = test.getStockData();
-
-    Comparator<LocalDate> comparator = LocalDate::compareTo;
-
-    SortedSet<LocalDate> keys = new TreeSet<>(comparator);
-    keys.addAll(stockdata.keySet());
-
-    Map<LocalDate, Double> myMap = DataHelpers.getStockData("IBM");
-    System.out.println(Collections.max(myMap.keySet()));
-    /*
-    for(LocalDate key: keys){
-      System.out.println(key.toString());
-    }
-
-     */
-
-    //System.out.println(Collections.min(stockdata.keySet()).toString());
-    //.out.println(Collections.max(stockdata.keySet()).toString());
-
-  }
 }

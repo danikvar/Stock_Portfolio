@@ -2,8 +2,12 @@
   <library name="jcommon-1.0.23">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/Resources/jcommon-1.0.23.jar!/" />
+      <root url="file://$PROJECT_DIR$/Resources" />
+      <root url="file://$PROJECT_DIR$/Jar_run/Resources" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/Jar_run/Resources" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/Resources" recursive="false" />
   </library>
 </component>

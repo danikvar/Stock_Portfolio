@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="8" />
+    <option name="CUSTOM_SCOPE_NAME" value="Project Files" />
+  </component>
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
       <artifact name="HW_4:jar" />
@@ -7,8 +11,195 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd5a6e10-d425-43fd-9d7d-095c0a644a3c" name="Changes" comment="Added GUI, plotting perforamnce, and DCA hooked up">
+      <change afterPath="$PROJECT_DIR$/.idea/checkstyleidea-libs/readme.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DESIGN-README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/.idea/Jar_run.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/DESIGN-README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/GUI.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/JavaDocs.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/Resources/Users/DanUser/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/Resources/Users/Tets_User/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/Resources/jcommon-1.0.23.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/Resources/jfreechart-1.0.19.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/SETUP-README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/class diagram.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/graph on gui.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/questionnaire.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/PortfolioApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/DataHelpers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/Pair.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/AbstractController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/Controller.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/GUIController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/IController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/SimpleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/SmartController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/controller/TextController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/Operations.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/OperationsImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/Portfolio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/SmartPortfolio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/SmartStock.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/Stock.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/Stock1.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/model/StockPortfolio.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/TextGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/TextInterface.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttons/Buttons.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttons/BuyMain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttons/CheckCost.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttons/CheckValue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttons/DisplayAllPorts.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttons/Home.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/BuyStock.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/CheckCB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/CheckCBD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/CheckVal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/CheckValByD.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/CreateUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/DollarCostAveraging.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/PortPerformance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/PortfolioPerformance.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/Reading.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/Saving.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/SellStock.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/ShowAllUsers.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/src/stockdataa/view/buttonsandtexts/Texts.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/ClassDiagram.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/DESIGN-README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/HTMLDocumentation.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/HW_4.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/SETUP-README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/HW_4/stockdataa/PortfolioTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/stockdataa/PortfolioTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Jar_run/test/stockdataa/portTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SETUP-README.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hw_6_submission_daniel_and_tarak.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jcommon-1.0.23.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/jfreechart-1.0.19.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/Tickers.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/Users/CreateTestUser/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/Users/DanUser/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/Users/NewUserTest/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/Users/Test_User/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/Users/Tets_User/root.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/jcommon-1.0.23.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/Resources/jfreechart-1.0.19.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/test/stockdataa/portTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/questionnaire.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/HW_4_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/HW_4_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jcommon_1_0_23.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/jcommon_1_0_23.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/jfreechart_1_0_19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/jfreechart_1_0_19.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/view/ButtonsAndTextsView/PortPerformance.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/view/ButtonsAndTextsView/PortPerformance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HW_4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/HW_4.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jar_run/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/HW_4.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jar_run/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/Resources/Tickers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Jar_run/Resources/Users/Test_User/root.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Jar_run/Resources/Users/Test_User/root.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/Tickers.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/Tickers.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/firsttest.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HW_4_jar/HW_4.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/PortfolioApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/DataHelpers.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/DataHelpers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/Pair.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/Pair.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/AbstractController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/AbstractController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/GUIController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/GUIController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/SimpleController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/SimpleController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/SmartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/SmartController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/TextController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/controller/TextController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/OperationsImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/OperationsImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/SmartPortfolio.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/SmartPortfolio.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/SmartStock.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/SmartStock.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/Stock1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/HW_4/stockdataa/model/Stock1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/ClassDiagram.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/DESIGN-README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/HTMLDocumentation.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/HW_4.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/SETUP-README.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/HW_4/stockdataa/PortfolioTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/stockdataa/PortfolioTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/PortfolioApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PortfolioApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/DataHelpers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/AbstractController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/AbstractController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/GUIController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/GUIController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/IController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/IController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/SimpleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/SimpleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/SmartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/SmartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/controller/TextController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/controller/TextController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/Operations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/Operations.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/OperationsImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/OperationsImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/Portfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/Portfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/SmartPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/SmartPortfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/SmartStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/SmartStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/Stock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/Stock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/Stock1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/Stock1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/model/StockPortfolio.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/model/StockPortfolio.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/ButtonOnly.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/CheckCost.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/CheckValue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/ChooseAWayToBuyStock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/GetPortfolio.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/MainView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/SetAPI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/ShowAllPortfolios.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/ShowGetPortfolioDetail.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonOnlyView/ShowGetPortfolioDetailByDate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/BuyStock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/CheckCB.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/CheckCBD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/CheckVal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/CheckValByD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/CreatePort.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/CreateUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/DollarCostAveraging.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/PortPerformance.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/PortfolioPerformance.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/Reading.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/Saving.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/SellStock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/ShowAllUsers.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/TBD.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsAndTextsView/Texts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/Buttons.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/BuyMain.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/CheckCost.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/CheckValue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/DisplayAllPorts.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/Home.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/ButtonsView/TBD1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/BuyStockMoney.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/BuyStockView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/CheckCostByDateView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/CheckCostView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/CheckValueByDateView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/CheckValueView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/CreatePortfolio.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/GetPortfolioDetailByDateView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/GetPortfolioDetailView.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/ReadPortfolio.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/SavePortfolio.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/SetCommissionFee.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/ShowAllUsers.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/WithTextField.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/createUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextFieldView/sellStock.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/view/TextGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stockdataa/view/TextInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stockdataa/view/TextInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/stockdataa/PortfolioTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,9 +245,9 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
     &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/danik/OneDrive/Desktop/Northeastern_Grad/CS_5010_Prog_Design/Code/HW_4/Resources/jfreechart-1.0.19.jar&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/danik/OneDrive/Desktop/Northeastern_Grad/CS_5010_Prog_Design/Code/HW_4/out/artifacts/HW_4_jar&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
@@ -221,6 +412,9 @@
       <workItem from="1669771690503" duration="810000" />
       <workItem from="1669778617924" duration="12252000" />
       <workItem from="1669826386758" duration="967000" />
+      <workItem from="1669858722566" duration="40000" />
+      <workItem from="1669860628270" duration="6812000" />
+      <workItem from="1670010232154" duration="4289000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed controller bugs + bug with portfolio performance. Selling shares added but not yet implemented in controller">
       <created>1669069182724</created>
