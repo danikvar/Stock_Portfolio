@@ -18,5 +18,5 @@
 	•	The cost basis and total value of the portfolios created using the Dollar cost averaging can be queried at any given date by the user.
 	•	The GUI also supports displaying the performance of the portfolio by displaying a line chart.
 	•	All the features for working with the flexible portfolio supported by both Text Line interface and Graphical User Interface.'
-  •	All the features for working with the infelxible portfolio are supported only by Text Line interface.
+	•	All the features for working with the infelxible portfolio are supported only by Text Line interface.
  
